@@ -1,0 +1,19 @@
+{
+  "author": "Andrew Steel",
+  "bugs": {
+    "url": "https://github.com/andrew-ls/coffee-run/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "homepage": "https://github.com/andrew-ls/coffee-run#readme",
+  "license": "GPL-3.0-only",
+  "main": "",
+  "name": "coffee-run",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrew-ls/coffee-run.git"
+  },
+  "scripts": {},
+  "version": "0.0.0"
+}
