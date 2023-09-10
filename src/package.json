@@ -10,7 +10,12 @@
     "react-native": "0.72.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@eslint/js": "^8.49.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.49.0",
+    "eslint-plugin-react": "^7.33.2"
   },
   "homepage": "https://github.com/andrew-ls/coffee-run#readme",
   "license": "GPL-3.0-only",
@@ -24,8 +29,10 @@
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",
+    "lint": "eslint .",
     "start": "expo start",
     "web": "expo start --web"
   },
+  "type": "module",
   "version": "0.0.0"
 }
