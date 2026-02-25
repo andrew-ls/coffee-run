@@ -44,7 +44,6 @@ export function RunView({
     <RunHeader
       orderCount={orders.length}
       hasActiveRun={hasActiveRun}
-      onEndRun={() => setShowEndConfirm(true)}
     />
   )
 
@@ -82,11 +81,20 @@ export function RunView({
           </>
         )}
       </div>
-      {showAddButton && (
-        <button className={styles.addButton} onClick={onAddOrder} aria-label={t('runView.addOrderAriaLabel')}>
-          +
-        </button>
-      )}
+      <div className={styles.bottomBar}>
+        <Button variant="text" onClick={() => setShowEndConfirm(true)}>
+          {t('runHeader.endRun')}
+        </Button>
+        {showAddButton && (
+          <button
+            className={styles.fab}
+            onClick={onAddOrder}
+            aria-label={t('runView.addOrderAriaLabel')}
+          >
+            +
+          </button>
+        )}
+      </div>
       {showEndConfirm && (
         <ConfirmDialog
           title={t('runView.endRoundDialog.title')}

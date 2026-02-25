@@ -1,14 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/atoms'
 import styles from './RunHeader.module.css'
 
 interface RunHeaderProps {
   orderCount: number
   hasActiveRun: boolean
-  onEndRun: () => void
 }
 
-export function RunHeader({ orderCount, hasActiveRun, onEndRun }: RunHeaderProps) {
+export function RunHeader({ orderCount, hasActiveRun }: RunHeaderProps) {
   const { t } = useTranslation()
 
   return (
@@ -28,11 +26,6 @@ export function RunHeader({ orderCount, hasActiveRun, onEndRun }: RunHeaderProps
           )}
         </div>
       </div>
-      {hasActiveRun && (
-        <Button variant="secondary" onClick={onEndRun}>
-          {t('runHeader.endRun')}
-        </Button>
-      )}
     </header>
   )
 }

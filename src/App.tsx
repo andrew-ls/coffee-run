@@ -106,7 +106,6 @@ export default function App() {
       <RunHeader
         orderCount={orders.length}
         hasActiveRun={!!activeRun}
-        onEndRun={handleEndRun}
       />
     )
 
