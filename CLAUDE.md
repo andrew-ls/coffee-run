@@ -49,6 +49,10 @@ Pages (`src/pages/`) compose organisms: `RunView`, `AddOrder`, `OrderFormPage`.
 
 `src/config/drinks.ts` defines the `DRINKS` array of `DrinkConfig` objects. Each config specifies which form fields (iced, milk, sweetener, etc.) are shown for that drink type. The `OrderForm` organism reads this config to conditionally render fields.
 
+### Internationalisation
+
+i18next + react-i18next, configured in `src/i18n/index.ts` (imported in `src/main.tsx` before `App`). Single `en-GB` locale at `src/i18n/locales/en-GB.json`. All UI text must use `useTranslation()` → `t(...)`. Config enum values (drink types, milk, sweetener) are stored in English in state/storage and translated at render time.
+
 ### Styling
 
 - CSS Modules with `camelCaseOnly` class name convention (configured in `vite.config.ts`)
