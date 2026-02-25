@@ -1,0 +1,30 @@
+.mascot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0;
+}
+
+.cup {
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.cup.wobble {
+  animation: wobble 600ms var(--ease-bounce);
+}
+
+@keyframes wobble {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  50% { transform: rotate(6deg); }
+  75% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.message {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-style: italic;
+}

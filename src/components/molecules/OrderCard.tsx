@@ -1,0 +1,120 @@
+import { useRef, useState, useCallback } from 'react'
+import type { Order } from '@/types'
+import { Badge, IconButton } from '@/components/atoms'
+import { useBreakpoint } from '@/hooks'
+import styles from './OrderCard.module.css'
+
+interface OrderCardProps {
+  order: Order
+  onEdit: (orderId: string) => void
+  onDelete: (orderId: string) => void
+  isNew?: boolean
+}
+
+function buildDrinkSummary(order: Order): string {
+  const parts: string[] = []
+  if (order.iced) parts.push('Iced')
+  if (order.variant) parts.push(order.variant)
+  if (order.customVariant) parts.push(order.customVariant)
+  if (order.customDrinkName) parts.push(order.customDrinkName)
+  if (order.milkType && order.milkType !== 'None') {
+    parts.push(`${order.milkAmount ?? ''} ${order.milkType} milk`.trim())
+  }
+  if (order.sweetenerType && order.sweetenerType !== 'None') {
+    parts.push(`${order.sweetenerAmount} ${order.sweetenerType}`)
+  }
+  if (order.notes) parts.push(`"${order.notes}"`)
+  return parts.join(' · ') || order.drinkType
+}
+
+const SWIPE_THRESHOLD = 80
+
+export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
+  const breakpoint = useBreakpoint()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const startX = useRef(0)
+  const currentX = useRef(0)
+  const [offsetX, setOffsetX] = useState(0)
+  const [swiped, setSwiped] = useState(false)
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    startX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    currentX.current = e.touches[0].clientX
+    const diff = currentX.current - startX.current
+    if (diff < 0) {
+      setOffsetX(diff)
+    }
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    if (offsetX < -SWIPE_THRESHOLD) {
+      setSwiped(true)
+      setOffsetX(-SWIPE_THRESHOLD - 20)
+    } else {
+      setOffsetX(0)
+    }
+  }, [offsetX])
+
+  const handleSwipeDelete = useCallback(() => {
+    onDelete(order.id)
+  }, [onDelete, order.id])
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.deleteZone} onClick={handleSwipeDelete}>
+        Delete
+      </div>
+      <div
+        ref={cardRef}
+        className={`${styles.card} ${isNew ? styles.entering : ''}`}
+        style={
+          breakpoint === 'mobile'
+            ? { transform: `translateX(${offsetX}px)` }
+            : undefined
+        }
+        onTouchStart={breakpoint === 'mobile' ? handleTouchStart : undefined}
+        onTouchMove={breakpoint === 'mobile' ? handleTouchMove : undefined}
+        onTouchEnd={breakpoint === 'mobile' ? handleTouchEnd : undefined}
+      >
+        <Badge drinkType={order.drinkType} />
+        <div className={styles.info}>
+          <div className={styles.personName}>{order.personName}</div>
+          <div className={styles.drinkSummary}>{buildDrinkSummary(order)}</div>
+        </div>
+        <div
+          className={`${styles.actions} ${breakpoint === 'mobile' || swiped ? styles.actionsVisible : ''}`}
+        >
+          <IconButton label="Edit order" onClick={() => onEdit(order.id)}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </IconButton>
+          <IconButton
+            label="Delete order"
+            variant="danger"
+            onClick={() => onDelete(order.id)}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M2 4H14M5 4V2H11V4M6 7V12M10 7V12M3 4L4 14H12L13 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </IconButton>
+        </div>
+      </div>
+    </div>
+  )
+}
