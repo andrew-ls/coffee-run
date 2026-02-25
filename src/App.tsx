@@ -26,9 +26,7 @@ export default function App() {
   }, [startRun])
 
   const handleEndRun = useCallback(() => {
-    if (activeRun) {
-      archiveRun(activeRun.id)
-    }
+    archiveRun(activeRun!.id)
     setScreen({ name: 'run' })
   }, [activeRun, archiveRun])
 
@@ -43,9 +41,7 @@ export default function App() {
   const handleEditOrder = useCallback(
     (orderId: string) => {
       const order = orders.find((o) => o.id === orderId)
-      if (order) {
-        setScreen({ name: 'form', orderId, prefill: order })
-      }
+      setScreen({ name: 'form', orderId, prefill: order })
     },
     [orders],
   )
@@ -78,12 +74,8 @@ export default function App() {
   )
 
   const handleFormCancel = useCallback(() => {
-    if (breakpoint === 'mobile') {
-      setScreen({ name: 'add' })
-    } else {
-      setScreen({ name: 'add' })
-    }
-  }, [breakpoint])
+    setScreen({ name: 'add' })
+  }, [])
 
   const runView = (
     <RunView
@@ -125,7 +117,6 @@ export default function App() {
           onCustom={handleCustom}
           onDeleteSaved={removeSavedOrder}
           onReorderSaved={reorderSavedOrders}
-          onBack={() => setScreen({ name: 'run' })}
           showBack={false}
         />
       ) : null

@@ -11,7 +11,7 @@ interface AddOrderProps {
   onCustom: (saved: SavedOrder) => void
   onDeleteSaved: (savedId: string) => void
   onReorderSaved: (fromIndex: number, toIndex: number) => void
-  onBack: () => void
+  onBack?: () => void
   showBack?: boolean
 }
 

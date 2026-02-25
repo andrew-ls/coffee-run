@@ -24,7 +24,7 @@ function buildDrinkSummary(order: Order, t: TFunction): string {
   if (order.milkType && order.milkType !== 'None') {
     parts.push(
       t('orderCard.drinkSummary.milk', {
-        amount: t(`milkAmounts.${order.milkAmount ?? ''}`),
+        amount: t(`milkAmounts.${order.milkAmount}`),
         type: t(`milkTypes.${order.milkType}`),
       }).trim(),
     )
