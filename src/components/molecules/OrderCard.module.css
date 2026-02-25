@@ -40,6 +40,11 @@
   animation: slideIn var(--duration-slow) var(--ease-bounce) forwards;
 }
 
+.card.dragging {
+  opacity: 0.35;
+  box-shadow: none;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;

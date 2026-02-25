@@ -10,6 +10,7 @@ interface AddOrderProps {
   onUsual: (saved: SavedOrder) => void
   onCustom: (saved: SavedOrder) => void
   onDeleteSaved: (savedId: string) => void
+  onReorderSaved: (fromIndex: number, toIndex: number) => void
   onBack: () => void
   showBack?: boolean
 }
@@ -20,6 +21,7 @@ export function AddOrder({
   onUsual,
   onCustom,
   onDeleteSaved,
+  onReorderSaved,
   onBack,
   showBack = true,
 }: AddOrderProps) {
@@ -45,6 +47,7 @@ export function AddOrder({
         onUsual={onUsual}
         onCustom={onCustom}
         onDelete={onDeleteSaved}
+        onReorder={onReorderSaved}
       />
     </div>
   )

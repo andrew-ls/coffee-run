@@ -33,6 +33,11 @@
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
+.card.dragging {
+  opacity: 0.35;
+  box-shadow: none;
+}
+
 .info {
   flex: 1;
   min-width: 0;

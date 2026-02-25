@@ -17,8 +17,8 @@ type Screen =
 export default function App() {
   const breakpoint = useBreakpoint()
   const { activeRun, startRun, archiveRun } = useRun()
-  const { orders, addOrder, updateOrder, removeOrder } = useOrders(activeRun?.id ?? null)
-  const { savedOrders, saveOrder, removeSavedOrder } = useSavedOrders()
+  const { orders, addOrder, updateOrder, removeOrder, reorderOrders } = useOrders(activeRun?.id ?? null)
+  const { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders } = useSavedOrders()
   const [screen, setScreen] = useState<Screen>({ name: 'run' })
 
   const handleStartRun = useCallback(() => {
@@ -94,6 +94,7 @@ export default function App() {
       onAddOrder={handleAddOrder}
       onEditOrder={handleEditOrder}
       onDeleteOrder={removeOrder}
+      onReorderOrder={reorderOrders}
       showHeader={breakpoint !== 'desktop'}
       showAddButton={breakpoint !== 'desktop'}
     />
@@ -124,6 +125,7 @@ export default function App() {
           onUsual={handleUsual}
           onCustom={handleCustom}
           onDeleteSaved={removeSavedOrder}
+          onReorderSaved={reorderSavedOrders}
           onBack={() => setScreen({ name: 'run' })}
           showBack={false}
         />
@@ -162,6 +164,7 @@ export default function App() {
             onUsual={handleUsual}
             onCustom={handleCustom}
             onDeleteSaved={removeSavedOrder}
+            onReorderSaved={reorderSavedOrders}
             onBack={() => setScreen({ name: 'run' })}
           />
         </div>

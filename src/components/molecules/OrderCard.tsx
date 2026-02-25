@@ -2,7 +2,7 @@ import { useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import type { Order } from '@/types'
-import { Badge, IconButton } from '@/components/atoms'
+import { Badge, DragHandle, IconButton } from '@/components/atoms'
 import { useBreakpoint } from '@/hooks'
 import styles from './OrderCard.module.css'
 
@@ -11,6 +11,8 @@ interface OrderCardProps {
   onEdit: (orderId: string) => void
   onDelete: (orderId: string) => void
   isNew?: boolean
+  dragHandleProps?: React.HTMLAttributes<HTMLElement>
+  isDragging?: boolean
 }
 
 function buildDrinkSummary(order: Order, t: TFunction): string {
@@ -41,7 +43,7 @@ function buildDrinkSummary(order: Order, t: TFunction): string {
 
 const SWIPE_THRESHOLD = 80
 
-export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
+export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isDragging }: OrderCardProps) {
   const { t } = useTranslation()
   const breakpoint = useBreakpoint()
   const cardRef = useRef<HTMLDivElement>(null)
@@ -82,7 +84,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
       </div>
       <div
         ref={cardRef}
-        className={`${styles.card} ${isNew ? styles.entering : ''}`}
+        className={`${styles.card} ${isNew ? styles.entering : ''} ${isDragging ? styles.dragging : ''}`}
         style={
           breakpoint === 'mobile'
             ? { transform: `translateX(${offsetX}px)` }
@@ -92,6 +94,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
         onTouchMove={breakpoint === 'mobile' ? handleTouchMove : undefined}
         onTouchEnd={breakpoint === 'mobile' ? handleTouchEnd : undefined}
       >
+        <DragHandle {...dragHandleProps} />
         <Badge drinkType={order.drinkType} />
         <div className={styles.info}>
           <div className={styles.personName}>{order.personName}</div>

@@ -14,6 +14,7 @@ interface RunViewProps {
   onAddOrder: () => void
   onEditOrder: (orderId: string) => void
   onDeleteOrder: (orderId: string) => void
+  onReorderOrder: (fromIndex: number, toIndex: number) => void
   showHeader?: boolean
   showAddButton?: boolean
 }
@@ -26,6 +27,7 @@ export function RunView({
   onAddOrder,
   onEditOrder,
   onDeleteOrder,
+  onReorderOrder,
   showHeader = true,
   showAddButton = true,
 }: RunViewProps) {
@@ -75,6 +77,7 @@ export function RunView({
               orders={orders}
               onEdit={onEditOrder}
               onDelete={(id) => setDeleteConfirm(id)}
+              onReorder={onReorderOrder}
             />
           </>
         )}

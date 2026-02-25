@@ -1,0 +1,5 @@
+.overlay {
+  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.2));
+  border-radius: var(--radius-md);
+  opacity: 0.95;
+}

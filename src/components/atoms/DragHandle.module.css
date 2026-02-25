@@ -1,0 +1,21 @@
+.handle {
+  touch-action: none;
+  cursor: grab;
+  color: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  transition: color var(--duration-fast);
+  user-select: none;
+}
+
+.handle:hover {
+  color: var(--color-text-muted);
+}
+
+.handle:active {
+  cursor: grabbing;
+}

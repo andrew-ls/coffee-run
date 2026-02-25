@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { arrayMove } from '@dnd-kit/sortable'
 import { useLocalStorage } from './useLocalStorage'
 import { useUserId } from './useUserId'
 import { generateId, now } from '@/utils'
@@ -37,5 +38,23 @@ export function useSavedOrders() {
     [setAllSaved],
   )
 
-  return { savedOrders, saveOrder, removeSavedOrder }
+  const reorderSavedOrders = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      setAllSaved((prev) => {
+        const userIndices = prev.reduce<number[]>((acc, s, i) => {
+          if (s.userId === userId) acc.push(i)
+          return acc
+        }, [])
+        const reorderedIndices = arrayMove(userIndices, fromIndex, toIndex)
+        const next = [...prev]
+        reorderedIndices.forEach((globalIdx, slot) => {
+          next[userIndices[slot]] = prev[globalIdx]
+        })
+        return next
+      })
+    },
+    [userId, setAllSaved],
+  )
+
+  return { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders }
 }

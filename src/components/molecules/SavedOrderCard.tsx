@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
-import { Badge, Button } from '@/components/atoms'
+import { Badge, Button, DragHandle } from '@/components/atoms'
 import { useBreakpoint } from '@/hooks'
 import styles from './SavedOrderCard.module.css'
 
@@ -10,6 +10,8 @@ interface SavedOrderCardProps {
   onUsual: (savedOrder: SavedOrder) => void
   onCustom: (savedOrder: SavedOrder) => void
   onDelete: (savedId: string) => void
+  dragHandleProps?: React.HTMLAttributes<HTMLElement>
+  isDragging?: boolean
 }
 
 const SWIPE_THRESHOLD = 80
@@ -19,6 +21,8 @@ export function SavedOrderCard({
   onUsual,
   onCustom,
   onDelete,
+  dragHandleProps,
+  isDragging,
 }: SavedOrderCardProps) {
   const { t } = useTranslation()
   const breakpoint = useBreakpoint()
@@ -50,7 +54,7 @@ export function SavedOrderCard({
         {t('savedOrderCard.delete')}
       </div>
       <div
-        className={styles.card}
+        className={`${styles.card} ${isDragging ? styles.dragging : ''}`}
         style={
           breakpoint === 'mobile'
             ? { transform: `translateX(${offsetX}px)` }
@@ -60,6 +64,7 @@ export function SavedOrderCard({
         onTouchMove={breakpoint === 'mobile' ? handleTouchMove : undefined}
         onTouchEnd={breakpoint === 'mobile' ? handleTouchEnd : undefined}
       >
+        <DragHandle {...dragHandleProps} />
         <Badge drinkType={orderData.drinkType} />
         <div className={styles.info}>
           <div className={styles.personName}>{orderData.personName}</div>

@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { arrayMove } from '@dnd-kit/sortable'
 import { useLocalStorage } from './useLocalStorage'
 import { generateId, now } from '@/utils'
 import type { Order, OrderFormData } from '@/types'
@@ -47,5 +48,24 @@ export function useOrders(runId: string | null) {
     [setAllOrders],
   )
 
-  return { orders, addOrder, updateOrder, removeOrder }
+  const reorderOrders = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      if (!runId) return
+      setAllOrders((prev) => {
+        const runIndices = prev.reduce<number[]>((acc, o, i) => {
+          if (o.runId === runId) acc.push(i)
+          return acc
+        }, [])
+        const reorderedIndices = arrayMove(runIndices, fromIndex, toIndex)
+        const next = [...prev]
+        reorderedIndices.forEach((globalIdx, slot) => {
+          next[runIndices[slot]] = prev[globalIdx]
+        })
+        return next
+      })
+    },
+    [runId, setAllOrders],
+  )
+
+  return { orders, addOrder, updateOrder, removeOrder, reorderOrders }
 }

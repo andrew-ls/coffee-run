@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
+import { SortableList } from '@/components/atoms'
 import { SavedOrderCard } from '@/components/molecules'
 import styles from './SavedOrderList.module.css'
 
@@ -8,6 +9,7 @@ interface SavedOrderListProps {
   onUsual: (saved: SavedOrder) => void
   onCustom: (saved: SavedOrder) => void
   onDelete: (savedId: string) => void
+  onReorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function SavedOrderList({
@@ -15,6 +17,7 @@ export function SavedOrderList({
   onUsual,
   onCustom,
   onDelete,
+  onReorder,
 }: SavedOrderListProps) {
   const { t } = useTranslation()
 
@@ -27,15 +30,28 @@ export function SavedOrderList({
         </div>
       ) : (
         <div className={styles.list}>
-          {savedOrders.map((saved) => (
-            <SavedOrderCard
-              key={saved.id}
-              savedOrder={saved}
-              onUsual={onUsual}
-              onCustom={onCustom}
-              onDelete={onDelete}
-            />
-          ))}
+          <SortableList
+            items={savedOrders}
+            onReorder={onReorder}
+            renderItem={(saved, { dragHandleProps, isDragging }) => (
+              <SavedOrderCard
+                savedOrder={saved}
+                onUsual={onUsual}
+                onCustom={onCustom}
+                onDelete={onDelete}
+                dragHandleProps={dragHandleProps}
+                isDragging={isDragging}
+              />
+            )}
+            renderOverlay={(saved) => (
+              <SavedOrderCard
+                savedOrder={saved}
+                onUsual={() => {}}
+                onCustom={() => {}}
+                onDelete={() => {}}
+              />
+            )}
+          />
         </div>
       )}
     </div>

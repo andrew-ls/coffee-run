@@ -2,6 +2,9 @@
   "app": {
     "name": "Coffee Run"
   },
+  "dragHandle": {
+    "ariaLabel": "Drag to reorder"
+  },
   "runView": {
     "emptyMessages": [
       "The kettle's gone cold...",
