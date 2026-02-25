@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
 import { DRINKS, MILK_TYPES, MILK_AMOUNTS, SWEETENER_TYPES, SWEETENER_MIN, SWEETENER_MAX, SWEETENER_STEP } from '@/config'
 import type { DrinkConfig } from '@/config'
@@ -31,8 +32,9 @@ export function OrderForm({
   initialData,
   onSubmit,
   onCancel,
-  submitLabel = 'Add order',
+  submitLabel,
 }: OrderFormProps) {
+  const { t } = useTranslation()
   const [form, setForm] = useState<OrderFormData>({ ...EMPTY_FORM, ...initialData })
   const [saveForLater, setSaveForLater] = useState(false)
 
@@ -85,58 +87,58 @@ export function OrderForm({
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <FormField label="Who's this for?">
+      <FormField label={t('orderForm.whoFor')}>
         <Input
           value={form.personName}
           onChange={(e) => update('personName', e.target.value)}
-          placeholder="Name"
+          placeholder={t('orderForm.namePlaceholder')}
           autoFocus
         />
       </FormField>
 
-      <FormField label="Drink type">
+      <FormField label={t('orderForm.drinkType')}>
         <Select
           value={form.drinkType}
           onChange={(e) => handleDrinkTypeChange(e.target.value)}
-          options={DRINKS.map((d) => d.type)}
-          placeholder="Pick a drink..."
+          options={DRINKS.map((d) => ({ value: d.type, label: t(`drinks.${d.type}`) }))}
+          placeholder={t('orderForm.pickDrink')}
         />
       </FormField>
 
       {drinkConfig?.allowCustomDrinkName && (
-        <FormField label="What drink?">
+        <FormField label={t('orderForm.whatDrink')}>
           <Input
             value={form.customDrinkName}
             onChange={(e) => update('customDrinkName', e.target.value)}
-            placeholder="Describe the drink"
+            placeholder={t('orderForm.describeDrink')}
           />
         </FormField>
       )}
 
       {variantOptions.length > 0 && (
-        <FormField label="Variant">
+        <FormField label={t('orderForm.variant')}>
           <Select
             value={form.variant}
             onChange={(e) => update('variant', e.target.value)}
-            options={variantOptions as unknown as string[]}
-            placeholder="Choose variant..."
+            options={variantOptions.map((v) => ({ value: v, label: t(`drinks.variants.${v}`) }))}
+            placeholder={t('orderForm.chooseVariant')}
           />
         </FormField>
       )}
 
       {showVariantOther && (
-        <FormField label="Custom variant">
+        <FormField label={t('orderForm.customVariant')}>
           <Input
             value={form.customVariant}
             onChange={(e) => update('customVariant', e.target.value)}
-            placeholder="What kind?"
+            placeholder={t('orderForm.whatKind')}
           />
         </FormField>
       )}
 
       {drinkConfig?.fields.iced && (
         <Checkbox
-          label="Iced"
+          label={t('orderForm.iced')}
           checked={form.iced}
           onChange={(e) => update('iced', e.target.checked)}
         />
@@ -144,21 +146,21 @@ export function OrderForm({
 
       {drinkConfig?.fields.milk && (
         <div className={styles.row}>
-          <FormField label="Milk">
+          <FormField label={t('orderForm.milk')}>
             <Select
               value={form.milkType}
               onChange={(e) => update('milkType', e.target.value as OrderFormData['milkType'])}
-              options={MILK_TYPES}
+              options={MILK_TYPES.map((m) => ({ value: m, label: t(`milkTypes.${m}`) }))}
             />
           </FormField>
           {drinkConfig.fields.milkAmount && form.milkType !== 'None' && (
-            <FormField label="How much?">
+            <FormField label={t('orderForm.howMuch')}>
               <Select
                 value={form.milkAmount}
                 onChange={(e) =>
                   update('milkAmount', e.target.value as OrderFormData['milkAmount'])
                 }
-                options={MILK_AMOUNTS}
+                options={MILK_AMOUNTS.map((a) => ({ value: a, label: t(`milkAmounts.${a}`) }))}
               />
             </FormField>
           )}
@@ -167,17 +169,17 @@ export function OrderForm({
 
       {drinkConfig?.fields.sweetener && (
         <div className={styles.row}>
-          <FormField label="Sweetener">
+          <FormField label={t('orderForm.sweetener')}>
             <Select
               value={form.sweetenerType}
               onChange={(e) =>
                 update('sweetenerType', e.target.value as OrderFormData['sweetenerType'])
               }
-              options={SWEETENER_TYPES}
+              options={SWEETENER_TYPES.map((s) => ({ value: s, label: t(`sweetenerTypes.${s}`) }))}
             />
           </FormField>
           {drinkConfig.fields.sweetenerAmount && form.sweetenerType !== 'None' && (
-            <FormField label="How many?">
+            <FormField label={t('orderForm.howMany')}>
               <Input
                 type="number"
                 value={form.sweetenerAmount}
@@ -192,12 +194,12 @@ export function OrderForm({
       )}
 
       {drinkConfig?.fields.notes && (
-        <FormField label="Notes">
+        <FormField label={t('orderForm.notes')}>
           <textarea
             className={styles.notes}
             value={form.notes}
             onChange={(e) => update('notes', e.target.value)}
-            placeholder="Extra shot, no foam, etc."
+            placeholder={t('orderForm.notesPlaceholder')}
             rows={2}
           />
         </FormField>
@@ -205,7 +207,7 @@ export function OrderForm({
 
       <div className={styles.saveRow}>
         <Checkbox
-          label="Remember this one for next time?"
+          label={t('orderForm.saveForLater')}
           checked={saveForLater}
           onChange={(e) => setSaveForLater(e.target.checked)}
         />
@@ -213,10 +215,10 @@ export function OrderForm({
 
       <div className={styles.row}>
         <Button variant="ghost" type="button" onClick={onCancel}>
-          Cancel
+          {t('orderForm.cancel')}
         </Button>
         <Button type="submit" fullWidth disabled={!form.drinkType}>
-          {submitLabel}
+          {submitLabel ?? t('orderForm.addOrder')}
         </Button>
       </div>
     </form>

@@ -1,4 +1,4 @@
-import { APP_NAME } from '@/config'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/atoms'
 import styles from './RunHeader.module.css'
 
@@ -9,26 +9,28 @@ interface RunHeaderProps {
 }
 
 export function RunHeader({ orderCount, hasActiveRun, onEndRun }: RunHeaderProps) {
+  const { t } = useTranslation()
+
   return (
     <header className={styles.header}>
       <div className={styles.left}>
-        <div className={styles.title}>{APP_NAME}</div>
+        <div className={styles.title}>{t('app.name')}</div>
         <div className={styles.subtitle}>
           {hasActiveRun ? (
             <>
-              Brew round in progress{' '}
+              {t('runHeader.roundInProgress')}{' '}
               <span className={styles.orderCount}>
-                · {orderCount} {orderCount === 1 ? 'order' : 'orders'}
+                {t('runHeader.orderCount', { count: orderCount })}
               </span>
             </>
           ) : (
-            "No run on \u2014 fancy starting one?"
+            t('runHeader.noRun')
           )}
         </div>
       </div>
       {hasActiveRun && (
         <Button variant="secondary" onClick={onEndRun}>
-          End Run
+          {t('runHeader.endRun')}
         </Button>
       )}
     </header>

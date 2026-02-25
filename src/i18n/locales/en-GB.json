@@ -1,0 +1,138 @@
+{
+  "app": {
+    "name": "Coffee Run"
+  },
+  "runView": {
+    "emptyMessages": [
+      "The kettle's gone cold...",
+      "Nobody's thirsty?",
+      "Bit quiet in here...",
+      "Who fancies a brew?",
+      "The mugs are gathering dust..."
+    ],
+    "startRun": "Start a brew round",
+    "addOrderAriaLabel": "Add order",
+    "endRoundDialog": {
+      "title": "End this round?",
+      "message": "Everyone sorted? This will clear all current orders.",
+      "confirm": "End round"
+    },
+    "deleteOrderDialog": {
+      "title": "Remove this order?",
+      "message": "Are you sure you want to bin this one?",
+      "confirm": "Remove"
+    }
+  },
+  "runHeader": {
+    "roundInProgress": "Brew round in progress",
+    "orderCount_one": "\u00b7 {{count}} order",
+    "orderCount_other": "\u00b7 {{count}} orders",
+    "noRun": "No run on \u2014 fancy starting one?",
+    "endRun": "End Run"
+  },
+  "addOrder": {
+    "title": "Add Order",
+    "back": "Back",
+    "newOrder": "New Order"
+  },
+  "orderFormPage": {
+    "editTitle": "Edit Order",
+    "newTitle": "New Order",
+    "updateSubmit": "Update order",
+    "addSubmit": "Add order"
+  },
+  "orderForm": {
+    "whoFor": "Who's this for?",
+    "namePlaceholder": "Name",
+    "drinkType": "Drink type",
+    "pickDrink": "Pick a drink...",
+    "whatDrink": "What drink?",
+    "describeDrink": "Describe the drink",
+    "variant": "Variant",
+    "chooseVariant": "Choose variant...",
+    "customVariant": "Custom variant",
+    "whatKind": "What kind?",
+    "iced": "Iced",
+    "milk": "Milk",
+    "howMuch": "How much?",
+    "sweetener": "Sweetener",
+    "howMany": "How many?",
+    "notes": "Notes",
+    "notesPlaceholder": "Extra shot, no foam, etc.",
+    "saveForLater": "Remember this one for next time?",
+    "cancel": "Cancel",
+    "addOrder": "Add order"
+  },
+  "savedOrderList": {
+    "title": "Saved Orders",
+    "empty": "No saved orders yet. Save one from the order form!"
+  },
+  "orderCard": {
+    "editLabel": "Edit order",
+    "deleteLabel": "Delete order",
+    "delete": "Delete",
+    "drinkSummary": {
+      "iced": "Iced",
+      "milk": "{{amount}} {{type}} milk",
+      "sweetener": "{{amount}} {{type}}"
+    }
+  },
+  "savedOrderCard": {
+    "delete": "Delete",
+    "usual": "Usual",
+    "custom": "Custom"
+  },
+  "confirmDialog": {
+    "cancel": "Never mind",
+    "confirm": "Confirm"
+  },
+  "drinks": {
+    "Coffee": "Coffee",
+    "Tea": "Tea",
+    "Hot Chocolate": "Hot Chocolate",
+    "Juice": "Juice",
+    "Other": "Other",
+    "variants": {
+      "Americano": "Americano",
+      "Latte": "Latte",
+      "Cappuccino": "Cappuccino",
+      "Flat White": "Flat White",
+      "Espresso": "Espresso",
+      "Mocha": "Mocha",
+      "English Breakfast": "English Breakfast",
+      "Earl Grey": "Earl Grey",
+      "Green": "Green",
+      "Peppermint": "Peppermint",
+      "Chamomile": "Chamomile",
+      "Classic": "Classic",
+      "White": "White",
+      "Mint": "Mint",
+      "Orange": "Orange",
+      "Apple": "Apple",
+      "Cranberry": "Cranberry",
+      "Other": "Other"
+    }
+  },
+  "milkTypes": {
+    "Regular": "Regular",
+    "Semi-Skimmed": "Semi-Skimmed",
+    "Skimmed": "Skimmed",
+    "Oat": "Oat",
+    "Soy": "Soy",
+    "Almond": "Almond",
+    "Coconut": "Coconut",
+    "None": "None"
+  },
+  "milkAmounts": {
+    "Splish": "Splish",
+    "Splash": "Splash",
+    "Splosh": "Splosh"
+  },
+  "sweetenerTypes": {
+    "Sugar": "Sugar",
+    "Brown Sugar": "Brown Sugar",
+    "Honey": "Honey",
+    "Sweetener": "Sweetener",
+    "None": "None"
+  }
+}

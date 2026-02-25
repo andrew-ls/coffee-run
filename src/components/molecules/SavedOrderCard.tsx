@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
 import { Badge, Button } from '@/components/atoms'
 import { useBreakpoint } from '@/hooks'
@@ -19,6 +20,7 @@ export function SavedOrderCard({
   onCustom,
   onDelete,
 }: SavedOrderCardProps) {
+  const { t } = useTranslation()
   const breakpoint = useBreakpoint()
   const startX = useRef(0)
   const [offsetX, setOffsetX] = useState(0)
@@ -45,7 +47,7 @@ export function SavedOrderCard({
   return (
     <div className={styles.wrapper}>
       <div className={styles.deleteZone} onClick={() => onDelete(savedOrder.id)}>
-        Delete
+        {t('savedOrderCard.delete')}
       </div>
       <div
         className={styles.card}
@@ -67,10 +69,10 @@ export function SavedOrderCard({
         </div>
         <div className={styles.actions}>
           <Button variant="primary" onClick={() => onUsual(savedOrder)}>
-            Usual
+            {t('savedOrderCard.usual')}
           </Button>
           <Button variant="ghost" onClick={() => onCustom(savedOrder)}>
-            Custom
+            {t('savedOrderCard.custom')}
           </Button>
         </div>
       </div>

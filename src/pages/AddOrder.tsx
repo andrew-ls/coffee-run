@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
 import { Button } from '@/components/atoms'
 import { SavedOrderList } from '@/components/organisms'
@@ -22,19 +23,21 @@ export function AddOrder({
   onBack,
   showBack = true,
 }: AddOrderProps) {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.title}>Add Order</div>
+        <div className={styles.title}>{t('addOrder.title')}</div>
         {showBack && (
           <Button variant="ghost" onClick={onBack}>
-            Back
+            {t('addOrder.back')}
           </Button>
         )}
       </div>
       <div className={styles.newOrderSection}>
         <Button onClick={onNewOrder} fullWidth>
-          New Order
+          {t('addOrder.newOrder')}
         </Button>
       </div>
       <SavedOrderList

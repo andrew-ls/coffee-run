@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
 import { OrderForm } from '@/components/organisms'
 import styles from './OrderFormPage.module.css'
@@ -15,18 +16,20 @@ export function OrderFormPage({
   onSubmit,
   onCancel,
 }: OrderFormPageProps) {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>
-          {orderId ? 'Edit Order' : 'New Order'}
+          {orderId ? t('orderFormPage.editTitle') : t('orderFormPage.newTitle')}
         </div>
       </div>
       <OrderForm
         initialData={initialData}
         onSubmit={onSubmit}
         onCancel={onCancel}
-        submitLabel={orderId ? 'Update order' : 'Add order'}
+        submitLabel={orderId ? t('orderFormPage.updateSubmit') : t('orderFormPage.addSubmit')}
       />
     </div>
   )

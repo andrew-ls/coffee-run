@@ -1,4 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { Order } from '@/types'
 import { Badge, IconButton } from '@/components/atoms'
 import { useBreakpoint } from '@/hooks'
@@ -11,25 +13,36 @@ interface OrderCardProps {
   isNew?: boolean
 }
 
-function buildDrinkSummary(order: Order): string {
+function buildDrinkSummary(order: Order, t: TFunction): string {
   const parts: string[] = []
-  if (order.iced) parts.push('Iced')
-  if (order.variant) parts.push(order.variant)
+  if (order.iced) parts.push(t('orderCard.drinkSummary.iced'))
+  if (order.variant) parts.push(t(`drinks.variants.${order.variant}`, order.variant))
   if (order.customVariant) parts.push(order.customVariant)
   if (order.customDrinkName) parts.push(order.customDrinkName)
   if (order.milkType && order.milkType !== 'None') {
-    parts.push(`${order.milkAmount ?? ''} ${order.milkType} milk`.trim())
+    parts.push(
+      t('orderCard.drinkSummary.milk', {
+        amount: t(`milkAmounts.${order.milkAmount ?? ''}`),
+        type: t(`milkTypes.${order.milkType}`),
+      }).trim(),
+    )
   }
   if (order.sweetenerType && order.sweetenerType !== 'None') {
-    parts.push(`${order.sweetenerAmount} ${order.sweetenerType}`)
+    parts.push(
+      t('orderCard.drinkSummary.sweetener', {
+        amount: order.sweetenerAmount,
+        type: t(`sweetenerTypes.${order.sweetenerType}`),
+      }),
+    )
   }
   if (order.notes) parts.push(`"${order.notes}"`)
-  return parts.join(' · ') || order.drinkType
+  return parts.join(' · ') || t(`drinks.${order.drinkType}`, order.drinkType)
 }
 
 const SWIPE_THRESHOLD = 80
 
 export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
+  const { t } = useTranslation()
   const breakpoint = useBreakpoint()
   const cardRef = useRef<HTMLDivElement>(null)
   const startX = useRef(0)
@@ -65,7 +78,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.deleteZone} onClick={handleSwipeDelete}>
-        Delete
+        {t('orderCard.delete')}
       </div>
       <div
         ref={cardRef}
@@ -82,12 +95,12 @@ export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
         <Badge drinkType={order.drinkType} />
         <div className={styles.info}>
           <div className={styles.personName}>{order.personName}</div>
-          <div className={styles.drinkSummary}>{buildDrinkSummary(order)}</div>
+          <div className={styles.drinkSummary}>{buildDrinkSummary(order, t)}</div>
         </div>
         <div
           className={`${styles.actions} ${breakpoint === 'mobile' || swiped ? styles.actionsVisible : ''}`}
         >
-          <IconButton label="Edit order" onClick={() => onEdit(order.id)}>
+          <IconButton label={t('orderCard.editLabel')} onClick={() => onEdit(order.id)}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
                 d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z"
@@ -99,7 +112,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew }: OrderCardProps) {
             </svg>
           </IconButton>
           <IconButton
-            label="Delete order"
+            label={t('orderCard.deleteLabel')}
             variant="danger"
             onClick={() => onDelete(order.id)}
           >

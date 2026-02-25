@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/atoms'
 import styles from './ConfirmDialog.module.css'
 
@@ -13,11 +14,13 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({
   title,
   message,
-  confirmLabel = 'Confirm',
+  confirmLabel,
   confirmVariant = 'danger',
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.overlay} onClick={onCancel}>
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
@@ -25,10 +28,10 @@ export function ConfirmDialog({
         <div className={styles.message}>{message}</div>
         <div className={styles.actions}>
           <Button variant="ghost" onClick={onCancel}>
-            Never mind
+            {t('confirmDialog.cancel')}
           </Button>
           <Button variant={confirmVariant} onClick={onConfirm}>
-            {confirmLabel}
+            {confirmLabel ?? t('confirmDialog.confirm')}
           </Button>
         </div>
       </div>

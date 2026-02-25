@@ -1,17 +1,10 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Order } from '@/types'
 import { Button } from '@/components/atoms'
 import { ConfirmDialog } from '@/components/molecules'
 import { RunHeader, OrderList, Mascot } from '@/components/organisms'
 import styles from './RunView.module.css'
-
-const EMPTY_MESSAGES = [
-  "The kettle's gone cold...",
-  "Nobody's thirsty?",
-  "Bit quiet in here...",
-  "Who fancies a brew?",
-  "The mugs are gathering dust...",
-]
 
 interface RunViewProps {
   hasActiveRun: boolean
@@ -36,13 +29,14 @@ export function RunView({
   showHeader = true,
   showAddButton = true,
 }: RunViewProps) {
+  const { t } = useTranslation()
   const [showEndConfirm, setShowEndConfirm] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
-  const emptyMessage = useMemo(
-    () => EMPTY_MESSAGES[Math.floor(Math.random() * EMPTY_MESSAGES.length)],
-    [],
-  )
+  const emptyMessage = useMemo(() => {
+    const messages = t('runView.emptyMessages', { returnObjects: true }) as string[]
+    return messages[Math.floor(Math.random() * messages.length)]
+  }, [t])
 
   const header = (
     <RunHeader
@@ -59,7 +53,7 @@ export function RunView({
         <div className={styles.emptyState}>
           <Mascot orderCount={0} message={emptyMessage} />
           <div className={styles.startButton}>
-            <Button onClick={onStartRun}>Start a brew round</Button>
+            <Button onClick={onStartRun}>{t('runView.startRun')}</Button>
           </div>
         </div>
       </>
@@ -86,15 +80,15 @@ export function RunView({
         )}
       </div>
       {showAddButton && (
-        <button className={styles.addButton} onClick={onAddOrder} aria-label="Add order">
+        <button className={styles.addButton} onClick={onAddOrder} aria-label={t('runView.addOrderAriaLabel')}>
           +
         </button>
       )}
       {showEndConfirm && (
         <ConfirmDialog
-          title="End this round?"
-          message="Everyone sorted? This will clear all current orders."
-          confirmLabel="End round"
+          title={t('runView.endRoundDialog.title')}
+          message={t('runView.endRoundDialog.message')}
+          confirmLabel={t('runView.endRoundDialog.confirm')}
           onConfirm={() => {
             setShowEndConfirm(false)
             onEndRun()
@@ -104,9 +98,9 @@ export function RunView({
       )}
       {deleteConfirm && (
         <ConfirmDialog
-          title="Remove this order?"
-          message="Are you sure you want to bin this one?"
-          confirmLabel="Remove"
+          title={t('runView.deleteOrderDialog.title')}
+          message={t('runView.deleteOrderDialog.message')}
+          confirmLabel={t('runView.deleteOrderDialog.confirm')}
           onConfirm={() => {
             onDeleteOrder(deleteConfirm)
             setDeleteConfirm(null)
