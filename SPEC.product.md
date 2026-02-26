@@ -2,7 +2,7 @@
 
 ## Overview
 
-Coffee Run is a single-page web application for managing group coffee orders in an office setting. A user starts a "run", collects drink orders from colleagues, and tracks them in a checklist. The app supports saving frequently-ordered drinks for quick recall, drag-and-drop reordering, and works responsively across mobile and desktop.
+Coffee Run is a single-page web application for managing group coffee Orders in an office setting. A user starts a "Run", collects drink Orders from colleagues, and tracks them in a checklist. The app supports saving frequently-ordered drinks for quick recall, drag-and-drop reordering, and works responsively across mobile and desktop.
 
 There is no backend — all data is persisted in the browser's localStorage. There is no routing — navigation is managed as a screen state machine within the app.
 
@@ -12,15 +12,15 @@ There is no backend — all data is persisted in the browser's localStorage. The
 
 ### Run
 
-A **run** is a single coffee-fetching session. Only one run can be active at a time per user. The user starts a run, adds orders to it, then ends it. Ending a run archives it (preserving history) and clears the active order list.
+A **Run** is a single coffee-fetching session. Only one Run can be active at a time per user. The user starts a Run, adds Orders to it, then ends it. Ending a Run archives it (preserving history) and clears the active Order list.
 
 ### Order
 
-An **order** is a single drink request within a run. Each order belongs to a named person and captures their drink preferences using a structured form driven by drink configuration.
+An **Order** is a single drink request within a Run. Each Order belongs to a named person and captures their drink preferences using a structured form driven by drink configuration.
 
 ### Saved Order
 
-A **saved order** is a bookmark of someone's usual drink. The user can save an order during creation, then recall it later with one tap ("Usual") or pre-fill a form for modification ("Custom").
+A **Saved Order** is a bookmark of someone's usual drink. The user can save an Order during creation, then recall it later with one tap ("Usual") or pre-fill a form for modification ("Custom").
 
 ---
 
@@ -30,46 +30,46 @@ The app has three screens, managed by an internal state machine (not URL-based):
 
 ### 1. Run View (Main Screen)
 
-The primary screen showing the current active run.
+The primary screen showing the current active Run.
 
-**No active run state:**
+**No active Run state:**
 - Displays the mascot with a random playful empty-state message.
-- A "Start a new run" button begins a new run.
+- A "Start a new Run" button begins a new Run.
 
-**Active run, no orders state:**
+**Active Run, no Orders state:**
 - Displays the mascot with a random empty-state message.
-- A floating action button (FAB) with "+" to add orders.
+- A floating action button (FAB) with "+" to add Orders.
 - An "End Run" text button in the bottom bar.
 
-**Active run with orders:**
-- The mascot is displayed above the order list, reacting to the order count.
-- A scrollable list of order cards, each showing:
+**Active Run with Orders:**
+- The mascot is displayed above the Order list, reacting to the Order count.
+- A scrollable list of Order cards, each showing:
   - Drag handle for reordering
   - Person's name
   - Drink summary as coloured pills (drink type badge, iced, variant, milk, sweetener)
   - Edit and delete icon buttons (hover-revealed on desktop, always visible on mobile)
 - Swipe-to-delete on mobile (swipe left reveals a red delete zone).
 - A bottom bar with "End Run" (text button) and the FAB.
-- "End Run" requires confirmation via a dialog ("End this round? Everyone sorted? This will clear all current orders.").
-- Deleting an order also requires confirmation via a dialog.
+- "End Run" requires confirmation via a dialog ("End this round? Everyone sorted? This will clear all current Orders.").
+- Deleting an Order also requires confirmation via a dialog.
 
 ### 2. Add Order Screen
 
-Reached by tapping the FAB on the run view. On mobile, this is a full-page transition with a "Back" button. On desktop, it appears in the right panel.
+Reached by tapping the FAB on the Run view. On mobile, this is a full-page transition with a "Back" button. On desktop, it appears in the right panel.
 
 **Layout:**
-- A "New Order" button at the top to open a blank order form.
-- A "Saved Orders" section listing all saved orders. Each card shows:
+- A "New Order" button at the top to open a blank Order form.
+- A "Saved Orders" section listing all Saved Orders. Each card shows:
   - Drag handle for reordering
   - Person's name
   - Drink summary pills
-  - "Usual" button — adds their saved order directly to the run and returns to the run view.
-  - "Custom" button — opens the order form pre-filled with their saved order for modification.
-- Swipe-to-delete on mobile for removing saved orders.
+  - "Usual" button — adds their Saved Order directly to the Run and returns to the Run view.
+  - "Custom" button — opens the Order form pre-filled with their Saved Order for modification.
+- Swipe-to-delete on mobile for removing Saved Orders.
 
 ### 3. Order Form Screen
 
-Used for creating new orders, editing existing orders in the run, and customising saved orders. The form fields adapt based on the selected drink type.
+Used for creating new Orders, editing existing Orders in the Run, and customising Saved Orders. The form fields adapt based on the selected drink type.
 
 **Fields (conditional based on drink config):**
 - **Name** — text input, required, auto-focused
@@ -85,14 +85,14 @@ Used for creating new orders, editing existing orders in the run, and customisin
 - **Notes** — freetext textarea, shown for all drink types that support notes
 
 **Bottom of form:**
-- A "Remember this one for next time?" checkbox — saves the order for future recall.
-- "Add order" / "Update order" submit button (label varies by context).
+- A "Remember this one for next time?" checkbox — saves the Order for future recall.
+- "Add Order" / "Update Order" submit button (label varies by context).
 - "Cancel" button returns to the add screen.
 
 **Behaviour by context:**
-- **New Order:** All fields empty. Submit adds to the run.
-- **Edit (from run):** Fields pre-filled from the existing order. Submit updates the order in the run.
-- **Custom (from saved):** Fields pre-filled from the saved order. Submit adds a new order to the run. The save checkbox, if checked, creates a new saved order entry.
+- **New Order:** All fields empty. Submit adds to the Run.
+- **Edit (from Run):** Fields pre-filled from the existing Order. Submit updates the Order in the Run.
+- **Custom (from Saved):** Fields pre-filled from the Saved Order. Submit adds a new Order to the Run. The save checkbox, if checked, creates a new Saved Order entry.
 
 ---
 
@@ -102,16 +102,16 @@ Used for creating new orders, editing existing orders in the run, and customisin
 - Single-column, full-width layout.
 - Full-page transitions between screens (slide-in animation).
 - Touch-friendly: swipe-to-delete, large tap targets.
-- Bottom bar with FAB and End Run button on the run view.
+- Bottom bar with FAB and End Run button on the Run view.
 - Order card action buttons always visible.
 
 ### Desktop (≥ 768px)
 - Two-panel layout:
-  - **Left sidebar** (360px fixed width): Run header, order list, bottom bar with End Run + FAB.
-  - **Right main panel**: Add Order screen or Order Form. When no run is active, the right panel is empty.
+  - **Left sidebar** (360px fixed width): Run header, Order list, bottom bar with End Run + FAB.
+  - **Right main panel**: Add Order screen or Order Form. When no Run is active, the right panel is empty.
 - Only the right panel changes on navigation — the sidebar persists.
 - Order card action buttons revealed on hover.
-- The Add Order screen is the default right panel content when a run is active.
+- The Add Order screen is the default right panel content when a Run is active.
 
 ---
 
@@ -189,32 +189,32 @@ A subtle SVG fractal noise overlay (`opacity: 0.035`) on the root element provid
 
 ### Animations
 - **Page transitions:** Mobile screens slide in from the right (250ms).
-- **Order card entry:** New order cards slide in with a bounce (400ms).
+- **Order card entry:** New Order cards slide in with a bounce (400ms).
 - **Mascot mood change:** Wobble animation (600ms) when mood transitions.
 - **Button press:** Scale down to 0.97 on active.
 - **Confirm dialog:** Fade-in overlay with scale-in dialog (bounce easing).
 - **Drag overlay:** Elevated with large shadow at 0.95 opacity.
 
 ### Mascot
-A simple inline SVG coffee cup character with a face. Three reactive moods based on order count:
-- **Neutral** (0 orders): Flat mouth, warm tan fill, steam wisps.
-- **Happy** (1–4 orders): Smile curve, mint green fill, steam wisps.
-- **Overwhelmed** (5+ orders): X-eyes, frown, pink fill, no steam.
+A simple inline SVG coffee cup character with a face. Three reactive moods based on Order count:
+- **Neutral** (0 Orders): Flat mouth, warm tan fill, steam wisps.
+- **Happy** (1–4 Orders): Smile curve, mint green fill, steam wisps.
+- **Overwhelmed** (5+ Orders): X-eyes, frown, pink fill, no steam.
 
 The mascot wobbles when its mood changes.
 
 ### Copy & Tone
 Warm, gently British voice. Playful copy in non-interactive text:
 - Empty state messages rotate randomly: "The kettle's gone cold...", "Nobody's thirsty?", "Bit quiet in here...", "Who fancies a brew?", "The mugs are gathering dust..."
-- Start run: "Start a new run"
+- Start Run: "Start a new Run"
 - Run status: "Run in progress"
-- No run: "No run on — fancy starting one?"
-- End run confirmation: "End this round? Everyone sorted? This will clear all current orders."
-- Delete order confirmation: "Are you sure you want to bin this one?"
+- No Run: "No Run on — fancy starting one?"
+- End Run confirmation: "End this round? Everyone sorted? This will clear all current Orders."
+- Delete Order confirmation: "Are you sure you want to bin this one?"
 - Cancel button: "Never mind"
 - Save checkbox: "Remember this one for next time?"
-- Saved orders empty: "No saved orders yet. Save one from the order form!"
-- Action buttons remain concise: "Add order", "Update order", "End Run", "Usual", "Custom", "New Order", "Back".
+- Saved Orders empty: "No Saved Orders yet. Save one from the Order form!"
+- Action buttons remain concise: "Add Order", "Update Order", "End Run", "Usual", "Custom", "New Order", "Back".
 
 ---
 
@@ -228,9 +228,9 @@ All user-facing strings are externalised via i18n with a single `en-GB` locale. 
 
 The following capabilities are designed into the data model or hook layer but have no UI:
 
-1. **Multi-user authentication** — The `useUserId` hook currently returns a hardcoded `'default-user'`. The data model includes `userId` on runs and saved orders, ready for multi-user support.
-2. **Run history viewing** — Completed runs are archived (not deleted) with an `archivedAt` timestamp. There is no UI to browse past runs.
-3. **Saved order overwrite on Custom flow** — When using "Custom" to modify a saved order and checking "Save", the current implementation creates a new saved order rather than updating the original.
+1. **Multi-user authentication** — The `useUserId` hook currently returns a hardcoded `'default-user'`. The data model includes `userId` on Runs and Saved Orders, ready for multi-user support.
+2. **Run history viewing** — Completed Runs are archived (not deleted) with an `archivedAt` timestamp. There is no UI to browse past Runs.
+3. **Saved Order overwrite on Custom flow** — When using "Custom" to modify a Saved Order and checking "Save", the current implementation creates a new Saved Order rather than updating the original.
 
 ---
 
@@ -238,4 +238,4 @@ The following capabilities are designed into the data model or hook layer but ha
 
 1. **Swipe-to-delete reset** — On `SavedOrderCard`, swiping partially and then not completing the swipe does not always reset the card position cleanly. The `offsetX` state persists until the next touch interaction.
 2. **Order form validation** — The submit button is disabled only when no drink type is selected. The name field is required in logic but there is no visible validation error state shown to the user.
-3. **Saved order duplication** — The "Save for later" checkbox always creates a new saved order entry. There is no deduplication by person name or matching against existing saved orders.
+3. **Saved Order duplication** — The "Save for later" checkbox always creates a new Saved Order entry. There is no deduplication by person name or matching against existing Saved Orders.

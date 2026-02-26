@@ -43,8 +43,8 @@ src/
 │   ├── useLocalStorage.ts   # Generic localStorage hook with cross-tab sync
 │   ├── useUserId.ts         # Returns hardcoded 'default-user'
 │   ├── useRun.ts            # Active run management + archival
-│   ├── useOrders.ts         # CRUD + reorder for orders in a run
-│   ├── useSavedOrders.ts    # CRUD + reorder for saved orders
+│   ├── useOrders.ts         # CRUD + reorder for Orders in a Run
+│   ├── useSavedOrders.ts    # CRUD + reorder for Saved Orders
 │   ├── useBreakpoint.ts     # Responsive breakpoint detection
 │   └── index.ts             # Re-exports all hooks
 ├── utils/                   # Pure utility functions
@@ -57,8 +57,8 @@ src/
 │   ├── organisms/           # RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
 │   └── templates/           # SinglePanelLayout, DualPanelLayout
 ├── pages/                   # Screen-level components
-│   ├── RunView.tsx          # Main run screen
-│   ├── AddOrder.tsx         # Add order / saved orders screen
+│   ├── RunView.tsx          # Main Run screen
+│   ├── AddOrder.tsx         # Add Order / Saved Orders screen
 │   └── OrderFormPage.tsx    # Order form wrapper
 ├── styles/                  # Global styles
 │   ├── tokens.css           # CSS custom properties (design tokens)
@@ -89,7 +89,7 @@ interface Run {
 ```
 
 **Storage key:** `CoffeeRun:runs`
-**Lifecycle:** Created by `startRun()`. Archived (not deleted) by `archiveRun(runId)` which sets `archivedAt`. Only one run per user can have `archivedAt === null` at a time.
+**Lifecycle:** Created by `startRun()`. Archived (not deleted) by `archiveRun(runId)` which sets `archivedAt`. Only one Run per user can have `archivedAt === null` at a time.
 
 ### Order
 
@@ -116,7 +116,7 @@ type OrderFormData = Omit<Order, 'id' | 'runId' | 'createdAt' | 'updatedAt'>
 ```
 
 **Storage key:** `CoffeeRun:orders`
-**Note:** All orders across all runs are stored in a single flat array. Filtering by `runId` happens in the `useOrders` hook.
+**Note:** All Orders across all Runs are stored in a single flat array. Filtering by `runId` happens in the `useOrders` hook.
 
 ### SavedOrder
 
@@ -183,24 +183,24 @@ Returns `'default-user'`. Placeholder for future auth integration — when auth 
 
 ### `useRun()`
 Returns `{ activeRun, startRun, archiveRun }`.
-- `activeRun`: The current user's non-archived run, or `null`.
+- `activeRun`: The current user's non-archived Run, or `null`.
 - `startRun()`: Creates and persists a new Run.
-- `archiveRun(runId)`: Sets `archivedAt` on the run.
+- `archiveRun(runId)`: Sets `archivedAt` on the Run.
 
 ### `useOrders(runId: string | null)`
 Returns `{ orders, addOrder, updateOrder, removeOrder, reorderOrders }`.
-- Filters the global order array by `runId`.
+- Filters the global Order array by `runId`.
 - `addOrder(data: OrderFormData)`: Creates an Order with generated ID and timestamps.
 - `updateOrder(orderId, data)`: Partial update with new `updatedAt`.
 - `removeOrder(orderId)`: Hard deletes from the array.
-- `reorderOrders(fromIndex, toIndex)`: Uses `arrayMove` from @dnd-kit to reorder within the run's subset while preserving global array positions.
+- `reorderOrders(fromIndex, toIndex)`: Uses `arrayMove` from @dnd-kit to reorder within the Run's subset while preserving global array positions.
 
 ### `useSavedOrders()`
 Returns `{ savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders }`.
 - Filters by current `userId`.
 - `saveOrder(data)`: Always creates a new SavedOrder (no update/overwrite).
 - `removeSavedOrder(savedId)`: Hard deletes.
-- `reorderSavedOrders(fromIndex, toIndex)`: Same array-reorder pattern as orders.
+- `reorderSavedOrders(fromIndex, toIndex)`: Same array-reorder pattern as Orders.
 
 ### `useBreakpoint(): 'mobile' | 'desktop'`
 Uses `window.matchMedia('(min-width: 768px)')` with a change listener. Returns the current breakpoint.
@@ -221,13 +221,13 @@ type Screen =
 **Transitions:**
 - `run` → `add`: User taps "Add" FAB
 - `add` → `form` (no orderId, no prefill): User taps "New Order"
-- `add` → `form` (with prefill): User taps "Custom" on a saved order
-- `run` → `form` (with orderId + prefill): User taps "Edit" on an order card
+- `add` → `form` (with prefill): User taps "Custom" on a Saved Order
+- `run` → `form` (with orderId + prefill): User taps "Edit" on an Order card
 - `form` → `add`: User taps "Cancel"
 - `form` → `run`: User submits the form
-- `add` → `run`: User taps "Usual" on a saved order, or "Back"
+- `add` → `run`: User taps "Usual" on a Saved Order, or "Back"
 
-On desktop, `run` screen is always visible in the sidebar. The right panel shows `add` or `form`. When no run is active on desktop, the right panel is empty (`null`).
+On desktop, `run` screen is always visible in the sidebar. The right panel shows `add` or `form`. When no Run is active on desktop, the right panel is empty (`null`).
 
 ---
 
@@ -256,17 +256,17 @@ Composite components combining atoms.
 | `FormField` | Label + children wrapper for form inputs. |
 | `ConfirmDialog` | Modal overlay with title, message, cancel/confirm actions. |
 | `OrderCard` | Order display card with drag handle, name, drink pills, edit/delete actions, swipe-to-delete. |
-| `SavedOrderCard` | Saved order card with drag handle, name, drink pills, Usual/Custom buttons, swipe-to-delete. |
-| `DrinkPills` | Renders a row of Badge + AspectPill components summarising a drink order. Shared between OrderCard and SavedOrderCard. |
+| `SavedOrderCard` | Saved Order card with drag handle, name, drink pills, Usual/Custom buttons, swipe-to-delete. |
+| `DrinkPills` | Renders a row of Badge + AspectPill components summarising a drink Order. Shared between OrderCard and SavedOrderCard. |
 
 ### Organisms
 Complex UI blocks with internal state or business logic.
 
 | Component | Description |
 |-----------|-------------|
-| `RunHeader` | App title, run status subtitle with order count. |
+| `RunHeader` | App title, Run status subtitle with Order count. |
 | `OrderForm` | Multi-field form driven by drink config. Manages own form state. Resets fields on drink type change. Submit disabled when no drink type selected. |
-| `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added orders for entry animation. |
+| `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
 | `SavedOrderList` | "Saved Orders" header + SortableList with SavedOrderCard rendering. Shows empty state message. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
 
@@ -283,7 +283,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 
 | Component | Description |
 |-----------|-------------|
-| `RunView` | Full run view: mascot, order list, bottom bar with End Run + FAB, confirmation dialogs. Handles run start/end and order CRUD delegation. |
+| `RunView` | Full Run view: mascot, Order list, bottom bar with End Run + FAB, confirmation dialogs. Handles Run start/end and Order CRUD delegation. |
 | `AddOrder` | New Order button + SavedOrderList. Optional back button (mobile). |
 | `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). |
 
@@ -347,7 +347,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 - **Locale:** Single `en-GB` locale bundled at build time (not lazy-loaded).
 - **Config:** Initialised in `src/i18n/index.ts`, imported in `main.tsx`.
 - **Interpolation escaping:** Disabled (`escapeValue: false`) since React handles XSS.
-- **Pluralisation:** Used for order count (`orderCount_one` / `orderCount_other`).
+- **Pluralisation:** Used for Order count (`orderCount_one` / `orderCount_other`).
 - **Translation keys:** Flat namespace under `translation`. All drink types, variants, milk types, sweetener types, and UI strings are keyed.
 - **Usage pattern:** `useTranslation()` hook in components, `t('key')` for strings, `t('key', { returnObjects: true })` for arrays (empty state messages).
 

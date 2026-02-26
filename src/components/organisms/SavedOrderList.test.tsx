@@ -56,7 +56,7 @@ describe('SavedOrderList', () => {
     expect(screen.getByText('Saved Orders')).toBeInTheDocument()
   })
 
-  it('shows empty state message when no saved orders', () => {
+  it('shows empty state message when no Saved Orders', () => {
     render(
       <SavedOrderList
         savedOrders={[]}
@@ -66,10 +66,10 @@ describe('SavedOrderList', () => {
         onReorder={vi.fn()}
       />,
     )
-    expect(screen.getByText(/No saved orders yet/)).toBeInTheDocument()
+    expect(screen.getByText(/No Saved Orders yet/)).toBeInTheDocument()
   })
 
-  it('renders saved order cards', () => {
+  it('renders Saved Order cards', () => {
     const saved = [
       createSavedOrder({ id: 's1', orderData: createOrderFormData({ personName: 'Alice' }) }),
       createSavedOrder({ id: 's2', orderData: createOrderFormData({ personName: 'Bob' }) }),
@@ -87,7 +87,7 @@ describe('SavedOrderList', () => {
     expect(screen.getByText('Bob')).toBeInTheDocument()
   })
 
-  it('does not show empty message when orders exist', () => {
+  it('does not show empty message when Orders exist', () => {
     const saved = [createSavedOrder({ id: 's1' })]
     render(
       <SavedOrderList
@@ -98,7 +98,7 @@ describe('SavedOrderList', () => {
         onReorder={vi.fn()}
       />,
     )
-    expect(screen.queryByText(/No saved orders yet/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/No Saved Orders yet/)).not.toBeInTheDocument()
   })
 
   it('wires onUsual callback to cards', () => {
@@ -133,7 +133,7 @@ describe('SavedOrderList', () => {
     expect(onCustom).toHaveBeenCalledWith(saved[0])
   })
 
-  it('renders drag overlay when a saved order is being dragged', () => {
+  it('renders drag overlay when a Saved Order is being dragged', () => {
     const saved = [
       createSavedOrder({ id: 's1', orderData: createOrderFormData({ personName: 'Alice' }) }),
     ]

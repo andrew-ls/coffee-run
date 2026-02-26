@@ -13,14 +13,14 @@ describe('OrderFormPage', () => {
     expect(screen.getByText('Edit Order')).toBeInTheDocument()
   })
 
-  it('uses "Add order" submit label for new orders', () => {
+  it('uses "Add Order" submit label for new Orders', () => {
     render(<OrderFormPage onSubmit={vi.fn()} onCancel={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Add order' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
   })
 
-  it('uses "Update order" submit label when editing', () => {
+  it('uses "Update Order" submit label when editing', () => {
     render(<OrderFormPage orderId="some-id" onSubmit={vi.fn()} onCancel={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Update order' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Update Order' })).toBeInTheDocument()
   })
 
   it('pre-fills form with initialData', () => {

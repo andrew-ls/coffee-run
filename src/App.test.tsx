@@ -55,23 +55,23 @@ describe('App — mobile layout', () => {
     mockUseBreakpoint.mockReturnValue('mobile')
   })
 
-  it('shows start run screen with no active run', () => {
+  it('shows start Run screen with no active Run', () => {
     render(<App />)
-    expect(screen.getByText('Start a brew round')).toBeInTheDocument()
+    expect(screen.getByText('Start a new Run')).toBeInTheDocument()
   })
 
-  it('starts a run and shows the active run view', async () => {
+  it('starts a Run and shows the active Run view', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
     expect(screen.getByText('End Run')).toBeInTheDocument()
   })
 
   it('navigates to AddOrder when FAB is clicked', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getByText('Add Order')).toBeInTheDocument()
     expect(screen.getByText('New Order')).toBeInTheDocument()
   })
@@ -79,8 +79,8 @@ describe('App — mobile layout', () => {
   it('goes back from AddOrder to RunView', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('Back'))
     expect(screen.getByText('End Run')).toBeInTheDocument()
     expect(screen.queryByText('Add Order')).not.toBeInTheDocument()
@@ -89,22 +89,22 @@ describe('App — mobile layout', () => {
   it('navigates to New Order form from AddOrder', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     expect(screen.getByText('New Order')).toBeInTheDocument()
     // The form is shown — pick a drink placeholder confirms it
     expect(screen.getByText('Pick a drink...')).toBeInTheDocument()
   })
 
-  it('submits a new order and returns to RunView with the order showing', async () => {
+  it('submits a new Order and returns to RunView with the Order showing', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Start run
-    await user.click(screen.getByText('Start a brew round'))
+    // Start Run
+    await user.click(screen.getByText('Start a new Run'))
     // Navigate to form
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
 
     // Fill form
@@ -112,7 +112,7 @@ describe('App — mobile layout', () => {
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Coffee')
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
-    // Should be back in RunView with Alice's order
+    // Should be back in RunView with Alice's Order
     expect(screen.getByText('Alice')).toBeInTheDocument()
     expect(screen.queryByText('Pick a drink...')).not.toBeInTheDocument()
   })
@@ -121,8 +121,8 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.click(screen.getByRole('button', { name: /cancel/i }))
 
@@ -133,8 +133,8 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
 
     await user.type(screen.getByPlaceholderText('Name'), 'Bob')
@@ -142,42 +142,42 @@ describe('App — mobile layout', () => {
     await user.click(screen.getByLabelText(/remember this one/i))
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
-    // Navigate to AddOrder to see the saved order
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Navigate to AddOrder to see the Saved Order
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getByText('Bob')).toBeInTheDocument()
     // The Usual button should be there
     expect(screen.getByText('Usual')).toBeInTheDocument()
   })
 
-  it('clicking Usual adds the saved order and returns to run view', async () => {
+  it('clicking Usual adds the Saved Order and returns to Run view', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Save an order
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Save an Order
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Eve')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Tea')
     await user.click(screen.getByLabelText(/remember this one/i))
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
-    // Go to AddOrder to see the saved order
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Go to AddOrder to see the Saved Order
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('Usual'))
 
-    // Should be back at run view with Eve's order added again
+    // Should be back at Run view with Eve's Order added again
     expect(screen.getByText('End Run')).toBeInTheDocument()
     expect(screen.queryByText('Add Order')).not.toBeInTheDocument()
   })
 
-  it('clicking Custom opens the form pre-filled from saved order', async () => {
+  it('clicking Custom opens the form pre-filled from Saved Order', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Save an order
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Save an Order
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Frank')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Tea')
@@ -185,7 +185,7 @@ describe('App — mobile layout', () => {
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
     // Go to AddOrder and click Custom
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('Custom'))
 
     // Should show form pre-filled with Frank's data
@@ -196,40 +196,40 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
     await user.click(screen.getByText('End Run'))
     await user.click(screen.getByText('End round'))
 
-    expect(screen.getByText('Start a brew round')).toBeInTheDocument()
+    expect(screen.getByText('Start a new Run')).toBeInTheDocument()
   })
 
-  it('edit order navigates to form pre-filled', async () => {
+  it('edit Order navigates to form pre-filled', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Add an order first
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Add an Order first
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Carol')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Coffee')
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
     // Click edit
-    await user.click(screen.getByRole('button', { name: 'Edit order' }))
+    await user.click(screen.getByRole('button', { name: 'Edit Order' }))
 
     // Should show "Edit Order" title and Carol pre-filled
     expect(screen.getByText('Edit Order')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Name')).toHaveValue('Carol')
   })
 
-  it('delete order shows confirm dialog then removes the order', async () => {
+  it('delete Order shows confirm dialog then removes the Order', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Add an order
-    await user.click(screen.getByText('Start a brew round'))
-    await user.click(screen.getByRole('button', { name: 'Add order' }))
+    // Add an Order
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Dave')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Tea')
@@ -238,7 +238,7 @@ describe('App — mobile layout', () => {
     expect(screen.getByText('Dave')).toBeInTheDocument()
 
     // Delete it
-    await user.click(screen.getByRole('button', { name: 'Delete order' }))
+    await user.click(screen.getByRole('button', { name: 'Delete Order' }))
     await user.click(screen.getByText('Remove'))
 
     expect(screen.queryByText('Dave')).not.toBeInTheDocument()
@@ -261,7 +261,7 @@ describe('App — desktop layout', () => {
     render(<App />)
 
     // On desktop, the RunView is in the sidebar — start run button should be there
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
 
     // Right panel shows AddOrder (no back button on desktop)
     expect(screen.getByText('Add Order')).toBeInTheDocument()
@@ -278,7 +278,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
     await user.click(screen.getByText('New Order'))
 
     expect(screen.getByText('Pick a drink...')).toBeInTheDocument()
@@ -288,7 +288,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
     await user.click(screen.getByText('New Order'))
     expect(screen.getByText('Pick a drink...')).toBeInTheDocument()
 
@@ -298,17 +298,17 @@ describe('App — desktop layout', () => {
     expect(screen.getByText('New Order')).toBeInTheDocument()
   })
 
-  it('updates an existing order when edited from desktop', async () => {
+  it('updates an existing Order when edited from desktop', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a brew round'))
+    await user.click(screen.getByText('Start a new Run'))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Carol')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Coffee')
     await user.click(screen.getByRole('button', { name: /add order/i }))
 
-    await user.click(screen.getByRole('button', { name: 'Edit order' }))
+    await user.click(screen.getByRole('button', { name: 'Edit Order' }))
 
     const nameInput = screen.getByPlaceholderText('Name')
     await user.clear(nameInput)

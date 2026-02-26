@@ -83,7 +83,7 @@ describe('AddOrder', () => {
     expect(onBack).toHaveBeenCalledOnce()
   })
 
-  it('shows saved orders', () => {
+  it('shows Saved Orders', () => {
     const saved = [
       createSavedOrder({ id: 's1', orderData: createOrderFormData({ personName: 'Eve' }) }),
     ]
@@ -96,7 +96,7 @@ describe('AddOrder', () => {
     expect(screen.getByText('Saved Orders')).toBeInTheDocument()
   })
 
-  it('wires onUsual to saved order cards', () => {
+  it('wires onUsual to Saved Order cards', () => {
     const onUsual = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onUsual={onUsual} />)
@@ -104,7 +104,7 @@ describe('AddOrder', () => {
     expect(onUsual).toHaveBeenCalledWith(saved[0])
   })
 
-  it('wires onCustom to saved order cards', () => {
+  it('wires onCustom to Saved Order cards', () => {
     const onCustom = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onCustom={onCustom} />)

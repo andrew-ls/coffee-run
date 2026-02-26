@@ -75,7 +75,7 @@ describe('OrderList', () => {
     render(
       <OrderList orders={orders} onEdit={onEdit} onDelete={vi.fn()} onReorder={vi.fn()} />,
     )
-    const editButtons = screen.getAllByRole('button', { name: 'Edit order' })
+    const editButtons = screen.getAllByRole('button', { name: 'Edit Order' })
     editButtons[0].click()
     expect(onEdit).toHaveBeenCalledWith('o1')
   })
@@ -85,7 +85,7 @@ describe('OrderList', () => {
     render(
       <OrderList orders={orders} onEdit={vi.fn()} onDelete={onDelete} onReorder={vi.fn()} />,
     )
-    const deleteButtons = screen.getAllByRole('button', { name: 'Delete order' })
+    const deleteButtons = screen.getAllByRole('button', { name: 'Delete Order' })
     deleteButtons[0].click()
     expect(onDelete).toHaveBeenCalledWith('o1')
   })
@@ -115,8 +115,8 @@ describe('OrderList', () => {
     expect(aliceElements.length).toBeGreaterThan(1)
 
     // Invoke the no-op callbacks on the overlay card to achieve function coverage
-    const editButtons = screen.getAllByRole('button', { name: 'Edit order' })
-    const deleteButtons = screen.getAllByRole('button', { name: 'Delete order' })
+    const editButtons = screen.getAllByRole('button', { name: 'Edit Order' })
+    const deleteButtons = screen.getAllByRole('button', { name: 'Delete Order' })
     fireEvent.click(editButtons[editButtons.length - 1])
     fireEvent.click(deleteButtons[deleteButtons.length - 1])
   })

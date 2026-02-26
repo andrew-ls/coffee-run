@@ -13,24 +13,24 @@
       "Who fancies a brew?",
       "The mugs are gathering dust..."
     ],
-    "startRun": "Start a brew round",
-    "addOrderAriaLabel": "Add order",
+    "startRun": "Start a new Run",
+    "addOrderAriaLabel": "Add Order",
     "endRoundDialog": {
       "title": "End this round?",
-      "message": "Everyone sorted? This will clear all current orders.",
+      "message": "Everyone sorted? This will clear all current Orders.",
       "confirm": "End round"
     },
     "deleteOrderDialog": {
-      "title": "Remove this order?",
+      "title": "Remove this Order?",
       "message": "Are you sure you want to bin this one?",
       "confirm": "Remove"
     }
   },
   "runHeader": {
-    "roundInProgress": "Brew round in progress",
-    "orderCount_one": "\u00b7 {{count}} order",
-    "orderCount_other": "\u00b7 {{count}} orders",
-    "noRun": "No run on \u2014 fancy starting one?",
+    "roundInProgress": "Run in progress",
+    "orderCount_one": "\u00b7 {{count}} Order",
+    "orderCount_other": "\u00b7 {{count}} Orders",
+    "noRun": "No Run on \u2014 fancy starting one?",
     "endRun": "End Run"
   },
   "addOrder": {
@@ -41,8 +41,8 @@
   "orderFormPage": {
     "editTitle": "Edit Order",
     "newTitle": "New Order",
-    "updateSubmit": "Update order",
-    "addSubmit": "Add order"
+    "updateSubmit": "Update Order",
+    "addSubmit": "Add Order"
   },
   "orderForm": {
     "whoFor": "Who's this for?",
@@ -64,15 +64,15 @@
     "notesPlaceholder": "Extra shot, no foam, etc.",
     "saveForLater": "Remember this one for next time?",
     "cancel": "Cancel",
-    "addOrder": "Add order"
+    "addOrder": "Add Order"
   },
   "savedOrderList": {
     "title": "Saved Orders",
-    "empty": "No saved orders yet. Save one from the order form!"
+    "empty": "No Saved Orders yet. Save one from the Order form!"
   },
   "orderCard": {
-    "editLabel": "Edit order",
-    "deleteLabel": "Delete order",
+    "editLabel": "Edit Order",
+    "deleteLabel": "Delete Order",
     "delete": "Delete",
     "drinkSummary": {
       "iced": "Iced",

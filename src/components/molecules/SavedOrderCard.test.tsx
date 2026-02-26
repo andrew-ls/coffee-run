@@ -90,7 +90,7 @@ describe('SavedOrderCard', () => {
     expect(screen.getByText('Matcha')).toBeInTheDocument()
   })
 
-  it('calls onUsual with the saved order when Usual is clicked', () => {
+  it('calls onUsual with the Saved Order when Usual is clicked', () => {
     const onUsual = vi.fn()
     render(
       <SavedOrderCard
@@ -104,7 +104,7 @@ describe('SavedOrderCard', () => {
     expect(onUsual).toHaveBeenCalledWith(savedOrder)
   })
 
-  it('calls onCustom with the saved order when Custom is clicked', () => {
+  it('calls onCustom with the Saved Order when Custom is clicked', () => {
     const onCustom = vi.fn()
     render(
       <SavedOrderCard
@@ -118,7 +118,7 @@ describe('SavedOrderCard', () => {
     expect(onCustom).toHaveBeenCalledWith(savedOrder)
   })
 
-  it('calls onDelete with saved order id when delete zone is clicked', () => {
+  it('calls onDelete with Saved Order id when delete zone is clicked', () => {
     const onDelete = vi.fn()
     render(
       <SavedOrderCard

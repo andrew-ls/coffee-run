@@ -49,19 +49,19 @@ describe('OrderCard', () => {
     expect(screen.getByText('Coffee')).toBeInTheDocument()
   })
 
-  it('calls onEdit with order id when edit button is clicked', () => {
+  it('calls onEdit with Order id when edit button is clicked', () => {
     const onEdit = vi.fn()
     const order = createOrder({ id: 'test-id' })
     render(<OrderCard order={order} onEdit={onEdit} onDelete={vi.fn()} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Edit order' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Edit Order' }))
     expect(onEdit).toHaveBeenCalledWith('test-id')
   })
 
-  it('calls onDelete with order id when delete button is clicked', () => {
+  it('calls onDelete with Order id when delete button is clicked', () => {
     const onDelete = vi.fn()
     const order = createOrder({ id: 'del-id' })
     render(<OrderCard order={order} onEdit={vi.fn()} onDelete={onDelete} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Delete order' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
     expect(onDelete).toHaveBeenCalledWith('del-id')
   })
 

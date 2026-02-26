@@ -52,13 +52,13 @@ describe('RunView', () => {
   describe('no active run', () => {
     it('shows the start run button', () => {
       render(<RunView {...defaultProps} hasActiveRun={false} />)
-      expect(screen.getByText('Start a brew round')).toBeInTheDocument()
+      expect(screen.getByText('Start a new Run')).toBeInTheDocument()
     })
 
     it('calls onStartRun when start button is clicked', () => {
       const onStartRun = vi.fn()
       render(<RunView {...defaultProps} hasActiveRun={false} onStartRun={onStartRun} />)
-      fireEvent.click(screen.getByText('Start a brew round'))
+      fireEvent.click(screen.getByText('Start a new Run'))
       expect(onStartRun).toHaveBeenCalledOnce()
     })
 
@@ -73,7 +73,7 @@ describe('RunView', () => {
     })
   })
 
-  describe('active run, no orders', () => {
+  describe('active Run, no Orders', () => {
     it('shows End Run button', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} />)
       expect(screen.getByText('End Run')).toBeInTheDocument()
@@ -81,29 +81,29 @@ describe('RunView', () => {
 
     it('shows FAB when showAddButton is true (default)', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} />)
-      expect(screen.getByRole('button', { name: 'Add order' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
     })
 
     it('hides FAB when showAddButton is false', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} showAddButton={false} />)
-      expect(screen.queryByRole('button', { name: 'Add order' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Add Order' })).not.toBeInTheDocument()
     })
 
     it('calls onAddOrder when FAB is clicked', () => {
       const onAddOrder = vi.fn()
       render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} onAddOrder={onAddOrder} />)
-      fireEvent.click(screen.getByRole('button', { name: 'Add order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Add Order' }))
       expect(onAddOrder).toHaveBeenCalledOnce()
     })
   })
 
-  describe('active run with orders', () => {
+  describe('active Run with Orders', () => {
     const orders = [
       createOrder({ id: 'o1', personName: 'Alice' }),
       createOrder({ id: 'o2', personName: 'Bob' }),
     ]
 
-    it('renders order cards', () => {
+    it('renders Order cards', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
       expect(screen.getByText('Alice')).toBeInTheDocument()
       expect(screen.getByText('Bob')).toBeInTheDocument()
@@ -133,14 +133,14 @@ describe('RunView', () => {
     })
   })
 
-  describe('delete order dialog', () => {
+  describe('delete Order dialog', () => {
     const orders = [createOrder({ id: 'o1', personName: 'Alice' })]
 
     it('opens delete confirm dialog when delete is triggered', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
-      // Click delete button on the order card
-      fireEvent.click(screen.getByRole('button', { name: 'Delete order' }))
-      expect(screen.getByText('Remove this order?')).toBeInTheDocument()
+      // Click delete button on the Order card
+      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
+      expect(screen.getByText('Remove this Order?')).toBeInTheDocument()
     })
 
     it('calls onDeleteOrder with the correct id when confirmed', () => {
@@ -148,7 +148,7 @@ describe('RunView', () => {
       render(
         <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
       )
-      fireEvent.click(screen.getByRole('button', { name: 'Delete order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
       fireEvent.click(screen.getByText('Remove'))
       expect(onDeleteOrder).toHaveBeenCalledWith('o1')
     })
@@ -158,9 +158,9 @@ describe('RunView', () => {
       render(
         <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
       )
-      fireEvent.click(screen.getByRole('button', { name: 'Delete order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
       fireEvent.click(screen.getByText('Never mind'))
-      expect(screen.queryByText('Remove this order?')).not.toBeInTheDocument()
+      expect(screen.queryByText('Remove this Order?')).not.toBeInTheDocument()
       expect(onDeleteOrder).not.toHaveBeenCalled()
     })
   })
