@@ -68,7 +68,7 @@ describe('SavedOrderCard', () => {
     expect(screen.getByText('Tea')).toBeInTheDocument()
   })
 
-  it('shows variant in the summary', () => {
+  it('shows variant as a pill', () => {
     render(
       <SavedOrderCard
         savedOrder={savedOrder}
@@ -80,7 +80,7 @@ describe('SavedOrderCard', () => {
     expect(screen.getByText('Earl Grey')).toBeInTheDocument()
   })
 
-  it('shows customDrinkName when variant is empty', () => {
+  it('shows customDrinkName as a pill when variant is empty', () => {
     const order = createSavedOrder({
       orderData: createOrderFormData({ drinkType: 'Other', variant: '', customDrinkName: 'Matcha' }),
     })
@@ -130,6 +130,72 @@ describe('SavedOrderCard', () => {
     )
     fireEvent.click(screen.getByText('Delete'))
     expect(onDelete).toHaveBeenCalledWith('s1')
+  })
+
+  describe('aspect pills', () => {
+    it('renders an Iced pill when iced is true', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ iced: true, milkType: 'None', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Iced')).toBeInTheDocument()
+    })
+
+    it('does not render an Iced pill when iced is false', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ iced: false, milkType: 'None', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.queryByText('Iced')).not.toBeInTheDocument()
+    })
+
+    it('does not render a variant pill when variant is "Other" with no customVariant', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ drinkType: 'Coffee', variant: 'Other', customVariant: '', milkType: 'None', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.queryByText('Other')).not.toBeInTheDocument()
+    })
+
+    it('renders customVariant as a variant pill', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ variant: 'Other', customVariant: 'Hazelnut' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Hazelnut')).toBeInTheDocument()
+    })
+
+    it('renders milk pill when milkType is not None', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ milkType: 'Oat', milkAmount: 'Splash', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText(/Oat/)).toBeInTheDocument()
+    })
+
+    it('does not render a milk pill when milkType is None', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ milkType: 'None', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.queryByText(/milk/i)).not.toBeInTheDocument()
+    })
+
+    it('renders sweetener pill when sweetenerType is not None', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ milkType: 'None', sweetenerType: 'Brown Sugar', sweetenerAmount: 2 }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText(/Brown Sugar/)).toBeInTheDocument()
+    })
+
+    it('does not render a sweetener pill when sweetenerType is None', () => {
+      const order = createSavedOrder({
+        orderData: createOrderFormData({ milkType: 'None', sweetenerType: 'None' }),
+      })
+      render(<SavedOrderCard savedOrder={order} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.queryByText(/Sugar/i)).not.toBeInTheDocument()
+    })
   })
 
   describe('mobile touch handling', () => {

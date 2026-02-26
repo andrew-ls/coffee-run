@@ -48,9 +48,10 @@
   margin-bottom: var(--space-xs);
 }
 
-.drinkSummary {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
 }
 
 .actions {

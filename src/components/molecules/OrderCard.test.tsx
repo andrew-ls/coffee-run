@@ -65,60 +65,78 @@ describe('OrderCard', () => {
     expect(onDelete).toHaveBeenCalledWith('del-id')
   })
 
-  describe('buildDrinkSummary', () => {
-    it('shows variant when set', () => {
-      const order = createOrder({ variant: 'Latte', customVariant: '', iced: false, milkType: 'None', sweetenerType: 'None', notes: '' })
-      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/Latte/)).toBeInTheDocument()
+  describe('aspect pills', () => {
+    it('always renders the drink type badge', () => {
+      render(<OrderCard order={createOrder({ drinkType: 'Tea' })} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Tea')).toBeInTheDocument()
     })
 
-    it('shows Iced prefix when iced is true', () => {
-      const order = createOrder({ iced: true, variant: 'Latte', milkType: 'None', sweetenerType: 'None', notes: '' })
+    it('renders an Iced pill when iced is true', () => {
+      const order = createOrder({ iced: true })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/Iced/)).toBeInTheDocument()
+      expect(screen.getByText('Iced')).toBeInTheDocument()
     })
 
-    it('shows milk info when milkType is not None', () => {
-      const order = createOrder({ milkType: 'Oat', milkAmount: 'Splash', variant: 'Latte', sweetenerType: 'None', notes: '' })
+    it('does not render an Iced pill when iced is false', () => {
+      const order = createOrder({ iced: false })
+      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.queryByText('Iced')).not.toBeInTheDocument()
+    })
+
+    it('renders variant pill when variant is set and not "Other"', () => {
+      const order = createOrder({ variant: 'Latte', customVariant: '' })
+      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Latte')).toBeInTheDocument()
+    })
+
+    it('does not render a variant pill when variant is "Other" with no customVariant', () => {
+      const order = createOrder({ variant: 'Other', customVariant: '' })
+      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      // "Other" as a variant should not appear as a separate pill
+      expect(screen.queryByText('Other')).not.toBeInTheDocument()
+    })
+
+    it('renders customVariant as a variant pill', () => {
+      const order = createOrder({ variant: 'Other', customVariant: 'Hazelnut' })
+      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Hazelnut')).toBeInTheDocument()
+    })
+
+    it('renders customDrinkName as a variant pill for Other type', () => {
+      const order = createOrder({ drinkType: 'Other', customDrinkName: 'Chai Latte', variant: '', customVariant: '' })
+      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      expect(screen.getByText('Chai Latte')).toBeInTheDocument()
+    })
+
+    it('renders milk pill when milkType is not None', () => {
+      const order = createOrder({ milkType: 'Oat', milkAmount: 'Splash', sweetenerType: 'None' })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
       expect(screen.getByText(/Oat/)).toBeInTheDocument()
+      expect(screen.getByText(/Splash/)).toBeInTheDocument()
     })
 
-    it('omits milk info when milkType is None', () => {
-      const order = createOrder({ milkType: 'None', variant: 'Espresso', sweetenerType: 'None', notes: '', iced: false })
+    it('does not render a milk pill when milkType is None', () => {
+      const order = createOrder({ milkType: 'None', sweetenerType: 'None' })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
       expect(screen.queryByText(/milk/i)).not.toBeInTheDocument()
     })
 
-    it('shows sweetener info when sweetenerType is not None', () => {
-      const order = createOrder({ sweetenerType: 'Sugar', sweetenerAmount: 2, milkType: 'None', notes: '' })
+    it('renders sweetener pill when sweetenerType is not None', () => {
+      const order = createOrder({ sweetenerType: 'Brown Sugar', sweetenerAmount: 1.5, milkType: 'None' })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/Sugar/)).toBeInTheDocument()
+      expect(screen.getByText(/Brown Sugar/)).toBeInTheDocument()
     })
 
-    it('shows custom drink name for Other type', () => {
-      const order = createOrder({ drinkType: 'Other', customDrinkName: 'Chai Latte', variant: '', milkType: 'None', sweetenerType: 'None', notes: '' })
+    it('does not render a sweetener pill when sweetenerType is None', () => {
+      const order = createOrder({ sweetenerType: 'None', milkType: 'None' })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/Chai Latte/)).toBeInTheDocument()
+      expect(screen.queryByText(/Sugar/i)).not.toBeInTheDocument()
     })
 
-    it('falls back to drink type when no summary parts', () => {
-      const order = createOrder({ drinkType: 'Juice', variant: '', customVariant: '', customDrinkName: '', iced: false, milkType: 'None', sweetenerType: 'None', notes: '' })
+    it('does not render a notes pill even when notes are present', () => {
+      const order = createOrder({ notes: 'extra hot', milkType: 'None', sweetenerType: 'None' })
       render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      // Juice appears in both the badge and summary fallback
-      expect(screen.getAllByText('Juice').length).toBeGreaterThanOrEqual(1)
-    })
-
-    it('shows notes in quotes', () => {
-      const order = createOrder({ notes: 'extra shot', milkType: 'None', sweetenerType: 'None', variant: '' })
-      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/"extra shot"/)).toBeInTheDocument()
-    })
-
-    it('shows customVariant in drink summary', () => {
-      const order = createOrder({ customVariant: 'Hazelnut', milkType: 'None', sweetenerType: 'None', notes: '' })
-      render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      expect(screen.getByText(/Hazelnut/)).toBeInTheDocument()
+      expect(screen.queryByText(/extra hot/)).not.toBeInTheDocument()
     })
   })
 

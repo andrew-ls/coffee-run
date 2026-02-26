@@ -1,8 +1,7 @@
 import { useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { TFunction } from 'i18next'
 import type { Order } from '@/types'
-import { Badge, DragHandle, IconButton } from '@/components/atoms'
+import { AspectPill, Badge, DragHandle, IconButton } from '@/components/atoms'
 import { useBreakpoint } from '@/hooks'
 import styles from './OrderCard.module.css'
 
@@ -13,32 +12,6 @@ interface OrderCardProps {
   isNew?: boolean
   dragHandleProps?: React.HTMLAttributes<HTMLElement>
   isDragging?: boolean
-}
-
-function buildDrinkSummary(order: Order, t: TFunction): string {
-  const parts: string[] = []
-  if (order.iced) parts.push(t('orderCard.drinkSummary.iced'))
-  if (order.variant) parts.push(t(`drinks.variants.${order.variant}`, order.variant))
-  if (order.customVariant) parts.push(order.customVariant)
-  if (order.customDrinkName) parts.push(order.customDrinkName)
-  if (order.milkType && order.milkType !== 'None') {
-    parts.push(
-      t('orderCard.drinkSummary.milk', {
-        amount: t(`milkAmounts.${order.milkAmount}`),
-        type: t(`milkTypes.${order.milkType}`),
-      }).trim(),
-    )
-  }
-  if (order.sweetenerType && order.sweetenerType !== 'None') {
-    parts.push(
-      t('orderCard.drinkSummary.sweetener', {
-        amount: order.sweetenerAmount,
-        type: t(`sweetenerTypes.${order.sweetenerType}`),
-      }),
-    )
-  }
-  if (order.notes) parts.push(`"${order.notes}"`)
-  return parts.join(' · ') || t(`drinks.${order.drinkType}`, order.drinkType)
 }
 
 const SWIPE_THRESHOLD = 80
@@ -95,10 +68,41 @@ export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isD
         onTouchEnd={breakpoint === 'mobile' ? handleTouchEnd : undefined}
       >
         <DragHandle {...dragHandleProps} />
-        <Badge drinkType={order.drinkType} />
         <div className={styles.info}>
           <div className={styles.personName}>{order.personName}</div>
-          <div className={styles.drinkSummary}>{buildDrinkSummary(order, t)}</div>
+          <div className={styles.pillRow}>
+            <Badge drinkType={order.drinkType} />
+            {order.iced && (
+              <AspectPill category="iced" label={t('orderCard.drinkSummary.iced')} />
+            )}
+            {order.variant && order.variant !== 'Other' && (
+              <AspectPill category="variant" label={t(`drinks.variants.${order.variant}`, order.variant)} />
+            )}
+            {order.customVariant && (
+              <AspectPill category="variant" label={order.customVariant} />
+            )}
+            {order.customDrinkName && (
+              <AspectPill category="variant" label={order.customDrinkName} />
+            )}
+            {order.milkType && order.milkType !== 'None' && (
+              <AspectPill
+                category="milk"
+                label={t('orderCard.drinkSummary.milk', {
+                  amount: t(`milkAmounts.${order.milkAmount}`),
+                  type: t(`milkTypes.${order.milkType}`),
+                }).trim()}
+              />
+            )}
+            {order.sweetenerType && order.sweetenerType !== 'None' && (
+              <AspectPill
+                category="sweetener"
+                label={t('orderCard.drinkSummary.sweetener', {
+                  amount: order.sweetenerAmount,
+                  type: t(`sweetenerTypes.${order.sweetenerType}`),
+                })}
+              />
+            )}
+          </div>
         </div>
         <div
           className={`${styles.actions} ${breakpoint === 'mobile' || swiped ? styles.actionsVisible : ''}`}

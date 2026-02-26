@@ -3,6 +3,7 @@ export interface DrinkConfig {
   variants: readonly string[]
   allowOtherVariant: boolean
   allowCustomDrinkName: boolean
+  pillColor: { background: string; text: string }
   fields: {
     iced: boolean
     milk: boolean
@@ -19,6 +20,7 @@ export const DRINKS: readonly DrinkConfig[] = [
     variants: ['Americano', 'Latte', 'Cappuccino', 'Flat White', 'Espresso', 'Mocha'],
     allowOtherVariant: true,
     allowCustomDrinkName: false,
+    pillColor: { background: '#F0E0CC', text: 'var(--color-primary)' },
     fields: { iced: true, milk: true, milkAmount: true, sweetener: true, sweetenerAmount: true, notes: true },
   },
   {
@@ -26,6 +28,7 @@ export const DRINKS: readonly DrinkConfig[] = [
     variants: ['English Breakfast', 'Earl Grey', 'Green', 'Peppermint', 'Chamomile'],
     allowOtherVariant: true,
     allowCustomDrinkName: false,
+    pillColor: { background: '#E8F5E9', text: '#2E7D32' },
     fields: { iced: true, milk: true, milkAmount: true, sweetener: true, sweetenerAmount: true, notes: true },
   },
   {
@@ -33,6 +36,7 @@ export const DRINKS: readonly DrinkConfig[] = [
     variants: ['Classic', 'White', 'Mint'],
     allowOtherVariant: false,
     allowCustomDrinkName: false,
+    pillColor: { background: '#F3E5F5', text: '#6A1B9A' },
     fields: { iced: false, milk: true, milkAmount: true, sweetener: false, sweetenerAmount: false, notes: true },
   },
   {
@@ -40,6 +44,7 @@ export const DRINKS: readonly DrinkConfig[] = [
     variants: ['Orange', 'Apple', 'Cranberry'],
     allowOtherVariant: true,
     allowCustomDrinkName: false,
+    pillColor: { background: '#FFF3E0', text: '#E65100' },
     fields: { iced: false, milk: false, milkAmount: false, sweetener: false, sweetenerAmount: false, notes: true },
   },
   {
@@ -47,6 +52,7 @@ export const DRINKS: readonly DrinkConfig[] = [
     variants: [],
     allowOtherVariant: false,
     allowCustomDrinkName: true,
+    pillColor: { background: '#E0E0E0', text: '#616161' },
     fields: { iced: false, milk: false, milkAmount: false, sweetener: false, sweetenerAmount: false, notes: true },
   },
 ] as const
