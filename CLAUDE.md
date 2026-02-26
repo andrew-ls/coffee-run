@@ -5,17 +5,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # Start dev server with HMR
-npm run build      # Type-check then bundle (tsc -b && vite build)
-npm run lint       # Run ESLint
-npm run preview    # Preview production build locally
+npm run dev             # Start dev server with HMR
+npm run build           # Type-check then bundle (tsc -b && vite build)
+npm run lint            # Run ESLint
+npm run preview         # Preview production build locally
+npm run test            # Run tests in watch mode
+npm run test:run        # Run tests once (CI)
+npm run test:coverage   # Run tests with coverage report
 ```
-
-There is no test runner configured.
 
 ## Architecture
 
-Single-page React 19 + TypeScript app built with Vite. No router — navigation is handled by a `Screen` discriminated union in `App.tsx` with `useState`.
+Single-page React 19 + TypeScript app built with Vite. No router — navigation is handled by a `Screen` discriminated union in `App.tsx` with `useState`:
+
+```typescript
+type Screen =
+  | { name: 'run' }
+  | { name: 'add' }
+  | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
+```
 
 ### State & Persistence
 
@@ -38,7 +46,7 @@ The three domain hooks (`useRun`, `useOrders`, `useSavedOrders`) each own one of
 
 Components follow Atomic Design under `src/components/`:
 
-- `atoms/` — Button, Input, Select, Checkbox, Badge, IconButton
+- `atoms/` — Button, Input, Select, Checkbox, Badge, IconButton, DragHandle, SortableList
 - `molecules/` — FormField, OrderCard, SavedOrderCard, ConfirmDialog
 - `organisms/` — OrderForm, OrderList, RunHeader, SavedOrderList, Mascot
 - `templates/` — SinglePanelLayout, DualPanelLayout
@@ -58,3 +66,10 @@ i18next + react-i18next, configured in `src/i18n/index.ts` (imported in `src/mai
 - CSS Modules with `camelCaseOnly` class name convention (configured in `vite.config.ts`)
 - Design tokens defined as CSS custom properties in `src/styles/tokens.css` (colors, spacing, typography, shadows, transitions)
 - `@` path alias resolves to `src/`
+
+### Testing
+
+Vitest with jsdom + `@testing-library/react`. Coverage thresholds: 100% statements, 100% branches, 100% functions, 100% lines.
+
+- `src/test/setup.ts` — mocks `window.matchMedia`, `crypto.randomUUID`, clears localStorage before each test, initialises i18n
+- `src/test/fixtures.ts` — factory functions (`createRun`, `createOrder`, `createSavedOrder`, `createOrderFormData`) that accept partial overrides
