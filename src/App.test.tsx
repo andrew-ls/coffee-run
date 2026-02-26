@@ -146,7 +146,7 @@ describe('App — mobile layout', () => {
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getByText('Bob')).toBeInTheDocument()
     // The Usual button should be there
-    expect(screen.getByText('Usual')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Usual' })).toBeInTheDocument()
   })
 
   it('clicking Usual adds the Saved Order and returns to Run view', async () => {
@@ -164,7 +164,7 @@ describe('App — mobile layout', () => {
 
     // Go to AddOrder to see the Saved Order
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
-    await user.click(screen.getByText('Usual'))
+    await user.click(screen.getByRole('button', { name: 'Usual' }))
 
     // Should be back at Run view with Eve's Order added again
     expect(screen.getByText('End Run')).toBeInTheDocument()
@@ -186,7 +186,7 @@ describe('App — mobile layout', () => {
 
     // Go to AddOrder and click Custom
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
-    await user.click(screen.getByText('Custom'))
+    await user.click(screen.getByRole('button', { name: 'Custom' }))
 
     // Should show form pre-filled with Frank's data
     expect(screen.getByPlaceholderText('Name')).toHaveValue('Frank')

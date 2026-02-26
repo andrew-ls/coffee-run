@@ -1,40 +1,62 @@
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState } from 'react'
 import { useBreakpoint } from './useBreakpoint'
 
 const SWIPE_THRESHOLD = 80
 
-export function useSwipeToDelete() {
+export function useSwipeToDelete({ enableRightSwipe = false }: { enableRightSwipe?: boolean } = {}) {
   const breakpoint = useBreakpoint()
   const startX = useRef(0)
+  const startOffsetX = useRef(0)
   const [offsetX, setOffsetX] = useState(0)
-  const [swiped, setSwiped] = useState(false)
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX
-  }, [])
+    startOffsetX.current = offsetX
+  }
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     const diff = e.touches[0].clientX - startX.current
-    if (diff < 0) setOffsetX(diff)
-  }, [])
-
-  const handleTouchEnd = useCallback(() => {
-    if (offsetX < -SWIPE_THRESHOLD) {
-      setSwiped(true)
-      setOffsetX(-SWIPE_THRESHOLD - 20)
+    const newOffset = startOffsetX.current + diff
+    if (newOffset < 0) {
+      setOffsetX(newOffset)
+      setSwipeDirection('left')
+    } else if (newOffset > 0 && enableRightSwipe) {
+      setOffsetX(newOffset)
+      setSwipeDirection('right')
     } else {
       setOffsetX(0)
     }
-  }, [offsetX])
+  }
+
+  const handleTouchEnd = () => {
+    if (offsetX < -SWIPE_THRESHOLD) {
+      setOffsetX(-SWIPE_THRESHOLD - 20)
+    } else if (offsetX > SWIPE_THRESHOLD) {
+      setOffsetX(SWIPE_THRESHOLD + 20)
+    } else {
+      setOffsetX(0)
+    }
+  }
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (e.propertyName === 'transform' && offsetX === 0) {
+      setSwipeDirection(null)
+    }
+  }
 
   const isMobile = breakpoint === 'mobile'
 
   return {
-    swiped,
-    isMobile,
+    swipeDirection,
     swipeStyle: isMobile ? { transform: `translateX(${offsetX}px)` } : undefined,
     touchHandlers: isMobile
-      ? { onTouchStart: handleTouchStart, onTouchMove: handleTouchMove, onTouchEnd: handleTouchEnd }
+      ? {
+          onTouchStart: handleTouchStart,
+          onTouchMove: handleTouchMove,
+          onTouchEnd: handleTouchEnd,
+          onTransitionEnd: handleTransitionEnd,
+        }
       : {},
   }
 }

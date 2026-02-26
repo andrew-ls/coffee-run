@@ -4,6 +4,29 @@
   border-radius: var(--radius-md);
 }
 
+.usualCustomZone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding-left: var(--space-xl);
+  background-color: var(--color-accent-mint);
+  border-radius: var(--radius-md);
+}
+
+.usualZone {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
+.customZone {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
 .deleteZone {
   position: absolute;
   inset: 0;
@@ -29,8 +52,10 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   touch-action: pan-y;
-  z-index: 1;
-  transition: transform var(--duration-normal) var(--ease-out);
+  z-index: 2;
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-fast);
 }
 
 .card.dragging {
@@ -55,7 +80,22 @@
 }
 
 .actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
   display: flex;
-  gap: var(--space-sm);
-  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-right: var(--space-lg);
+  padding-left: var(--space-2xl);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  background: linear-gradient(to right, transparent, var(--color-bg-card) var(--space-2xl));
+}
+
+@media (hover: hover) {
+  .card:hover .actions {
+    opacity: 1;
+  }
 }

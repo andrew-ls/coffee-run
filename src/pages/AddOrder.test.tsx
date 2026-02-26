@@ -100,7 +100,7 @@ describe('AddOrder', () => {
     const onUsual = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onUsual={onUsual} />)
-    fireEvent.click(screen.getByText('Usual'))
+    fireEvent.click(screen.getByRole('button', { name: 'Usual' }))
     expect(onUsual).toHaveBeenCalledWith(saved[0])
   })
 
@@ -108,7 +108,36 @@ describe('AddOrder', () => {
     const onCustom = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onCustom={onCustom} />)
-    fireEvent.click(screen.getByText('Custom'))
+    fireEvent.click(screen.getByRole('button', { name: 'Custom' }))
     expect(onCustom).toHaveBeenCalledWith(saved[0])
+  })
+
+  describe('delete saved order', () => {
+    it('shows confirm dialog when delete button is clicked', () => {
+      const saved = [createSavedOrder({ id: 's1' })]
+      render(<AddOrder {...defaultProps} savedOrders={saved} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
+      expect(screen.getByText('Delete Saved Order?')).toBeInTheDocument()
+    })
+
+    it('calls onDeleteSaved and closes dialog when Remove is confirmed', () => {
+      const onDeleteSaved = vi.fn()
+      const saved = [createSavedOrder({ id: 's1' })]
+      render(<AddOrder {...defaultProps} savedOrders={saved} onDeleteSaved={onDeleteSaved} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
+      fireEvent.click(screen.getByText('Remove'))
+      expect(onDeleteSaved).toHaveBeenCalledWith('s1')
+      expect(screen.queryByText('Delete Saved Order?')).not.toBeInTheDocument()
+    })
+
+    it('does not call onDeleteSaved and closes dialog when cancelled', () => {
+      const onDeleteSaved = vi.fn()
+      const saved = [createSavedOrder({ id: 's1' })]
+      render(<AddOrder {...defaultProps} savedOrders={saved} onDeleteSaved={onDeleteSaved} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
+      fireEvent.click(screen.getByText('Never mind'))
+      expect(onDeleteSaved).not.toHaveBeenCalled()
+      expect(screen.queryByText('Delete Saved Order?')).not.toBeInTheDocument()
+    })
   })
 })

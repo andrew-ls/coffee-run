@@ -16,11 +16,22 @@ interface OrderCardProps {
 
 export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isDragging }: OrderCardProps) {
   const { t } = useTranslation()
-  const { swiped, isMobile, swipeStyle, touchHandlers } = useSwipeToDelete()
+  const { swipeStyle, touchHandlers, swipeDirection } = useSwipeToDelete({ enableRightSwipe: true })
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.deleteZone} onClick={() => onDelete(order.id)}>
+      <div
+        className={styles.editZone}
+        style={{ zIndex: swipeDirection === 'right' ? 1 : 0 }}
+        onClick={() => onEdit(order.id)}
+      >
+        {t('orderCard.edit')}
+      </div>
+      <div
+        className={styles.deleteZone}
+        style={{ zIndex: swipeDirection === 'left' ? 1 : 0 }}
+        onClick={() => onDelete(order.id)}
+      >
         {t('orderCard.delete')}
       </div>
       <div
@@ -35,9 +46,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isD
             <DrinkPills order={order} />
           </div>
         </div>
-        <div
-          className={`${styles.actions} ${!isMobile || swiped ? styles.actionsVisible : ''}`}
-        >
+        <div className={styles.actions}>
           <IconButton label={t('orderCard.editLabel')} onClick={() => onEdit(order.id)}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path

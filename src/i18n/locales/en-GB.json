@@ -36,7 +36,12 @@
   "addOrder": {
     "title": "Add Order",
     "back": "Back",
-    "newOrder": "New Order"
+    "newOrder": "New Order",
+    "deleteSavedDialog": {
+      "title": "Delete Saved Order?",
+      "message": "This saved order will be removed permanently.",
+      "confirm": "Remove"
+    }
   },
   "orderFormPage": {
     "editTitle": "Edit Order",
@@ -74,6 +79,7 @@
     "editLabel": "Edit Order",
     "deleteLabel": "Delete Order",
     "delete": "Delete",
+    "edit": "Edit",
     "drinkSummary": {
       "iced": "Iced",
       "milk": "{{amount}} {{type}} milk",

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { OrderCard } from './OrderCard'
 import { createOrder } from '@/test/fixtures'
@@ -141,20 +141,22 @@ describe('OrderCard', () => {
   })
 
   describe('mobile layout', () => {
-    it('applies swipe transform on mobile', () => {
+    beforeEach(() => {
       vi.mocked(useBreakpoint).mockReturnValue('mobile')
+    })
+
+    it('applies swipe transform on mobile', () => {
       const order = createOrder()
       const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      const card = container.querySelector('[style]')
+      const card = container.querySelector('.card') as HTMLElement
       // On mobile the transform style is applied (may be translateX(0px) initially)
       expect(card).toBeInTheDocument()
     })
 
     it('handles touch start, move and end on the card', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const order = createOrder()
       const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      const card = container.querySelector('[style]') as HTMLElement
+      const card = container.querySelector('.card') as HTMLElement
       // simulate a small swipe that does not trigger delete
       fireEvent.touchStart(card, { touches: [{ clientX: 100 }] })
       fireEvent.touchMove(card, { touches: [{ clientX: 70 }] })
@@ -164,19 +166,17 @@ describe('OrderCard', () => {
     })
 
     it('reveals swipe delete zone after threshold swipe', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const order = createOrder()
       const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      const card = container.querySelector('[style]') as HTMLElement
+      const card = container.querySelector('.card') as HTMLElement
       // swipe further than 80px threshold
       fireEvent.touchStart(card, { touches: [{ clientX: 200 }] })
       fireEvent.touchMove(card, { touches: [{ clientX: 100 }] })
       fireEvent.touchEnd(card)
-      expect(card).toBeInTheDocument()
+      expect(card.style.transform).toBe('translateX(-100px)')
     })
 
     it('calls onDelete when swipe delete zone is clicked', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const onDelete = vi.fn()
       const order = createOrder({ id: 'swipe-id' })
       const { getByText } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={onDelete} />)
@@ -184,15 +184,99 @@ describe('OrderCard', () => {
       expect(onDelete).toHaveBeenCalledWith('swipe-id')
     })
 
-    it('does not update offset when touch moves in positive direction', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
+    it('updates offset when touch moves in positive direction (right swipe enabled)', () => {
       const order = createOrder()
       const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
-      const card = container.querySelector('[style]') as HTMLElement
+      const card = container.querySelector('.card') as HTMLElement
       fireEvent.touchStart(card, { touches: [{ clientX: 100 }] })
-      // Move right (positive diff) — offsetX should stay at 0
       fireEvent.touchMove(card, { touches: [{ clientX: 150 }] })
+      expect(card.style.transform).toBe('translateX(50px)')
+    })
+
+    it('reveals edit zone after threshold right swipe', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      fireEvent.touchStart(card, { touches: [{ clientX: 0 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 100 }] })
+      fireEvent.touchEnd(card)
+      expect(card.style.transform).toBe('translateX(100px)')
+    })
+
+    it('calls onEdit when edit zone is tapped after right swipe', () => {
+      const onEdit = vi.fn()
+      const order = createOrder({ id: 'edit-swipe-id' })
+      const { getByText, container } = render(<OrderCard order={order} onEdit={onEdit} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      fireEvent.touchStart(card, { touches: [{ clientX: 0 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 100 }] })
+      fireEvent.touchEnd(card)
+      fireEvent.click(getByText('Edit'))
+      expect(onEdit).toHaveBeenCalledWith('edit-swipe-id')
+    })
+
+    it('snaps card back when right swipe is below threshold', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      fireEvent.touchStart(card, { touches: [{ clientX: 0 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 50 }] })
+      fireEvent.touchEnd(card)
       expect(card.style.transform).toBe('translateX(0px)')
+    })
+
+    it('elevates editZone z-index during right swipe', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      const editZone = container.querySelector('.editZone') as HTMLElement
+      const deleteZone = container.querySelector('.deleteZone') as HTMLElement
+      fireEvent.touchStart(card, { touches: [{ clientX: 0 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 50 }] })
+      expect(editZone.style.zIndex).toBe('1')
+      expect(deleteZone.style.zIndex).toBe('0')
+    })
+
+    it('elevates deleteZone z-index during left swipe', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      const editZone = container.querySelector('.editZone') as HTMLElement
+      const deleteZone = container.querySelector('.deleteZone') as HTMLElement
+      fireEvent.touchStart(card, { touches: [{ clientX: 100 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 60 }] })
+      expect(deleteZone.style.zIndex).toBe('1')
+      expect(editZone.style.zIndex).toBe('0')
+    })
+
+    it('resets z-index on both zones after snap-back transitionEnd', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      const editZone = container.querySelector('.editZone') as HTMLElement
+      const deleteZone = container.querySelector('.deleteZone') as HTMLElement
+      // swipe right below threshold so card snaps back (offsetX → 0)
+      fireEvent.touchStart(card, { touches: [{ clientX: 0 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 50 }] })
+      fireEvent.touchEnd(card)
+      // swipeDirection is still 'right' at this point; simulate CSS transition completing
+      fireEvent.transitionEnd(card, { propertyName: 'transform' })
+      expect(editZone.style.zIndex).toBe('0')
+      expect(deleteZone.style.zIndex).toBe('0')
+    })
+
+    it('continues swipe relative to locked position', () => {
+      const order = createOrder()
+      const { container } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} />)
+      const card = container.querySelector('.card') as HTMLElement
+      // lock card at -100px (left swipe past threshold)
+      fireEvent.touchStart(card, { touches: [{ clientX: 200 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 100 }] })
+      fireEvent.touchEnd(card)
+      // start a new swipe from x=150, drag right 30px
+      fireEvent.touchStart(card, { touches: [{ clientX: 150 }] })
+      fireEvent.touchMove(card, { touches: [{ clientX: 180 }] })
+      expect(card.style.transform).toBe('translateX(-70px)')
     })
   })
 

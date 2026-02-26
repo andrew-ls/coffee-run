@@ -4,6 +4,20 @@
   border-radius: var(--radius-md);
 }
 
+.editZone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: var(--space-xl);
+  background-color: var(--color-accent-mint);
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+}
+
 .deleteZone {
   position: absolute;
   inset: 0;
@@ -33,7 +47,7 @@
     box-shadow var(--duration-fast);
   touch-action: pan-y;
   cursor: default;
-  z-index: 1;
+  z-index: 2;
 }
 
 .card.entering {
@@ -74,16 +88,22 @@
 }
 
 .actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
   display: flex;
+  align-items: center;
   gap: var(--space-xs);
+  padding-right: var(--space-lg);
+  padding-left: var(--space-2xl);
   opacity: 0;
   transition: opacity var(--duration-fast);
+  background: linear-gradient(to right, transparent, var(--color-bg-card) var(--space-2xl));
 }
 
-.card:hover .actions {
-  opacity: 1;
-}
-
-.actionsVisible {
-  opacity: 1;
+@media (hover: hover) {
+  .card:hover .actions {
+    opacity: 1;
+  }
 }

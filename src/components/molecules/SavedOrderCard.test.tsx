@@ -100,7 +100,7 @@ describe('SavedOrderCard', () => {
         onDelete={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByText('Usual'))
+    fireEvent.click(screen.getByRole('button', { name: 'Usual' }))
     expect(onUsual).toHaveBeenCalledWith(savedOrder)
   })
 
@@ -114,7 +114,7 @@ describe('SavedOrderCard', () => {
         onDelete={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByText('Custom'))
+    fireEvent.click(screen.getByRole('button', { name: 'Custom' }))
     expect(onCustom).toHaveBeenCalledWith(savedOrder)
   })
 
@@ -129,6 +129,20 @@ describe('SavedOrderCard', () => {
       />,
     )
     fireEvent.click(screen.getByText('Delete'))
+    expect(onDelete).toHaveBeenCalledWith('s1')
+  })
+
+  it('calls onDelete with Saved Order id when delete button is clicked', () => {
+    const onDelete = vi.fn()
+    render(
+      <SavedOrderCard
+        savedOrder={savedOrder}
+        onUsual={vi.fn()}
+        onCustom={vi.fn()}
+        onDelete={onDelete}
+      />,
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
     expect(onDelete).toHaveBeenCalledWith('s1')
   })
 
@@ -204,8 +218,8 @@ describe('SavedOrderCard', () => {
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
-      // The card div with conditional style
-      const card = container.querySelector('[style]') as HTMLElement
+      // Select the card by its translateX transform (zones have zIndex style, not transform)
+      const card = container.querySelector('[style*="translateX"]') as HTMLElement
       fireEvent.touchStart(card, { touches: [{ clientX: 200 }] })
       fireEvent.touchMove(card, { touches: [{ clientX: 150 }] })
       fireEvent.touchEnd(card)
@@ -217,23 +231,43 @@ describe('SavedOrderCard', () => {
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
-      const card = container.querySelector('[style]') as HTMLElement
+      const card = container.querySelector('[style*="translateX"]') as HTMLElement
       fireEvent.touchStart(card, { touches: [{ clientX: 200 }] })
       fireEvent.touchMove(card, { touches: [{ clientX: 100 }] })
       fireEvent.touchEnd(card)
       expect(card).toBeInTheDocument()
     })
 
-    it('does not update offset when touch moves in positive direction', () => {
+    it('updates offset when touch moves in positive direction (right swipe enabled)', () => {
       vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
-      const card = container.querySelector('[style]') as HTMLElement
+      const card = container.querySelector('[style*="translateX"]') as HTMLElement
       fireEvent.touchStart(card, { touches: [{ clientX: 100 }] })
-      // Move right (positive diff) — offsetX should stay at 0
+      // Move right (positive diff) — right swipe is enabled, card moves with touch
       fireEvent.touchMove(card, { touches: [{ clientX: 150 }] })
-      expect(card.style.transform).toBe('translateX(0px)')
+      expect(card.style.transform).toBe('translateX(50px)')
+    })
+
+    it('calls onUsual when the Usual swipe zone is clicked (mobile)', () => {
+      vi.mocked(useBreakpoint).mockReturnValue('mobile')
+      const onUsual = vi.fn()
+      render(
+        <SavedOrderCard savedOrder={savedOrder} onUsual={onUsual} onCustom={vi.fn()} onDelete={vi.fn()} />,
+      )
+      fireEvent.click(screen.getByText('Usual'))
+      expect(onUsual).toHaveBeenCalledWith(savedOrder)
+    })
+
+    it('calls onCustom when the Custom swipe zone is clicked (mobile)', () => {
+      vi.mocked(useBreakpoint).mockReturnValue('mobile')
+      const onCustom = vi.fn()
+      render(
+        <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={onCustom} onDelete={vi.fn()} />,
+      )
+      fireEvent.click(screen.getByText('Custom'))
+      expect(onCustom).toHaveBeenCalledWith(savedOrder)
     })
   })
 

@@ -25,3 +25,13 @@
   background-color: var(--color-danger-bg);
   color: var(--color-danger);
 }
+
+.usual:hover {
+  background-color: var(--color-accent-mint);
+  color: var(--color-text);
+}
+
+.custom:hover {
+  background-color: var(--color-accent-peach);
+  color: var(--color-text);
+}

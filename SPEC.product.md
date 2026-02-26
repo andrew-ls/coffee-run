@@ -63,9 +63,11 @@ Reached by tapping the FAB on the Run view. On mobile, this is a full-page trans
   - Drag handle for reordering
   - Person's name
   - Drink summary pills
-  - "Usual" button — adds their Saved Order directly to the Run and returns to the Run view.
-  - "Custom" button — opens the Order form pre-filled with their Saved Order for modification.
-- Swipe-to-delete on mobile for removing Saved Orders.
+  - Checkmark icon button (aria-label "Usual") — adds their Saved Order directly to the Run and returns to the Run view.
+  - Sliders icon button (aria-label "Custom") — opens the Order form pre-filled with their Saved Order for modification.
+  - Trash icon button (aria-label "Delete", danger style) — removes the Saved Order after a confirmation dialog.
+  - On desktop, the three icon buttons are hover-revealed with a gradient (same pattern as active Order cards).
+  - On mobile, the icon buttons are hidden; swipe left reveals the delete zone, swipe right reveals a split zone with "Usual" (mint) and "Custom" (peach) actions.
 
 ### 3. Order Form Screen
 

@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
 import { Button } from '@/components/atoms'
+import { ConfirmDialog } from '@/components/molecules'
 import { SavedOrderList } from '@/components/organisms'
 import styles from './AddOrder.module.css'
 
@@ -26,6 +28,12 @@ export function AddOrder({
   showBack = true,
 }: AddOrderProps) {
   const { t } = useTranslation()
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+
+  const handleConfirmDelete = () => {
+    onDeleteSaved(deleteConfirmId!)
+    setDeleteConfirmId(null)
+  }
 
   return (
     <div className={styles.container}>
@@ -46,9 +54,18 @@ export function AddOrder({
         savedOrders={savedOrders}
         onUsual={onUsual}
         onCustom={onCustom}
-        onDelete={onDeleteSaved}
+        onDelete={setDeleteConfirmId}
         onReorder={onReorderSaved}
       />
+      {deleteConfirmId && (
+        <ConfirmDialog
+          title={t('addOrder.deleteSavedDialog.title')}
+          message={t('addOrder.deleteSavedDialog.message')}
+          confirmLabel={t('addOrder.deleteSavedDialog.confirm')}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteConfirmId(null)}
+        />
+      )}
     </div>
   )
 }

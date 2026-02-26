@@ -46,14 +46,13 @@ src/
 │   ├── useOrders.ts         # CRUD + reorder for Orders in a Run
 │   ├── useSavedOrders.ts    # CRUD + reorder for Saved Orders
 │   ├── useBreakpoint.ts     # Responsive breakpoint detection
-│   ├── useSwipeToDelete.ts  # Shared swipe-to-delete state + touch handlers
 │   └── index.ts             # Re-exports all hooks
 ├── utils/                   # Pure utility functions
 │   ├── id.ts                # generateId() — crypto.randomUUID()
 │   ├── time.ts              # now() — ISO timestamp
 │   └── index.ts             # Re-exports
 ├── components/              # Atomic Design hierarchy
-│   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Pill, DragHandle, SortableList
+│   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Badge, AspectPill, DragHandle, SortableList
 │   ├── molecules/           # FormField, ConfirmDialog, OrderCard, SavedOrderCard, DrinkPills
 │   ├── organisms/           # RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
 │   └── templates/           # SinglePanelLayout, DualPanelLayout
@@ -153,7 +152,7 @@ interface DrinkConfig {
   variants: readonly string[]               // Available variants
   allowOtherVariant: boolean                // Show "Other" freetext option in variants
   allowCustomDrinkName: boolean             // Show freetext drink name (only for 'Other' type)
-  pillColor: PillColor                        // Pill colours
+  pillColor: { background: string; text: string }  // Badge colours
   fields: {
     iced: boolean           // Show iced checkbox
     milk: boolean           // Show milk type select
@@ -244,7 +243,8 @@ Foundational UI primitives. No business logic.
 | `Select` | Styled `<select>` with custom chevron. Accepts `string` or `{value, label}` options. |
 | `Checkbox` | Styled checkbox with label. |
 | `IconButton` | Circular icon button. Variants: default, danger. Requires `label` for a11y. |
-| `Pill` | Coloured pill label. Takes `label` and `color: PillColor` props. Used via DrinkPills for drink types and aspect categories. |
+| `Badge` | Drink type pill with drink-specific colours from config. |
+| `AspectPill` | Coloured pill for drink aspects (iced, variant, milk, sweetener). |
 | `DragHandle` | Six-dot grip icon for drag-and-drop. |
 | `SortableList` | Generic drag-and-drop list using @dnd-kit. Accepts render props for items and overlay. Vertical-axis-only with pointer (8px distance) and touch (250ms delay) sensors. |
 
@@ -257,7 +257,7 @@ Composite components combining atoms.
 | `ConfirmDialog` | Modal overlay with title, message, cancel/confirm actions. |
 | `OrderCard` | Order display card with drag handle, name, drink pills, edit/delete actions, swipe-to-delete. |
 | `SavedOrderCard` | Saved Order card with drag handle, name, drink pills, Usual/Custom buttons, swipe-to-delete. |
-| `DrinkPills` | Renders a row of Pill components summarising a drink order. Resolves drink and aspect colours from config. Shared between OrderCard and SavedOrderCard. |
+| `DrinkPills` | Renders a row of Badge + AspectPill components summarising a drink Order. Shared between OrderCard and SavedOrderCard. |
 
 ### Organisms
 Complex UI blocks with internal state or business logic.
@@ -294,7 +294,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 ### Approach
 - **CSS Modules** with `camelCaseOnly` convention (configured in Vite).
 - **Design tokens** in `src/styles/tokens.css` as CSS custom properties on `:root`.
-- **Co-located styles**: Each component has a `.module.css` file alongside it.
+- **Co-located styles**: Each component has a `.module.css` file alongside it (except where components share a stylesheet, e.g. `Badge` and `AspectPill` share `pill.module.css`).
 - **Global reset** in `src/styles/global.css`: box-sizing, margin/padding reset, font inheritance, button reset.
 - **Texture overlay** in `src/styles/textures.css`: SVG fractal noise `::before` pseudo-element on `#root`.
 
@@ -364,7 +364,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 ### Test Files
 Tests are co-located with their source files. Coverage includes:
 
-**Atoms** (7 test files): Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList
+**Atoms** (7 test files): Button, Checkbox, DragHandle, IconButton, Input, Select, SortableList, AspectPill, Badge
 **Molecules** (4 test files): ConfirmDialog, FormField, OrderCard, SavedOrderCard
 **Organisms** (5 test files): Mascot, RunHeader, OrderForm, OrderList, SavedOrderList
 **Templates** (2 test files): DualPanelLayout, SinglePanelLayout
