@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# Coffee Run
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A client-side React app for managing group coffee orders in an office setting. Start a run, collect drink orders from colleagues, and track them in a checklist — all without a backend.
 
-Currently, two official plugins are available:
+<!-- TODO: Add screenshot or GIF demo here -->
+<!-- ![Coffee Run screenshot](docs/screenshot.png) -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Drink orders** — add orders with configurable options: drink type, variant, iced, milk type/amount, sweetener type/amount, and notes
+- **Saved orders** — bookmark someone's usual drink and recall it with one tap, or use it as a starting point for a custom order
+- **Drag-and-drop reordering** — rearrange orders and saved orders by dragging
+- **Swipe-to-delete** — remove orders with a swipe gesture on mobile
+- **Run lifecycle** — start a run, collect orders, end and archive it
+- **Responsive layout** — single-panel on mobile with page transitions, dual-panel sidebar on desktop
+- **Offline-first** — all data stored in localStorage, no server required
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+React 19, TypeScript, Vite, CSS Modules, i18next (en-GB), @dnd-kit, Vitest + Testing Library.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+No backend, no router — navigation is a screen state machine and all state lives in the browser.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Prerequisites:** Node 20+
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone <repo-url>
+cd coffee-run
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The dev server starts at `http://localhost:5173` with hot module replacement.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To build for production:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Type-check (`tsc -b`) then bundle (`vite build`) |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run tests in watch mode |
+| `npm run test:run` | Run tests once |
+| `npm run test:coverage` | Run tests with coverage report |
+
+## Project structure
+
+```
+src/
+  App.tsx            # Screen state machine, responsive layout switching
+  components/        # Atomic Design: atoms/ molecules/ organisms/ templates/
+  pages/             # Screen-level components (RunView, AddOrder, OrderFormPage)
+  hooks/             # Data and UI hooks (useRun, useOrders, useSavedOrders, etc.)
+  config/            # Data-driven drink, milk, and sweetener configuration
+  types/             # Domain type definitions
+  styles/            # CSS custom properties (design tokens) and global styles
+  i18n/              # i18next setup and en-GB locale strings
+  test/              # Test setup, mocks, and fixture factories
+```
+
+## Documentation
+
+See [SPEC.product.md](SPEC.product.md) for the full product specification, and [SPEC.technical.md](SPEC.technical.md) for architecture and technical details.
