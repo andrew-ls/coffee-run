@@ -42,6 +42,8 @@ npm run test:coverage   # Run tests with coverage report
 - Run `npm run test:run` and `npm run lint` before considering any task complete.
 - Prefer extending existing patterns over introducing new abstractions.
 - Do not mark work complete if tests or lint fail.
+- When a change affects product behaviour, screens, drink config, visual design, or copy, update `SPEC.product.md` to match.
+- When a change affects project structure, data model, types, hooks, components, config, styling tokens, i18n setup, testing, or build config, update `SPEC.technical.md` to match.
 
 ## Context management
 
