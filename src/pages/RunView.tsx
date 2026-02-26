@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Order } from '@/types'
 import { Button } from '@/components/atoms'
@@ -35,10 +35,10 @@ export function RunView({
   const [showEndConfirm, setShowEndConfirm] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
-  const emptyMessage = useMemo(() => {
+  const [emptyMessage] = useState(() => {
     const messages = t('runView.emptyMessages', { returnObjects: true }) as string[]
     return messages[Math.floor(Math.random() * messages.length)]
-  }, [t])
+  })
 
   const header = (
     <RunHeader

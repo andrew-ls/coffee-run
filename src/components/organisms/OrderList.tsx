@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import type { Order } from '@/types'
 import { SortableList } from '@/components/atoms'
 import { OrderCard } from '@/components/molecules'
@@ -12,9 +12,11 @@ interface OrderListProps {
 }
 
 export function OrderList({ orders, onEdit, onDelete, onReorder }: OrderListProps) {
-  const prevCount = useRef(orders.length)
-  const isNewOrder = orders.length > prevCount.current
-  prevCount.current = orders.length
+  const [prevCount, setPrevCount] = useState(orders.length)
+  const isNewOrder = orders.length > prevCount
+  if (orders.length !== prevCount) {
+    setPrevCount(orders.length)
+  }
   const newestId = isNewOrder ? orders[orders.length - 1]?.id : null
 
   return (

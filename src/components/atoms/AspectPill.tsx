@@ -1,6 +1,6 @@
 import { ASPECT_COLORS } from '@/config'
 import type { AspectCategory } from '@/config'
-import styles from './AspectPill.module.css'
+import styles from './pill.module.css'
 
 interface AspectPillProps {
   label: string

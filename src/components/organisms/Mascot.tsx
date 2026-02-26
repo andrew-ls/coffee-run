@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './Mascot.module.css'
 
 type Mood = 'neutral' | 'happy' | 'overwhelmed'
@@ -8,25 +8,44 @@ interface MascotProps {
   message?: string
 }
 
+const CUP_COLORS: Record<Mood, string> = {
+  overwhelmed: '#E8A0BF',
+  happy: '#A8D8B9',
+  neutral: '#D4A574',
+}
+
 function getMood(count: number): Mood {
   if (count === 0) return 'neutral'
   if (count <= 4) return 'happy'
   return 'overwhelmed'
 }
 
+function MouthPath({ mood }: { mood: Mood }) {
+  switch (mood) {
+    case 'happy':
+      return <path d="M22 46C26 50 30 50 34 46" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" fill="none" />
+    case 'overwhelmed':
+      return <path d="M22 50C26 46 30 46 34 50" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" fill="none" />
+    default:
+      return <line x1="22" y1="48" x2="34" y2="48" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" />
+  }
+}
+
 export function Mascot({ orderCount, message }: MascotProps) {
   const mood = getMood(orderCount)
-  const prevMood = useRef(mood)
+  const [prevMood, setPrevMood] = useState(mood)
   const [wobble, setWobble] = useState(false)
 
+  if (prevMood !== mood) {
+    setPrevMood(mood)
+    setWobble(true)
+  }
+
   useEffect(() => {
-    if (prevMood.current !== mood) {
-      setWobble(true)
-      prevMood.current = mood
-      const timer = setTimeout(() => setWobble(false), 600)
-      return () => clearTimeout(timer)
-    }
-  }, [mood])
+    if (!wobble) return
+    const timer = setTimeout(() => setWobble(false), 600)
+    return () => clearTimeout(timer)
+  }, [wobble])
 
   return (
     <div className={styles.mascot}>
@@ -35,7 +54,7 @@ export function Mascot({ orderCount, message }: MascotProps) {
           {/* Cup body */}
           <path
             d="M8 16H48L44 64H12L8 16Z"
-            fill={mood === 'overwhelmed' ? '#E8A0BF' : mood === 'happy' ? '#A8D8B9' : '#D4A574'}
+            fill={CUP_COLORS[mood]}
             stroke="#6F4E37"
             strokeWidth="2.5"
           />
@@ -61,13 +80,7 @@ export function Mascot({ orderCount, message }: MascotProps) {
             </>
           )}
           {/* Mouth */}
-          {mood === 'happy' ? (
-            <path d="M22 46C26 50 30 50 34 46" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" fill="none" />
-          ) : mood === 'overwhelmed' ? (
-            <path d="M22 50C26 46 30 46 34 50" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" fill="none" />
-          ) : (
-            <line x1="22" y1="48" x2="34" y2="48" stroke="#6F4E37" strokeWidth="2" strokeLinecap="round" />
-          )}
+          <MouthPath mood={mood} />
           {/* Steam */}
           {mood !== 'overwhelmed' && (
             <>

@@ -46,6 +46,7 @@ src/
 │   ├── useOrders.ts         # CRUD + reorder for Orders in a Run
 │   ├── useSavedOrders.ts    # CRUD + reorder for Saved Orders
 │   ├── useBreakpoint.ts     # Responsive breakpoint detection
+│   ├── useSwipeToDelete.ts  # Shared swipe-to-delete state + touch handlers
 │   └── index.ts             # Re-exports all hooks
 ├── utils/                   # Pure utility functions
 │   ├── id.ts                # generateId() — crypto.randomUUID()

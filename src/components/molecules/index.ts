@@ -1,4 +1,5 @@
 export { FormField } from './FormField'
+export { DrinkPills } from './DrinkPills'
 export { OrderCard } from './OrderCard'
 export { SavedOrderCard } from './SavedOrderCard'
 export { ConfirmDialog } from './ConfirmDialog'

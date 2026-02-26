@@ -83,7 +83,7 @@ export function OrderForm({
   const variants = drinkConfig?.variants ?? []
   const variantOptions = drinkConfig?.allowOtherVariant
     ? [...variants, 'Other']
-    : [...variants]
+    : variants
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

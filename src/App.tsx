@@ -21,10 +21,6 @@ export default function App() {
   const { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders } = useSavedOrders()
   const [screen, setScreen] = useState<Screen>({ name: 'run' })
 
-  const handleStartRun = useCallback(() => {
-    startRun()
-  }, [startRun])
-
   const handleEndRun = useCallback(() => {
     archiveRun(activeRun!.id)
     setScreen({ name: 'run' })
@@ -81,7 +77,7 @@ export default function App() {
     <RunView
       hasActiveRun={!!activeRun}
       orders={orders}
-      onStartRun={handleStartRun}
+      onStartRun={startRun}
       onEndRun={handleEndRun}
       onAddOrder={handleAddOrder}
       onEditOrder={handleEditOrder}
