@@ -2,8 +2,17 @@ import { useRef, useState } from 'react'
 import { useBreakpoint } from './useBreakpoint'
 
 const SWIPE_THRESHOLD = 80
+const SNAP_FALLBACK = SWIPE_THRESHOLD + 20
 
-export function useSwipeToDelete({ enableRightSwipe = false }: { enableRightSwipe?: boolean } = {}) {
+export function useSwipeToDelete({
+  enableRightSwipe = false,
+  snapLeftRef,
+  snapRightRef,
+}: {
+  enableRightSwipe?: boolean
+  snapLeftRef?: { readonly current: HTMLElement | null }
+  snapRightRef?: { readonly current: HTMLElement | null }
+} = {}) {
   const breakpoint = useBreakpoint()
   const startX = useRef(0)
   const startOffsetX = useRef(0)
@@ -30,10 +39,12 @@ export function useSwipeToDelete({ enableRightSwipe = false }: { enableRightSwip
   }
 
   const handleTouchEnd = () => {
+    const snapLeft = snapLeftRef?.current?.offsetWidth || SNAP_FALLBACK
+    const snapRight = snapRightRef?.current?.offsetWidth || SNAP_FALLBACK
     if (offsetX < -SWIPE_THRESHOLD) {
-      setOffsetX(-SWIPE_THRESHOLD - 20)
+      setOffsetX(-snapLeft)
     } else if (offsetX > SWIPE_THRESHOLD) {
-      setOffsetX(SWIPE_THRESHOLD + 20)
+      setOffsetX(snapRight)
     } else {
       setOffsetX(0)
     }

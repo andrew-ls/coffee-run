@@ -9,20 +9,16 @@
   inset: 0;
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
-  padding-left: var(--space-xl);
   background-color: var(--color-accent-mint);
+  color: var(--color-text);
   border-radius: var(--radius-md);
 }
 
-.usualZone {
-  color: var(--color-text);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
-}
-
-.customZone {
-  color: var(--color-text);
+.usualCustomContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: 0 var(--space-xl);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
 }
@@ -33,12 +29,15 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: var(--space-xl);
   background-color: var(--color-danger);
   color: #fff;
+  border-radius: var(--radius-md);
+}
+
+.deleteContent {
+  padding: 0 var(--space-xl);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
-  border-radius: var(--radius-md);
 }
 
 .card {

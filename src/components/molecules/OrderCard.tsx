@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Order } from '@/types'
 import { DragHandle, IconButton } from '@/components/atoms'
@@ -16,7 +17,13 @@ interface OrderCardProps {
 
 export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isDragging }: OrderCardProps) {
   const { t } = useTranslation()
-  const { swipeStyle, touchHandlers, swipeDirection } = useSwipeToDelete({ enableRightSwipe: true })
+  const editZoneRef = useRef<HTMLSpanElement>(null)
+  const deleteZoneRef = useRef<HTMLSpanElement>(null)
+  const { swipeStyle, touchHandlers, swipeDirection } = useSwipeToDelete({
+    enableRightSwipe: true,
+    snapRightRef: editZoneRef,
+    snapLeftRef: deleteZoneRef,
+  })
 
   return (
     <div className={styles.wrapper}>
@@ -25,14 +32,14 @@ export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isD
         style={{ zIndex: swipeDirection === 'right' ? 1 : 0 }}
         onClick={() => onEdit(order.id)}
       >
-        {t('orderCard.edit')}
+        <span ref={editZoneRef} className={styles.zoneContent}>{t('orderCard.edit')}</span>
       </div>
       <div
         className={styles.deleteZone}
         style={{ zIndex: swipeDirection === 'left' ? 1 : 0 }}
         onClick={() => onDelete(order.id)}
       >
-        {t('orderCard.delete')}
+        <span ref={deleteZoneRef} className={styles.zoneContent}>{t('orderCard.delete')}</span>
       </div>
       <div
         className={`${styles.card} ${isNew ? styles.entering : ''} ${isDragging ? styles.dragging : ''}`}
