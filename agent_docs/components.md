@@ -6,7 +6,7 @@ Components live under `src/components/` and follow Atomic Design:
 
 | Level | Directory | Current components |
 |-------|-----------|-------------------|
-| Atoms | `atoms/` | Button, Input, Select, Checkbox, Badge, IconButton, DragHandle, SortableList |
+| Atoms | `atoms/` | Button, Input, Select, Checkbox, Pill, IconButton, DragHandle, SortableList |
 | Molecules | `molecules/` | FormField, OrderCard, SavedOrderCard, ConfirmDialog |
 | Organisms | `organisms/` | OrderForm, OrderList, RunHeader, SavedOrderList, Mascot |
 | Templates | `templates/` | SinglePanelLayout, DualPanelLayout |

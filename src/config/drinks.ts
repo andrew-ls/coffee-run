@@ -1,9 +1,11 @@
+import type { PillColor } from './aspectColors'
+
 export interface DrinkConfig {
   type: string
   variants: readonly string[]
   allowOtherVariant: boolean
   allowCustomDrinkName: boolean
-  pillColor: { background: string; text: string }
+  pillColor: PillColor
   fields: {
     iced: boolean
     milk: boolean

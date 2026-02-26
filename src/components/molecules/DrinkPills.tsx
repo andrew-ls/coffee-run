@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
-import { AspectPill, Badge } from '@/components/atoms'
+import { ASPECT_COLORS, DRINKS } from '@/config'
+import { Pill } from '@/components/atoms'
+
+const FALLBACK_PILL_COLOR = DRINKS.find((d) => d.type === 'Other')!.pillColor
 
 interface DrinkPillsProps {
   order: OrderFormData
@@ -20,24 +23,26 @@ export function DrinkPills({ order }: DrinkPillsProps) {
   } = order
   const { t } = useTranslation()
 
+  const drinkColor = DRINKS.find((d) => d.type === drinkType)?.pillColor ?? FALLBACK_PILL_COLOR
+
   return (
     <>
-      <Badge drinkType={drinkType} />
+      <Pill label={drinkType} color={drinkColor} />
       {iced && (
-        <AspectPill category="iced" label={t('orderCard.drinkSummary.iced')} />
+        <Pill color={ASPECT_COLORS.iced} label={t('orderCard.drinkSummary.iced')} />
       )}
       {variant && variant !== 'Other' && (
-        <AspectPill category="variant" label={t(`drinks.variants.${variant}`, variant)} />
+        <Pill color={ASPECT_COLORS.variant} label={t(`drinks.variants.${variant}`, variant)} />
       )}
       {customVariant && (
-        <AspectPill category="variant" label={customVariant} />
+        <Pill color={ASPECT_COLORS.variant} label={customVariant} />
       )}
       {customDrinkName && (
-        <AspectPill category="variant" label={customDrinkName} />
+        <Pill color={ASPECT_COLORS.variant} label={customDrinkName} />
       )}
       {milkType && milkType !== 'None' && (
-        <AspectPill
-          category="milk"
+        <Pill
+          color={ASPECT_COLORS.milk}
           label={t('orderCard.drinkSummary.milk', {
             amount: t(`milkAmounts.${milkAmount}`),
             type: t(`milkTypes.${milkType}`),
@@ -45,8 +50,8 @@ export function DrinkPills({ order }: DrinkPillsProps) {
         />
       )}
       {sweetenerType && sweetenerType !== 'None' && (
-        <AspectPill
-          category="sweetener"
+        <Pill
+          color={ASPECT_COLORS.sweetener}
           label={t('orderCard.drinkSummary.sweetener', {
             amount: sweetenerAmount,
             type: t(`sweetenerTypes.${sweetenerType}`),
