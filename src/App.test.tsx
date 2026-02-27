@@ -253,6 +253,37 @@ describe('App — mobile layout', () => {
 
     expect(screen.queryByText('Dave')).not.toBeInTheDocument()
   })
+
+  it('shows Back button on mobile landing screen when active run exists', async () => {
+    const user = userEvent.setup()
+
+    // Persist an active run to localStorage via a desktop render
+    mockUseBreakpoint.mockReturnValue('desktop')
+    const { unmount } = render(<App />)
+    await user.click(screen.getByText('Start a new Run'))
+    unmount()
+
+    // Fresh render on mobile — run restored from localStorage, screen defaults to 'landing'
+    mockUseBreakpoint.mockReturnValue('mobile')
+    render(<App />)
+
+    expect(screen.getByText('Back')).toBeInTheDocument()
+  })
+
+  it('Back from landing on mobile sets sidebar active', async () => {
+    const user = userEvent.setup()
+
+    mockUseBreakpoint.mockReturnValue('desktop')
+    const { unmount } = render(<App />)
+    await user.click(screen.getByText('Start a new Run'))
+    unmount()
+
+    mockUseBreakpoint.mockReturnValue('mobile')
+    render(<App />)
+
+    await user.click(screen.getByText('Back'))
+    expect(screen.getByText('End Run')).toBeInTheDocument()
+  })
 })
 
 describe('App — desktop layout', () => {
@@ -266,16 +297,16 @@ describe('App — desktop layout', () => {
     expect(screen.getByText('Coffee Run')).toBeInTheDocument()
   })
 
-  it('shows AddOrder in right panel when run is active', async () => {
+  it('shows AddOrder with Back button in right panel when run is active', async () => {
     const user = userEvent.setup()
     render(<App />)
 
     // On desktop, the RunView is in the sidebar — start run button should be there
     await user.click(screen.getByText('Start a new Run'))
 
-    // Right panel shows AddOrder (no back button on desktop)
+    // Right panel shows AddOrder with a Back button
     expect(screen.getByText('Add Order')).toBeInTheDocument()
-    expect(screen.queryByText('Back')).not.toBeInTheDocument()
+    expect(screen.getByText('Back')).toBeInTheDocument()
   })
 
   it('right panel is empty when no active run', () => {
@@ -326,5 +357,34 @@ describe('App — desktop layout', () => {
     await user.click(screen.getByRole('button', { name: /update order/i }))
 
     expect(screen.getByText('Diana')).toBeInTheDocument()
+  })
+
+  it('Back button in Desktop navigates main panel to landing', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByText('Start a new Run'))
+    expect(screen.getByText('New Order')).toBeInTheDocument()
+    await user.click(screen.getByText('Back'))
+    expect(screen.queryByText('New Order')).not.toBeInTheDocument()
+  })
+
+  it('FAB is visible on Desktop when main panel shows landing with active run', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByText('Back'))
+    expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
+  })
+
+  it('FAB in Desktop on landing navigates to AddOrder', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByText('Back'))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
+    expect(screen.getByText('New Order')).toBeInTheDocument()
   })
 })

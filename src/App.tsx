@@ -88,8 +88,12 @@ export default function App() {
   }, [])
 
   const handleBack = useCallback(() => {
-    setSidebarActive(true)
-  }, [])
+    if (breakpoint === 'desktop') {
+      setScreen({ name: 'landing' })
+    } else {
+      setSidebarActive(true)
+    }
+  }, [breakpoint])
 
   const submitLabel =
     screen.name === 'form' && screen.orderId
@@ -104,7 +108,7 @@ export default function App() {
         </Button>
       }
       right={
-        breakpoint !== 'desktop' ? (
+        breakpoint !== 'desktop' || screen.name === 'landing' ? (
           <Fab onClick={handleAddOrder} label={t('runView.addOrderAriaLabel')} />
         ) : undefined
       }
@@ -128,7 +132,7 @@ export default function App() {
         />
       )
     }
-    if (screen.name === 'add' && breakpoint !== 'desktop') {
+    if (screen.name === 'add' || (screen.name === 'landing' && breakpoint !== 'desktop')) {
       return (
         <BottomAppBar
           left={
