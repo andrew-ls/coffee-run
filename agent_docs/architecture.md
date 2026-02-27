@@ -9,9 +9,29 @@ type Screen =
   | { name: 'landing' }
   | { name: 'add' }
   | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
+
+type Direction = 'forward' | 'back'
 ```
 
 `App.tsx` passes handler callbacks (e.g. `handleAddOrder`, `handleEditOrder`) down to pages as props. Pages never set screen state directly — they call the handler they were given. There is no global state manager.
+
+`direction` drives the `PageTransition` molecule, which wraps the main content area. Forward navigations (landing→add, add→form) slide the incoming screen in from below; back navigations slide in from above. Both the outgoing and incoming pages are simultaneously in the DOM for the 250ms transition.
+
+**Screen transitions:**
+
+| Event | screen | sidebarActive | direction |
+|-------|--------|---------------|-----------|
+| App start, no Run | `landing` | `true` | — |
+| User starts a Run | `add` | `true` (sidebar stays) | `forward` |
+| FAB tap (mobile) | `add` | `false` (main shows) | `forward` |
+| "New Order" tap | `form` (no orderId/prefill) | unchanged | `forward` |
+| "Custom" on Saved Order | `form` (with prefill) | unchanged | `forward` |
+| "Edit" on Order card | `form` (orderId + prefill) | `false` on mobile | `forward` |
+| Form submit | `add` | `true` on mobile | `back` |
+| "Cancel" in form | `add` | unchanged | `back` |
+| "Back" tap (mobile) | unchanged | `true` | `back` |
+| "Usual" on Saved Order | unchanged | `true` | `back` |
+| End Run confirmed | `landing` | `true` | `back` |
 
 ## State & persistence
 

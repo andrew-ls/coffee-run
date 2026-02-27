@@ -70,9 +70,14 @@ Strict mode is on with `noUnusedLocals` and `noUnusedParameters`. Target ES2022.
 - Run `npm run test:run` and `npm run lint` before considering any task complete.
 - Prefer extending existing patterns over introducing new abstractions.
 - Do not mark work complete if tests or lint fail.
-- When a change affects product behaviour, screens, drink config, visual design, or copy, update `SPEC.product.md` to match.
+- When a change affects product behaviour, screens, drink config, or copy, update `agent_docs/product.md` to match.
 - When a change adds, removes, or significantly alters a user-facing feature or workflow (e.g. new screens, new gestures, changes to the run/order lifecycle), review and update the help tips in `src/pages/LandingPage.tsx` and their translation keys in `src/i18n/locales/en-GB.json` (`landingPage.*`) to keep the onboarding guidance accurate.
-- When a change affects project structure, data model, types, hooks, components, config, styling tokens, i18n setup, testing, or build config, update `SPEC.technical.md` to match.
+- When a change affects visual design or design tokens, update `agent_docs/styling.md` to match.
+- When a change affects the data model, types, hook APIs, or key implementation details, update `agent_docs/data-model.md` to match.
+- When a change affects component structure or descriptions, update `agent_docs/components.md` to match.
+- When a change affects i18n setup, drink config fields, interaction patterns, or DnD/swipe behaviour, update `agent_docs/patterns.md` to match.
+- When a change affects screen navigation, state machine transitions, or layout, update `agent_docs/architecture.md` to match.
+- When a change affects test setup, fixtures, or coverage config, update `agent_docs/testing.md` to match.
 - When a change affects the app's features, tech stack, prerequisites, npm scripts, or top-level project structure, update `README.md` to match.
 
 ## Context management
@@ -84,7 +89,10 @@ Strict mode is on with `noUnusedLocals` and `noUnusedParameters`. Target ES2022.
 
 Read the relevant file from `agent_docs/` before starting work:
 
-- `agent_docs/architecture.md` — Screen state machine, localStorage, layout switching
-- `agent_docs/components.md` — Atomic Design hierarchy, co-location conventions
-- `agent_docs/patterns.md` — i18n rules, drink config, styling conventions
+- `agent_docs/architecture.md` — Screen state machine, transitions, localStorage, layout switching
+- `agent_docs/components.md` — Atomic Design hierarchy, component descriptions, co-location conventions
+- `agent_docs/data-model.md` — Data model interfaces, hook APIs, key implementation details
+- `agent_docs/patterns.md` — i18n rules, drink config, DnD & swipe patterns
+- `agent_docs/product.md` — App overview, screens & workflow, copy & tone, planned features, known issues
+- `agent_docs/styling.md` — Visual design, design tokens, CSS conventions
 - `agent_docs/testing.md` — Test setup, fixtures, coverage config

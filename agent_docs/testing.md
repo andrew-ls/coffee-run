@@ -31,6 +31,23 @@ Factory functions for domain types; all accept `Partial<T>` overrides:
 
 `vitest.config.ts` sets `css.modules.classNameStrategy: 'non-scoped'`, so class names in tests match the original unscoped name (e.g. `wrapper` not `wrapper_abc123`). Query by role or label rather than class name where possible.
 
+## Test files by layer
+
+Tests are co-located with their source files. Current coverage:
+
+| Layer | Files |
+|-------|-------|
+| **Atoms** (8) | Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList |
+| **Molecules** (5) | ConfirmDialog, FormField, OrderCard, PageTransition, SavedOrderCard |
+| **Organisms** (6) | BottomAppBar, Mascot, OrderForm, OrderList, RunHeader, SavedOrderList |
+| **Templates** (1) | DualPanelLayout |
+| **Contexts** (1) | SidebarContext |
+| **Hooks** (6) | useBreakpoint, useLocalStorage, useOrders, useRun, useSavedOrders, useUserId |
+| **Utils** (2) | id, time |
+| **Config** (1) | drinks |
+| **Pages** (4) | RunView, AddOrder, OrderFormPage, LandingPage |
+| **Integration** (1) | App |
+
 ## Coverage configuration
 
 Provider: v8. Reporters: `text` (console), `html` (coverage/).
