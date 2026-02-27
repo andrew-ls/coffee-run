@@ -4,7 +4,7 @@ import type { OrderFormData, SavedOrder } from '@/types'
 import { useRun, useOrders, useSavedOrders, useBreakpoint } from '@/hooks'
 import { DualPanelLayout } from '@/components/templates'
 import { Button } from '@/components/atoms'
-import { ConfirmDialog } from '@/components/molecules'
+import { ConfirmDialog, PageTransition } from '@/components/molecules'
 import { RunHeader, BottomAppBar, Fab } from '@/components/organisms'
 import { RunView, AddOrder, OrderFormPage, LandingPage } from '@/pages'
 import { SidebarContext } from '@/contexts/SidebarContext'
@@ -21,33 +21,39 @@ export default function App() {
   const { orders, addOrder, updateOrder, removeOrder, reorderOrders } = useOrders(activeRun?.id ?? null)
   const { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders } = useSavedOrders()
   const [screen, setScreen] = useState<Screen>({ name: 'landing' })
+  const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [showEndConfirm, setShowEndConfirm] = useState(false)
   const [formValid, setFormValid] = useState(false)
   const [sidebarActive, setSidebarActive] = useState(true)
 
   const handleStartRun = useCallback(() => {
     startRun()
+    setDirection('forward')
     setScreen({ name: 'add' })
   }, [startRun])
 
   const handleEndRun = useCallback(() => {
     archiveRun(activeRun!.id)
+    setDirection('back')
     setScreen({ name: 'landing' })
     setSidebarActive(true)
   }, [activeRun, archiveRun])
 
   const handleAddOrder = useCallback(() => {
+    setDirection('forward')
     setScreen({ name: 'add' })
     setSidebarActive(false)
   }, [])
 
   const handleNewOrder = useCallback(() => {
+    setDirection('forward')
     setScreen({ name: 'form' })
   }, [])
 
   const handleEditOrder = useCallback(
     (orderId: string) => {
       const order = orders.find((o) => o.id === orderId)
+      setDirection('forward')
       setScreen({ name: 'form', orderId, prefill: order })
       if (breakpoint !== 'desktop') setSidebarActive(false)
     },
@@ -57,6 +63,7 @@ export default function App() {
   const handleUsual = useCallback(
     (saved: SavedOrder) => {
       addOrder(saved.orderData)
+      setDirection('back')
       setScreen({ name: 'add' })
       setSidebarActive(true)
     },
@@ -64,6 +71,7 @@ export default function App() {
   )
 
   const handleCustom = useCallback((saved: SavedOrder) => {
+    setDirection('forward')
     setScreen({ name: 'form', prefill: saved.orderData })
   }, [])
 
@@ -77,6 +85,7 @@ export default function App() {
       if (save) {
         saveOrder(data)
       }
+      setDirection('back')
       setScreen({ name: 'add' })
       setSidebarActive(true)
     },
@@ -84,11 +93,13 @@ export default function App() {
   )
 
   const handleFormCancel = useCallback(() => {
+    setDirection('back')
     setScreen({ name: 'add' })
   }, [])
 
   const handleBack = useCallback(() => {
     if (breakpoint === 'desktop') {
+      setDirection('back')
       setScreen({ name: 'landing' })
     } else {
       setSidebarActive(true)
@@ -205,7 +216,9 @@ export default function App() {
         sidebarBottom={sidebarBar}
         mainBottom={mainBar}
       >
-        {mainContent}
+        <PageTransition contentKey={screen.name} direction={direction}>
+          {mainContent}
+        </PageTransition>
       </DualPanelLayout>
       {endRunConfirmDialog}
     </SidebarContext.Provider>

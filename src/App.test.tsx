@@ -48,6 +48,10 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
+vi.mock('@/components/molecules/PageTransition', () => ({
+  PageTransition: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
+
 import React from 'react'
 
 describe('App — mobile layout', () => {

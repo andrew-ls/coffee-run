@@ -196,7 +196,7 @@ A subtle SVG fractal noise overlay (`opacity: 0.035`) on the root element provid
 - Soft shadows rather than hard borders.
 
 ### Animations
-- **Page transitions:** Mobile screens slide in from the right (250ms).
+- **Page transitions (sidebar/main):** Mobile sidebar and main panel slide horizontally (250ms). Both form factors also animate between main content screens with a direction-aware vertical slide: forward navigations (landing→add, add→form) slide in from below; back navigations (form→add, add→landing) slide in from above.
 - **Order card entry:** New Order cards slide in with a bounce (400ms).
 - **Mascot mood change:** Wobble animation (600ms) when mood transitions.
 - **Button press:** Scale down to 0.97 on active.

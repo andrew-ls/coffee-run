@@ -1,0 +1,48 @@
+@keyframes enterForward {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes exitForward {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes enterBack {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes exitBack {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.page {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+}
+
+.enterForward {
+  animation: enterForward var(--duration-normal) var(--ease-out) forwards;
+}
+
+.exitForward {
+  animation: exitForward var(--duration-normal) var(--ease-out) forwards;
+}
+
+.enterBack {
+  animation: enterBack var(--duration-normal) var(--ease-out) forwards;
+}
+
+.exitBack {
+  animation: exitBack var(--duration-normal) var(--ease-out) forwards;
+}

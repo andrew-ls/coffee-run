@@ -54,7 +54,7 @@ src/
 │   └── index.ts             # Re-exports
 ├── components/              # Atomic Design hierarchy
 │   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Pill, DragHandle, SortableList
-│   ├── molecules/           # FormField, ConfirmDialog, OrderCard, SavedOrderCard, DrinkPills
+│   ├── molecules/           # FormField, ConfirmDialog, OrderCard, SavedOrderCard, DrinkPills, PageTransition
 │   ├── organisms/           # BottomAppBar, RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
 │   └── templates/           # DualPanelLayout (universal — used on all form factors)
 ├── pages/                   # Screen-level components
@@ -214,16 +214,20 @@ Touch gesture handler for swipe-to-delete on cards. Options: `enableRightSwipe` 
 
 ## Screen State Machine
 
-`App.tsx` manages navigation via a `Screen` union type and a `sidebarActive` boolean:
+`App.tsx` manages navigation via a `Screen` union type, a `sidebarActive` boolean, and a `direction` value:
 
 ```typescript
 type Screen =
   | { name: 'landing' }
   | { name: 'add' }
   | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
+
+type Direction = 'forward' | 'back'
 ```
 
 `sidebarActive` controls which panel is visible on mobile (both panels are always in the DOM; CSS transforms show/hide them). On desktop, both panels are always fully visible and `sidebarActive` has no visual effect.
+
+`direction` drives the `PageTransition` molecule, which wraps the main content area and animates between screens using vertical CSS keyframe slides: forward navigations slide in from below; back navigations slide in from above.
 
 **Transitions:**
 - Start (no run): `screen = 'landing'`, `sidebarActive = true`
@@ -267,6 +271,7 @@ Composite components combining atoms.
 | `OrderCard` | Order display card with drag handle, name, drink pills, edit/delete actions, swipe-to-delete. |
 | `SavedOrderCard` | Saved Order card with drag handle, name, drink pills, Usual/Custom buttons, swipe-to-delete. |
 | `DrinkPills` | Renders a row of Pill components summarising a drink Order. Shared between OrderCard and SavedOrderCard. |
+| `PageTransition` | Wraps the main content area in `App.tsx`. Renders both outgoing and incoming pages simultaneously during a navigation transition (250ms, ease-out). Accepts `contentKey` (current screen name), `direction` (`'forward'` slides in from below; `'back'` slides in from above), and `children`. |
 
 ### Organisms
 Complex UI blocks with internal state or business logic.
@@ -375,7 +380,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 Tests are co-located with their source files. Coverage includes:
 
 **Atoms** (8 test files): Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList
-**Molecules** (4 test files): ConfirmDialog, FormField, OrderCard, SavedOrderCard
+**Molecules** (5 test files): ConfirmDialog, FormField, OrderCard, PageTransition, SavedOrderCard
 **Organisms** (6 test files): BottomAppBar, Mascot, RunHeader, OrderForm, OrderList, SavedOrderList
 **Templates** (1 test file): DualPanelLayout
 **Contexts** (1 test file): SidebarContext
