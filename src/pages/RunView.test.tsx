@@ -59,16 +59,6 @@ describe('RunView', () => {
       fireEvent.click(screen.getByText('Start a new Run'))
       expect(onStartRun).toHaveBeenCalledOnce()
     })
-
-    it('shows header when showHeader is true (default)', () => {
-      render(<RunView {...defaultProps} hasActiveRun={false} />)
-      expect(screen.getByText('Coffee Run')).toBeInTheDocument()
-    })
-
-    it('hides header when showHeader is false', () => {
-      render(<RunView {...defaultProps} hasActiveRun={false} showHeader={false} />)
-      expect(screen.queryByText('Coffee Run')).not.toBeInTheDocument()
-    })
   })
 
   describe('active Run with Orders', () => {

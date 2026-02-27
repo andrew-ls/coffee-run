@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { Order } from '@/types'
 import { Button } from '@/components/atoms'
 import { ConfirmDialog } from '@/components/molecules'
-import { RunHeader, OrderList, Mascot } from '@/components/organisms'
+import { OrderList, Mascot } from '@/components/organisms'
 import styles from './RunView.module.css'
 
 interface RunViewProps {
@@ -13,7 +13,6 @@ interface RunViewProps {
   onEditOrder: (orderId: string) => void
   onDeleteOrder: (orderId: string) => void
   onReorderOrder: (fromIndex: number, toIndex: number) => void
-  showHeader?: boolean
 }
 
 export function RunView({
@@ -23,7 +22,6 @@ export function RunView({
   onEditOrder,
   onDeleteOrder,
   onReorderOrder,
-  showHeader = true,
 }: RunViewProps) {
   const { t } = useTranslation()
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
@@ -33,30 +31,19 @@ export function RunView({
     return messages[Math.floor(Math.random() * messages.length)]
   })
 
-  const header = (
-    <RunHeader
-      orderCount={orders.length}
-      hasActiveRun={hasActiveRun}
-    />
-  )
-
   if (!hasActiveRun) {
     return (
-      <>
-        {showHeader && header}
-        <div className={styles.emptyState}>
-          <Mascot orderCount={0} message={emptyMessage} />
-          <div className={styles.startButton}>
-            <Button onClick={onStartRun}>{t('runView.startRun')}</Button>
-          </div>
+      <div className={styles.emptyState}>
+        <Mascot orderCount={0} message={emptyMessage} />
+        <div className={styles.startButton}>
+          <Button onClick={onStartRun}>{t('runView.startRun')}</Button>
         </div>
-      </>
+      </div>
     )
   }
 
   return (
     <>
-      {showHeader && header}
       <div className={styles.container}>
         {orders.length === 0 ? (
           <div className={styles.emptyState}>

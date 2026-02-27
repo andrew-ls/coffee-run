@@ -104,21 +104,22 @@ Used for creating new Orders, editing existing Orders in the Run, and customisin
 
 ### Mobile (< 768px)
 - Single-column, full-width layout.
-- Full-page transitions between screens (slide-in animation).
+- Panel transitions via CSS transform slide animation (250ms). Both panels are always in the DOM; only one is visible at a time, controlled by `SidebarContext`.
 - Touch-friendly: swipe-to-delete, large tap targets.
-- Bottom bar contents vary by screen:
-  - **Run view** (active run): End Run (text button, left) + FAB (right).
-  - **Add Order**: Back (ghost button, left).
-  - **Order form**: Cancel (ghost button, left) + Add/Update Order (primary button, right).
+- Bottom bar contents vary by active panel:
+  - **Run view panel** (active run): End Run (text button, left) + FAB (right).
+  - **Add Order panel**: Back (ghost button, left).
+  - **Order form panel**: Cancel (ghost button, left) + Add/Update Order (primary button, right).
 - Order card action buttons always visible.
 
 ### Desktop (≥ 768px)
-- Two-panel layout:
-  - **Left sidebar** (360px fixed width): Run header, Order list.
-  - **Right main panel**: Add Order screen or Order Form. A fixed bottom bar (spanning only the main panel) shows context-aware buttons: End Run (Add Order screen) or Cancel + Add/Update Order (form screen). When no Run is active, the right panel is empty.
+- Two-panel layout (always both panels visible side by side):
+  - **Left sidebar** (360px fixed width): Run header, Order list. Bottom bar shows End Run (if a Run is active).
+  - **Right main panel**: Add Order screen or Order Form. Bottom bar shows Cancel + Add/Update Order (form screen). When no Run is active, the right panel is empty.
 - Only the right panel changes on navigation — the sidebar persists.
 - Order card action buttons revealed on hover.
 - The Add Order screen is the default right panel content when a Run is active.
+- The FAB is not shown on desktop (Add Order is always visible in the right panel).
 
 ---
 

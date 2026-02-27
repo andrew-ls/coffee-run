@@ -22,9 +22,10 @@ No backend. No router. No state management library — React hooks + localStorag
 
 ```
 src/
-├── App.tsx                  # Screen state machine, layout switching
-├── App.module.css           # Mobile slide-in transition
+├── App.tsx                  # Screen state machine, SidebarContext provider, universal DualPanelLayout
 ├── main.tsx                 # React root, global CSS + i18n init
+├── contexts/                # React contexts
+│   └── SidebarContext.tsx   # sidebarActive state shared between App and DualPanelLayout
 ├── config/                  # Data-driven configuration
 │   ├── app.ts               # APP_NAME constant
 │   ├── drinks.ts            # DrinkConfig[] — drives conditional form fields
@@ -55,11 +56,12 @@ src/
 │   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Badge, AspectPill, DragHandle, SortableList
 │   ├── molecules/           # FormField, ConfirmDialog, OrderCard, SavedOrderCard, DrinkPills
 │   ├── organisms/           # RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
-│   └── templates/           # SinglePanelLayout, DualPanelLayout
+│   └── templates/           # DualPanelLayout (universal — used on all form factors)
 ├── pages/                   # Screen-level components
 │   ├── RunView.tsx          # Main Run screen
 │   ├── AddOrder.tsx         # Add Order / Saved Orders screen
-│   └── OrderFormPage.tsx    # Order form wrapper
+│   ├── OrderFormPage.tsx    # Order form wrapper
+│   └── LandingPage.tsx      # Empty placeholder for main panel when no Run is active
 ├── styles/                  # Global styles
 │   ├── tokens.css           # CSS custom properties (design tokens)
 │   ├── textures.css         # SVG noise texture overlay
@@ -209,25 +211,30 @@ Uses `window.matchMedia('(min-width: 768px)')` with a change listener. Returns t
 
 ## Screen State Machine
 
-`App.tsx` manages navigation via a `Screen` union type:
+`App.tsx` manages navigation via a `Screen` union type and a `sidebarActive` boolean:
 
 ```typescript
 type Screen =
-  | { name: 'run' }
+  | { name: 'landing' }
   | { name: 'add' }
   | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
 ```
 
+`sidebarActive` controls which panel is visible on mobile (both panels are always in the DOM; CSS transforms show/hide them). On desktop, both panels are always fully visible and `sidebarActive` has no visual effect.
+
 **Transitions:**
-- `run` → `add`: User taps "Add" FAB (in BottomAppBar)
+- Start (no run): `screen = 'landing'`, `sidebarActive = true`
+- `landing` → `add` (via sidebar run view): User starts a Run; sidebar stays active; `screen = 'add'`
+- Sidebar → main (FAB tap, mobile): `sidebarActive = false`; `screen = 'add'`
 - `add` → `form` (no orderId, no prefill): User taps "New Order"
 - `add` → `form` (with prefill): User taps "Custom" on a Saved Order
-- `run` → `form` (with orderId + prefill): User taps "Edit" on an Order card
-- `form` → `add`: User taps "Cancel" (in BottomAppBar)
-- `form` → `run`: User submits the form (via BottomAppBar submit button targeting `form="order-form"`)
-- `add` → `run`: User taps "Usual" on a Saved Order, or "Back" (in BottomAppBar)
+- sidebar `run` → `form` (with orderId + prefill): User taps "Edit" on an Order card; on mobile, `sidebarActive = false`
+- `form` → `add`: User taps "Cancel" or submits the form
+- After submit/cancel → sidebar (on mobile): `setSidebarActive(true)` called on submit; not on cancel (stays on main panel)
+- `add` → sidebar: User taps "Back" (mobile) or "Usual" button; `sidebarActive = true`
+- Any `screen` → `landing`: User confirms End Run; `sidebarActive = true`
 
-On desktop, `run` screen is always visible in the sidebar. The right panel shows `add` or `form`. When no Run is active on desktop, the right panel is empty (`null`).
+On desktop, `screen = 'add'` or `screen = 'form'` are always shown in the right panel. When no Run is active, `screen = 'landing'` renders the empty `LandingPage` in the right panel.
 
 ---
 
@@ -269,24 +276,24 @@ Complex UI blocks with internal state or business logic.
 | `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
 | `SavedOrderList` | "Saved Orders" header + SortableList with SavedOrderCard rendering. Shows empty state message. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
-| `BottomAppBar` | Fixed bottom bar (`position: fixed`, `z-index: 10`) rendered at App level as a sibling to the layout component. Accepts `left` and `right` ReactNode slots. `sidebarOffset` prop shifts the bar's left edge to `var(--sidebar-width)` on desktop so it spans only the main panel. Also exports `Fab` — a styled FAB button with `aria-label` support. |
+| `BottomAppBar` | Flex child of its containing panel section (`flex-shrink: 0`). Rendered at the bottom of each `DualPanelLayout` panel via `sidebarBottom` and `mainBottom` props. Accepts `left` and `right` ReactNode slots. Also exports `Fab` — a styled FAB button with `aria-label` support. |
 
 ### Templates
 Layout containers.
 
 | Component | Description |
 |-----------|-------------|
-| `SinglePanelLayout` | Header + scrollable content area. Used on mobile. |
-| `DualPanelLayout` | Fixed-width sidebar (header + scrollable content) + flexible main panel. Used on desktop. |
+| `DualPanelLayout` | Universal layout for all form factors. Fixed-width sidebar (`sidebarBottom` slot) + flexible main panel (`mainBottom` slot). Consumes `SidebarContext` to apply `sidebarHidden`/`mainHidden` CSS classes for mobile panel switching via CSS transform. On desktop, both panels are always fully visible. Each panel is `display: flex; flex-direction: column; height: 100dvh` so its `BottomAppBar` sits at the bottom as a natural flex child. |
 
 ### Pages
 Screen-level components. Compose organisms and pass through callbacks from App.tsx.
 
 | Component | Description |
 |-----------|-------------|
-| `RunView` | Run view: mascot, Order list, Order delete confirmation dialog, Run start button. No longer contains navigation buttons or End Run dialog — those moved to App.tsx. |
+| `RunView` | Run view: mascot, Order list, Order delete confirmation dialog, Run start button. No longer contains navigation buttons or End Run dialog — those are in App.tsx BottomAppBar slots. |
 | `AddOrder` | New Order button + SavedOrderList. Delete Saved Order confirmation dialog. Navigation (Back) is provided by App.tsx via BottomAppBar. |
 | `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). Passes through `showActions` and `onValidityChange` to OrderForm. |
+| `LandingPage` | Empty placeholder rendered in the main panel when no Run is active. |
 
 ---
 
@@ -368,7 +375,7 @@ Tests are co-located with their source files. Coverage includes:
 **Atoms** (7 test files): Button, Checkbox, DragHandle, IconButton, Input, Select, SortableList, AspectPill, Badge
 **Molecules** (4 test files): ConfirmDialog, FormField, OrderCard, SavedOrderCard
 **Organisms** (5 test files): Mascot, RunHeader, OrderForm, OrderList, SavedOrderList
-**Templates** (2 test files): DualPanelLayout, SinglePanelLayout
+**Templates** (1 test file): DualPanelLayout
 **Hooks** (6 test files): useBreakpoint, useLocalStorage, useOrders, useRun, useSavedOrders, useUserId
 **Utils** (2 test files): id, time
 **Config** (1 test file): drinks

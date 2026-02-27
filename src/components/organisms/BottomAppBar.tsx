@@ -4,12 +4,11 @@ import styles from './BottomAppBar.module.css'
 interface BottomAppBarProps {
   left?: ReactNode
   right?: ReactNode
-  sidebarOffset?: boolean
 }
 
-export function BottomAppBar({ left, right, sidebarOffset = false }: BottomAppBarProps) {
+export function BottomAppBar({ left, right }: BottomAppBarProps) {
   return (
-    <div className={`${styles.bar} ${sidebarOffset ? styles.sidebarOffset : ''}`}>
+    <div className={styles.bar}>
       <div>{left}</div>
       <div>{right}</div>
     </div>
