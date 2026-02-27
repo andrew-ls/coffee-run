@@ -9,6 +9,11 @@ describe('useSidebarContext', () => {
     expect(result.current.setSidebarActive).toBeInstanceOf(Function)
   })
 
+  it('default setSidebarActive is a noop', () => {
+    const { result } = renderHook(() => useSidebarContext())
+    expect(() => result.current.setSidebarActive(false)).not.toThrow()
+  })
+
   it('returns provided context values', () => {
     const setSidebarActive = vi.fn()
     const wrapper = ({ children }: { children: React.ReactNode }) => (

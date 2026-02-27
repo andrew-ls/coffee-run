@@ -290,4 +290,13 @@ describe('OrderCard', () => {
     const card = container.querySelector('.dragging')
     expect(card).toBeInTheDocument()
   })
+
+  it('applies entering class when isNew is true', () => {
+    const order = createOrder()
+    const { container } = render(
+      <OrderCard order={order} onEdit={vi.fn()} onDelete={vi.fn()} isNew={true} />,
+    )
+    const card = container.querySelector('.entering')
+    expect(card).toBeInTheDocument()
+  })
 })
