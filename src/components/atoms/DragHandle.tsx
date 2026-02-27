@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { DragHandleIcon } from '@/assets/icons'
 import styles from './DragHandle.module.css'
 
 export function DragHandle(props: React.HTMLAttributes<HTMLSpanElement>) {
@@ -12,20 +13,7 @@ export function DragHandle(props: React.HTMLAttributes<HTMLSpanElement>) {
       tabIndex={0}
       {...props}
     >
-      <svg
-        width="14"
-        height="20"
-        viewBox="0 0 14 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <circle cx="4" cy="4" r="2" />
-        <circle cx="10" cy="4" r="2" />
-        <circle cx="4" cy="10" r="2" />
-        <circle cx="10" cy="10" r="2" />
-        <circle cx="4" cy="16" r="2" />
-        <circle cx="10" cy="16" r="2" />
-      </svg>
+      <DragHandleIcon aria-hidden="true" />
     </span>
   )
 }

@@ -1,0 +1,5 @@
+export { CheckIcon } from './CheckIcon'
+export { DeleteIcon } from './DeleteIcon'
+export { DragHandleIcon } from './DragHandleIcon'
+export { EditIcon } from './EditIcon'
+export { SlidersIcon } from './SlidersIcon'

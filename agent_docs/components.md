@@ -73,6 +73,19 @@ Screen-level components. Compose organisms and receive callbacks from App.tsx.
 | `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). Passes through `showActions` and `onValidityChange`. |
 | `LandingPage` | Onboarding tips panel: shown in the main panel when no Run is active. |
 
+## Assets
+
+Shared non-component resources live under `src/assets/`.
+
+### Icons (`src/assets/icons/`)
+
+Five SVG icon components: `DragHandleIcon`, `EditIcon`, `DeleteIcon`, `CheckIcon`, `SlidersIcon`.
+
+- Accept `SVGProps<SVGSVGElement>` with default `width`/`height`
+- No CSS module — styling comes from parent via `currentColor`
+- No i18n — `aria-hidden` is set at the call site; the parent button owns the accessible label
+- Import from the barrel: `import { EditIcon } from '@/assets/icons'`
+
 ## Co-location convention
 
 Every component file has two siblings in the same directory:

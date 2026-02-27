@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Order } from '@/types'
+import { DeleteIcon, EditIcon } from '@/assets/icons'
 import { DragHandle, IconButton } from '@/components/atoms'
 import { useSwipeToDelete } from '@/hooks'
 import { DrinkPills } from './DrinkPills'
@@ -55,30 +56,14 @@ export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isD
         </div>
         <div className={styles.actions}>
           <IconButton label={t('orderCard.editLabel')} onClick={() => onEdit(order.id)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <EditIcon />
           </IconButton>
           <IconButton
             label={t('orderCard.deleteLabel')}
             variant="danger"
             onClick={() => onDelete(order.id)}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M2 4H14M5 4V2H11V4M6 7V12M10 7V12M3 4L4 14H12L13 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <DeleteIcon />
           </IconButton>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
+import { CheckIcon, DeleteIcon, SlidersIcon } from '@/assets/icons'
 import { DragHandle, IconButton } from '@/components/atoms'
 import { useSwipeToDelete } from '@/hooks'
 import { DrinkPills } from './DrinkPills'
@@ -70,24 +71,13 @@ export function SavedOrderCard({
         </div>
         <div className={styles.actions}>
           <IconButton variant="usual" label={t('savedOrderCard.usual')} onClick={() => onUsual(savedOrder)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 8L6 12L14 4" />
-            </svg>
+            <CheckIcon />
           </IconButton>
           <IconButton variant="custom" label={t('savedOrderCard.custom')} onClick={() => onCustom(savedOrder)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="2" y1="4" x2="14" y2="4" />
-              <line x1="2" y1="8" x2="14" y2="8" />
-              <line x1="2" y1="12" x2="14" y2="12" />
-              <circle cx="10" cy="4" r="2" stroke="currentColor" fill="var(--color-bg-card)" />
-              <circle cx="5" cy="8" r="2" stroke="currentColor" fill="var(--color-bg-card)" />
-              <circle cx="11" cy="12" r="2" stroke="currentColor" fill="var(--color-bg-card)" />
-            </svg>
+            <SlidersIcon />
           </IconButton>
           <IconButton variant="danger" label={t('savedOrderCard.delete')} onClick={() => onDelete(savedOrder.id)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 4H14M5 4V2H11V4M6 7V12M10 7V12M3 4L4 14H12L13 4" />
-            </svg>
+            <DeleteIcon />
           </IconButton>
         </div>
       </div>
