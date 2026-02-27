@@ -27,7 +27,6 @@ src/
 ├── contexts/                # React contexts
 │   └── SidebarContext.tsx   # sidebarActive state shared between App and DualPanelLayout
 ├── config/                  # Data-driven configuration
-│   ├── app.ts               # APP_NAME constant
 │   ├── drinks.ts            # DrinkConfig[] — drives conditional form fields
 │   ├── milk.ts              # MILK_TYPES, MILK_AMOUNTS arrays
 │   ├── sweetener.ts         # SWEETENER_TYPES, min/max/step
@@ -47,15 +46,16 @@ src/
 │   ├── useOrders.ts         # CRUD + reorder for Orders in a Run
 │   ├── useSavedOrders.ts    # CRUD + reorder for Saved Orders
 │   ├── useBreakpoint.ts     # Responsive breakpoint detection
+│   ├── useSwipeToDelete.ts  # Touch swipe gesture handler for delete actions
 │   └── index.ts             # Re-exports all hooks
 ├── utils/                   # Pure utility functions
 │   ├── id.ts                # generateId() — crypto.randomUUID()
 │   ├── time.ts              # now() — ISO timestamp
 │   └── index.ts             # Re-exports
 ├── components/              # Atomic Design hierarchy
-│   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Badge, AspectPill, DragHandle, SortableList
+│   ├── atoms/               # Button, Input, Select, Checkbox, IconButton, Pill, DragHandle, SortableList
 │   ├── molecules/           # FormField, ConfirmDialog, OrderCard, SavedOrderCard, DrinkPills
-│   ├── organisms/           # RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
+│   ├── organisms/           # BottomAppBar, RunHeader, OrderForm, OrderList, SavedOrderList, Mascot
 │   └── templates/           # DualPanelLayout (universal — used on all form factors)
 ├── pages/                   # Screen-level components
 │   ├── RunView.tsx          # Main Run screen
@@ -207,6 +207,9 @@ Returns `{ savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders }`.
 ### `useBreakpoint(): 'mobile' | 'desktop'`
 Uses `window.matchMedia('(min-width: 768px)')` with a change listener. Returns the current breakpoint.
 
+### `useSwipeToDelete(options?)`
+Touch gesture handler for swipe-to-delete on cards. Options: `enableRightSwipe` (boolean), `snapLeftRef` and `snapRightRef` (element refs for snap width measurement). Returns touch event handlers and swipe state. Only active on mobile breakpoint (delegates to `useBreakpoint`). Swipe threshold: 80px.
+
 ---
 
 ## Screen State Machine
@@ -250,8 +253,7 @@ Foundational UI primitives. No business logic.
 | `Select` | Styled `<select>` with custom chevron. Accepts `string` or `{value, label}` options. |
 | `Checkbox` | Styled checkbox with label. |
 | `IconButton` | Circular icon button. Variants: default, danger. Requires `label` for a11y. |
-| `Badge` | Drink type pill with drink-specific colours from config. |
-| `AspectPill` | Coloured pill for drink aspects (iced, variant, milk, sweetener). |
+| `Pill` | Generic coloured pill. Accepts `label` and `color: PillColor`. Used for drink type badges and aspect pills (iced, variant, milk, sweetener). |
 | `DragHandle` | Six-dot grip icon for drag-and-drop. |
 | `SortableList` | Generic drag-and-drop list using @dnd-kit. Accepts render props for items and overlay. Vertical-axis-only with pointer (8px distance) and touch (250ms delay) sensors. |
 
@@ -264,7 +266,7 @@ Composite components combining atoms.
 | `ConfirmDialog` | Modal overlay with title, message, cancel/confirm actions. |
 | `OrderCard` | Order display card with drag handle, name, drink pills, edit/delete actions, swipe-to-delete. |
 | `SavedOrderCard` | Saved Order card with drag handle, name, drink pills, Usual/Custom buttons, swipe-to-delete. |
-| `DrinkPills` | Renders a row of Badge + AspectPill components summarising a drink Order. Shared between OrderCard and SavedOrderCard. |
+| `DrinkPills` | Renders a row of Pill components summarising a drink Order. Shared between OrderCard and SavedOrderCard. |
 
 ### Organisms
 Complex UI blocks with internal state or business logic.
@@ -272,7 +274,7 @@ Complex UI blocks with internal state or business logic.
 | Component | Description |
 |-----------|-------------|
 | `RunHeader` | App title, Run status subtitle with Order count. |
-| `OrderForm` | Multi-field form driven by drink config. Manages own form state. Resets fields on drink type change. Submit disabled when no drink type selected. Accepts `showActions` (hide button row when false) and `onValidityChange` (notifies parent of form validity). |
+| `OrderForm` | Multi-field form driven by drink config. Manages own form state. Resets fields on drink type change. Submit disabled when no drink type or person name provided. Accepts `showActions` (hide button row when false) and `onValidityChange` (notifies parent of form validity). |
 | `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
 | `SavedOrderList` | "Saved Orders" header + SortableList with SavedOrderCard rendering. Shows empty state message. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
@@ -302,7 +304,7 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 ### Approach
 - **CSS Modules** with `camelCaseOnly` convention (configured in Vite).
 - **Design tokens** in `src/styles/tokens.css` as CSS custom properties on `:root`.
-- **Co-located styles**: Each component has a `.module.css` file alongside it (except where components share a stylesheet, e.g. `Badge` and `AspectPill` share `pill.module.css`).
+- **Co-located styles**: Each component has a `.module.css` file alongside it.
 - **Global reset** in `src/styles/global.css`: box-sizing, margin/padding reset, font inheritance, button reset.
 - **Texture overlay** in `src/styles/textures.css`: SVG fractal noise `::before` pseudo-element on `#root`.
 
@@ -372,14 +374,15 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 ### Test Files
 Tests are co-located with their source files. Coverage includes:
 
-**Atoms** (7 test files): Button, Checkbox, DragHandle, IconButton, Input, Select, SortableList, AspectPill, Badge
+**Atoms** (8 test files): Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList
 **Molecules** (4 test files): ConfirmDialog, FormField, OrderCard, SavedOrderCard
-**Organisms** (5 test files): Mascot, RunHeader, OrderForm, OrderList, SavedOrderList
+**Organisms** (6 test files): BottomAppBar, Mascot, RunHeader, OrderForm, OrderList, SavedOrderList
 **Templates** (1 test file): DualPanelLayout
+**Contexts** (1 test file): SidebarContext
 **Hooks** (6 test files): useBreakpoint, useLocalStorage, useOrders, useRun, useSavedOrders, useUserId
 **Utils** (2 test files): id, time
 **Config** (1 test file): drinks
-**Pages** (3 test files): RunView, AddOrder, OrderFormPage
+**Pages** (4 test files): RunView, AddOrder, OrderFormPage, LandingPage
 **Integration** (1 test file): App
 
 ### Commands
@@ -427,7 +430,7 @@ npm run test:run        # Run tests once
 All keys prefixed with `CoffeeRun:` — `CoffeeRun:runs`, `CoffeeRun:orders`, `CoffeeRun:savedOrders`.
 
 ### App Name
-Single source of truth: `APP_NAME` constant in `src/config/app.ts` (`'Coffee Run'`). Also duplicated in the i18n locale as `app.name` for use in translated contexts.
+Single source of truth: the `app.name` key in the i18n locale (`'Coffee Run'`).
 
 ### Order Reordering
 Uses `arrayMove` from `@dnd-kit/sortable`. The reorder functions in `useOrders` and `useSavedOrders` operate on a subset of the global array (filtered by `runId` or `userId`) while preserving positions of all other entries in the flat array.

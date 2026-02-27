@@ -17,6 +17,7 @@ interface DrinkConfig {
   variants: readonly string[]
   allowOtherVariant: boolean      // show a free-text "other" variant input
   allowCustomDrinkName: boolean   // show a custom drink name field (used by "Other" type)
+  pillColor: PillColor            // { background: string; text: string } — Badge colours
   fields: {
     iced: boolean
     milk: boolean

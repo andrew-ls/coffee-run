@@ -7,11 +7,11 @@ Components live under `src/components/` and follow Atomic Design:
 | Level | Directory | Current components |
 |-------|-----------|-------------------|
 | Atoms | `atoms/` | Button, Input, Select, Checkbox, Pill, IconButton, DragHandle, SortableList |
-| Molecules | `molecules/` | FormField, OrderCard, SavedOrderCard, ConfirmDialog |
-| Organisms | `organisms/` | OrderForm, OrderList, RunHeader, SavedOrderList, Mascot |
-| Templates | `templates/` | SinglePanelLayout, DualPanelLayout |
+| Molecules | `molecules/` | FormField, DrinkPills, OrderCard, SavedOrderCard, ConfirmDialog |
+| Organisms | `organisms/` | BottomAppBar, OrderForm, OrderList, RunHeader, SavedOrderList, Mascot |
+| Templates | `templates/` | DualPanelLayout |
 
-Pages (`src/pages/`) sit outside `components/` and compose organisms: `RunView`, `AddOrder`, `OrderFormPage`.
+Pages (`src/pages/`) sit outside `components/` and compose organisms: `RunView`, `AddOrder`, `OrderFormPage`, `LandingPage`.
 
 The rule: each level may only import from levels below it. Pages may import from any level.
 

@@ -59,10 +59,12 @@ npm run preview
 src/
   App.tsx            # Screen state machine, responsive layout switching
   components/        # Atomic Design: atoms/ molecules/ organisms/ templates/
-  pages/             # Screen-level components (RunView, AddOrder, OrderFormPage)
+  contexts/          # React contexts (SidebarContext)
+  pages/             # Screen-level components (RunView, AddOrder, OrderFormPage, LandingPage)
   hooks/             # Data and UI hooks (useRun, useOrders, useSavedOrders, etc.)
   config/            # Data-driven drink, milk, and sweetener configuration
   types/             # Domain type definitions
+  utils/             # Pure utility functions (ID generation, timestamps)
   styles/            # CSS custom properties (design tokens) and global styles
   i18n/              # i18next setup and en-GB locale strings
   test/              # Test setup, mocks, and fixture factories

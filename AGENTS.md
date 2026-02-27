@@ -15,13 +15,15 @@ React SPA for managing group coffee orders — no backend, no router, all state 
 src/
   App.tsx            # Screen state machine (no router), layout switching
   components/        # atoms/ molecules/ organisms/ templates/
-  pages/             # RunView, AddOrder, OrderFormPage
-  hooks/             # useRun, useOrders, useSavedOrders, useLocalStorage, useBreakpoint
-  config/drinks.ts   # DrinkConfig array — drives conditional form fields
+  contexts/          # SidebarContext (panel visibility on mobile)
+  pages/             # RunView, AddOrder, OrderFormPage, LandingPage
+  hooks/             # useRun, useOrders, useSavedOrders, useLocalStorage, useBreakpoint, useUserId, useSwipeToDelete
+  config/            # DrinkConfig[], milk/sweetener arrays, aspect pill colours
   i18n/              # i18n config + locales/en-GB.json
   styles/            # tokens.css (CSS custom properties), global.css
   test/              # setup.ts (mocks + fixtures), fixtures.ts (factories)
   types/             # domain type definitions
+  utils/             # generateId, now (timestamps)
 agent_docs/          # Claude-specific reference docs (see below)
 ```
 
@@ -35,6 +37,32 @@ npm run test            # Run tests in watch mode
 npm run test:run        # Run tests once (CI)
 npm run test:coverage   # Run tests with coverage report
 ```
+
+### Running a single test
+
+```bash
+npx vitest run src/components/atoms/Button/Button.test.tsx
+```
+
+### Path alias
+
+`@` resolves to `src/` in all imports and in Vitest. Use `@/components/atoms` not `../../components/atoms`.
+
+## Architecture
+
+- **No router.** Screen navigation is a discriminated union (`Screen`) in `App.tsx` `useState`. Pages receive handler callbacks; only `App.tsx` calls `setScreen`.
+- **Three localStorage keys** with clear hook ownership: `CoffeeRun:runs` (useRun), `CoffeeRun:orders` (useOrders), `CoffeeRun:savedOrders` (useSavedOrders). `useLocalStorage` syncs across browser tabs via the `storage` event.
+- **Drink config drives the form.** Each `DrinkConfig` in `src/config/drinks.ts` has a `fields` object that toggles which form sections render. Adding a new drink = add to the `DRINKS` array + add translations to `en-GB.json`.
+- **Enum values stored raw.** Drink types, milk types, sweetener types are stored as English strings in localStorage. Translation happens at display time using i18n keys like `drinks.${type}`, `milkTypes.${type}`.
+- **Layout breakpoint at 768px.** `useBreakpoint` switches between single-panel mobile (with sidebar toggle) and dual-panel desktop.
+
+## TypeScript
+
+Strict mode is on with `noUnusedLocals` and `noUnusedParameters`. Target ES2022.
+
+## Test coverage thresholds
+
+80% statements, 75% branches, 85% functions. Excluded: `main.tsx`, `i18n/index.ts`, `styles/**`, `test/**`, barrel exports (`index.ts`), `types/**`.
 
 ## Workflow
 

@@ -6,7 +6,7 @@ There is no router. Navigation is a `Screen` discriminated union held in `useSta
 
 ```typescript
 type Screen =
-  | { name: 'run' }
+  | { name: 'landing' }
   | { name: 'add' }
   | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
 ```
@@ -23,7 +23,7 @@ Three storage keys, each owned exclusively by one domain hook:
 |-----|------|----------|
 | `CoffeeRun:runs` | `useRun` | Active and archived runs |
 | `CoffeeRun:orders` | `useOrders` | All orders across all runs |
-| `CoffeeRun:saved-orders` | `useSavedOrders` | User's saved "usual" orders |
+| `CoffeeRun:savedOrders` | `useSavedOrders` | User's saved "usual" orders |
 
 Each domain hook exposes CRUD operations. Nothing else reads or writes these keys directly.
 
@@ -33,9 +33,13 @@ Each domain hook exposes CRUD operations. Nothing else reads or writes these key
 
 `useBreakpoint` watches `(min-width: 768px)` and returns `'mobile'` or `'desktop'`.
 
-`App.tsx` switches layouts based on this value:
+`App.tsx` uses a single `DualPanelLayout` template on all form factors. Both panels (sidebar and main) are always in the DOM. Panel visibility on mobile is controlled by `SidebarContext`:
 
-- **Mobile** (`SinglePanelLayout`): one `Screen` rendered at a time; navigation changes which screen is shown.
-- **Desktop** (`DualPanelLayout`): fixed left sidebar always shows `RunView`; the right panel shows `AddOrder` or `OrderFormPage` based on screen state. The `RunHeader` organism is rendered as the layout's header slot.
+- **`SidebarContext`** (`src/contexts/SidebarContext.tsx`) provides `sidebarActive` (boolean) and `setSidebarActive`. Created in `App.tsx` and consumed by `DualPanelLayout`.
+- **Mobile**: `DualPanelLayout` applies CSS transform classes (`sidebarHidden` / `mainHidden`) to show one panel at a time based on `sidebarActive`.
+- **Desktop**: Both panels are always fully visible; `sidebarActive` has no visual effect.
 
-On desktop, `RunView` and `AddOrder` receive `showHeader={false}` / `showBack={false}` to suppress elements that only make sense in single-panel navigation.
+Navigation actions live in `BottomAppBar` organisms rendered via `DualPanelLayout`'s `sidebarBottom` and `mainBottom` slots. `App.tsx` assembles the bar content — pages do not contain their own navigation controls.
+
+- **Sidebar bar**: "End Run" button (left), FAB (right, shown on mobile or when on landing screen).
+- **Main bar** (contextual): Cancel + Submit on the form screen; Back button on add/landing (mobile only).
