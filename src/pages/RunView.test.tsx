@@ -41,8 +41,6 @@ const defaultProps = {
   hasActiveRun: false,
   orders: [],
   onStartRun: vi.fn(),
-  onEndRun: vi.fn(),
-  onAddOrder: vi.fn(),
   onEditOrder: vi.fn(),
   onDeleteOrder: vi.fn(),
   onReorderOrder: vi.fn(),
@@ -73,30 +71,6 @@ describe('RunView', () => {
     })
   })
 
-  describe('active Run, no Orders', () => {
-    it('shows End Run button', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} />)
-      expect(screen.getByText('End Run')).toBeInTheDocument()
-    })
-
-    it('shows FAB when showAddButton is true (default)', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} />)
-      expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
-    })
-
-    it('hides FAB when showAddButton is false', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} showAddButton={false} />)
-      expect(screen.queryByRole('button', { name: 'Add Order' })).not.toBeInTheDocument()
-    })
-
-    it('calls onAddOrder when FAB is clicked', () => {
-      const onAddOrder = vi.fn()
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={[]} onAddOrder={onAddOrder} />)
-      fireEvent.click(screen.getByRole('button', { name: 'Add Order' }))
-      expect(onAddOrder).toHaveBeenCalledOnce()
-    })
-  })
-
   describe('active Run with Orders', () => {
     const orders = [
       createOrder({ id: 'o1', personName: 'Alice' }),
@@ -110,35 +84,11 @@ describe('RunView', () => {
     })
   })
 
-  describe('end run dialog', () => {
-    it('opens end run confirm dialog when End Run is clicked', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} />)
-      fireEvent.click(screen.getByText('End Run'))
-      expect(screen.getByText('End this round?')).toBeInTheDocument()
-    })
-
-    it('calls onEndRun when confirm is clicked', () => {
-      const onEndRun = vi.fn()
-      render(<RunView {...defaultProps} hasActiveRun={true} onEndRun={onEndRun} />)
-      fireEvent.click(screen.getByText('End Run'))
-      fireEvent.click(screen.getByText('End round'))
-      expect(onEndRun).toHaveBeenCalledOnce()
-    })
-
-    it('closes dialog when cancel is clicked', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} />)
-      fireEvent.click(screen.getByText('End Run'))
-      fireEvent.click(screen.getByText('Never mind'))
-      expect(screen.queryByText('End this round?')).not.toBeInTheDocument()
-    })
-  })
-
   describe('delete Order dialog', () => {
     const orders = [createOrder({ id: 'o1', personName: 'Alice' })]
 
     it('opens delete confirm dialog when delete is triggered', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
-      // Click delete button on the Order card
       fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
       expect(screen.getByText('Remove this Order?')).toBeInTheDocument()
     })

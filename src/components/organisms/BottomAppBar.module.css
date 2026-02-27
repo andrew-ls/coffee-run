@@ -1,0 +1,47 @@
+.bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: var(--color-bg-card);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -2px 8px var(--color-shadow);
+  z-index: 10;
+}
+
+.sidebarOffset {
+  left: var(--sidebar-width);
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast),
+    background-color var(--duration-fast);
+}
+
+.fab:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
 import { DRINKS, MILK_TYPES, MILK_AMOUNTS, SWEETENER_TYPES, SWEETENER_MIN, SWEETENER_MAX, SWEETENER_STEP } from '@/config'
@@ -26,6 +26,8 @@ interface OrderFormProps {
   onSubmit: (data: OrderFormData, save: boolean) => void
   onCancel: () => void
   submitLabel?: string
+  showActions?: boolean
+  onValidityChange?: (valid: boolean) => void
 }
 
 export function OrderForm({
@@ -33,10 +35,16 @@ export function OrderForm({
   onSubmit,
   onCancel,
   submitLabel,
+  showActions = true,
+  onValidityChange,
 }: OrderFormProps) {
   const { t } = useTranslation()
   const [form, setForm] = useState<OrderFormData>({ ...EMPTY_FORM, ...initialData })
   const [saveForLater, setSaveForLater] = useState(false)
+
+  useEffect(() => {
+    onValidityChange?.(!!form.drinkType)
+  }, [form.drinkType, onValidityChange])
 
   const drinkConfig: DrinkConfig | undefined = useMemo(
     () => DRINKS.find((d) => d.type === form.drinkType),
@@ -86,7 +94,7 @@ export function OrderForm({
     : variants
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form id="order-form" className={styles.form} onSubmit={handleSubmit}>
       <FormField label={t('orderForm.whoFor')}>
         <Input
           value={form.personName}
@@ -213,14 +221,16 @@ export function OrderForm({
         />
       </div>
 
-      <div className={styles.row}>
-        <Button variant="ghost" type="button" onClick={onCancel}>
-          {t('orderForm.cancel')}
-        </Button>
-        <Button type="submit" fullWidth disabled={!form.drinkType}>
-          {submitLabel ?? t('orderForm.addOrder')}
-        </Button>
-      </div>
+      {showActions && (
+        <div className={styles.row}>
+          <Button variant="ghost" type="button" onClick={onCancel}>
+            {t('orderForm.cancel')}
+          </Button>
+          <Button type="submit" fullWidth disabled={!form.drinkType}>
+            {submitLabel ?? t('orderForm.addOrder')}
+          </Button>
+        </div>
+      )}
     </form>
   )
 }

@@ -10,29 +10,22 @@ interface RunViewProps {
   hasActiveRun: boolean
   orders: Order[]
   onStartRun: () => void
-  onEndRun: () => void
-  onAddOrder: () => void
   onEditOrder: (orderId: string) => void
   onDeleteOrder: (orderId: string) => void
   onReorderOrder: (fromIndex: number, toIndex: number) => void
   showHeader?: boolean
-  showAddButton?: boolean
 }
 
 export function RunView({
   hasActiveRun,
   orders,
   onStartRun,
-  onEndRun,
-  onAddOrder,
   onEditOrder,
   onDeleteOrder,
   onReorderOrder,
   showHeader = true,
-  showAddButton = true,
 }: RunViewProps) {
   const { t } = useTranslation()
-  const [showEndConfirm, setShowEndConfirm] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
   const [emptyMessage] = useState(() => {
@@ -81,32 +74,6 @@ export function RunView({
           </>
         )}
       </div>
-      <div className={styles.bottomBar}>
-        <Button variant="text" onClick={() => setShowEndConfirm(true)}>
-          {t('runHeader.endRun')}
-        </Button>
-        {showAddButton && (
-          <button
-            className={styles.fab}
-            onClick={onAddOrder}
-            aria-label={t('runView.addOrderAriaLabel')}
-          >
-            +
-          </button>
-        )}
-      </div>
-      {showEndConfirm && (
-        <ConfirmDialog
-          title={t('runView.endRoundDialog.title')}
-          message={t('runView.endRoundDialog.message')}
-          confirmLabel={t('runView.endRoundDialog.confirm')}
-          onConfirm={() => {
-            setShowEndConfirm(false)
-            onEndRun()
-          }}
-          onCancel={() => setShowEndConfirm(false)}
-        />
-      )}
       {deleteConfirm && (
         <ConfirmDialog
           title={t('runView.deleteOrderDialog.title')}

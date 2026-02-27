@@ -45,7 +45,6 @@ const defaultProps = {
   onCustom: vi.fn(),
   onDeleteSaved: vi.fn(),
   onReorderSaved: vi.fn(),
-  onBack: vi.fn(),
 }
 
 describe('AddOrder', () => {
@@ -64,23 +63,6 @@ describe('AddOrder', () => {
     render(<AddOrder {...defaultProps} onNewOrder={onNewOrder} />)
     fireEvent.click(screen.getByText('New Order'))
     expect(onNewOrder).toHaveBeenCalledOnce()
-  })
-
-  it('shows Back button when showBack is true (default)', () => {
-    render(<AddOrder {...defaultProps} />)
-    expect(screen.getByText('Back')).toBeInTheDocument()
-  })
-
-  it('hides Back button when showBack is false', () => {
-    render(<AddOrder {...defaultProps} showBack={false} />)
-    expect(screen.queryByText('Back')).not.toBeInTheDocument()
-  })
-
-  it('calls onBack when Back is clicked', () => {
-    const onBack = vi.fn()
-    render(<AddOrder {...defaultProps} onBack={onBack} />)
-    fireEvent.click(screen.getByText('Back'))
-    expect(onBack).toHaveBeenCalledOnce()
   })
 
   it('shows Saved Orders', () => {

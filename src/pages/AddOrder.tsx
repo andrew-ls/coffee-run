@@ -13,8 +13,6 @@ interface AddOrderProps {
   onCustom: (saved: SavedOrder) => void
   onDeleteSaved: (savedId: string) => void
   onReorderSaved: (fromIndex: number, toIndex: number) => void
-  onBack?: () => void
-  showBack?: boolean
 }
 
 export function AddOrder({
@@ -24,8 +22,6 @@ export function AddOrder({
   onCustom,
   onDeleteSaved,
   onReorderSaved,
-  onBack,
-  showBack = true,
 }: AddOrderProps) {
   const { t } = useTranslation()
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
@@ -39,11 +35,6 @@ export function AddOrder({
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>{t('addOrder.title')}</div>
-        {showBack && (
-          <Button variant="ghost" onClick={onBack}>
-            {t('addOrder.back')}
-          </Button>
-        )}
       </div>
       <div className={styles.newOrderSection}>
         <Button onClick={onNewOrder} fullWidth>

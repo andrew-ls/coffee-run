@@ -203,6 +203,18 @@ describe('App — mobile layout', () => {
     expect(screen.getByText('Start a new Run')).toBeInTheDocument()
   })
 
+  it('cancelling End Run dialog does not end the run', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByText('End Run'))
+    await user.click(screen.getByText('Never mind'))
+
+    expect(screen.getByText('End Run')).toBeInTheDocument()
+    expect(screen.queryByText('Start a new Run')).not.toBeInTheDocument()
+  })
+
   it('edit Order navigates to form pre-filled', async () => {
     const user = userEvent.setup()
     render(<App />)

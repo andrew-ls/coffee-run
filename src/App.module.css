@@ -1,5 +1,6 @@
 .mobilePanel {
   animation: slideIn var(--duration-normal) var(--ease-out);
+  padding-bottom: calc(72px + var(--space-xl));
 }
 
 @keyframes slideIn {

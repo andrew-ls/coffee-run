@@ -8,6 +8,8 @@ interface OrderFormPageProps {
   orderId?: string
   onSubmit: (data: OrderFormData, save: boolean) => void
   onCancel: () => void
+  showActions?: boolean
+  onValidityChange?: (valid: boolean) => void
 }
 
 export function OrderFormPage({
@@ -15,6 +17,8 @@ export function OrderFormPage({
   orderId,
   onSubmit,
   onCancel,
+  showActions,
+  onValidityChange,
 }: OrderFormPageProps) {
   const { t } = useTranslation()
 
@@ -30,6 +34,8 @@ export function OrderFormPage({
         onSubmit={onSubmit}
         onCancel={onCancel}
         submitLabel={orderId ? t('orderFormPage.updateSubmit') : t('orderFormPage.addSubmit')}
+        showActions={showActions}
+        onValidityChange={onValidityChange}
       />
     </div>
   )

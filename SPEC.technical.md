@@ -219,13 +219,13 @@ type Screen =
 ```
 
 **Transitions:**
-- `run` → `add`: User taps "Add" FAB
+- `run` → `add`: User taps "Add" FAB (in BottomAppBar)
 - `add` → `form` (no orderId, no prefill): User taps "New Order"
 - `add` → `form` (with prefill): User taps "Custom" on a Saved Order
 - `run` → `form` (with orderId + prefill): User taps "Edit" on an Order card
-- `form` → `add`: User taps "Cancel"
-- `form` → `run`: User submits the form
-- `add` → `run`: User taps "Usual" on a Saved Order, or "Back"
+- `form` → `add`: User taps "Cancel" (in BottomAppBar)
+- `form` → `run`: User submits the form (via BottomAppBar submit button targeting `form="order-form"`)
+- `add` → `run`: User taps "Usual" on a Saved Order, or "Back" (in BottomAppBar)
 
 On desktop, `run` screen is always visible in the sidebar. The right panel shows `add` or `form`. When no Run is active on desktop, the right panel is empty (`null`).
 
@@ -265,10 +265,11 @@ Complex UI blocks with internal state or business logic.
 | Component | Description |
 |-----------|-------------|
 | `RunHeader` | App title, Run status subtitle with Order count. |
-| `OrderForm` | Multi-field form driven by drink config. Manages own form state. Resets fields on drink type change. Submit disabled when no drink type selected. |
+| `OrderForm` | Multi-field form driven by drink config. Manages own form state. Resets fields on drink type change. Submit disabled when no drink type selected. Accepts `showActions` (hide button row when false) and `onValidityChange` (notifies parent of form validity). |
 | `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
 | `SavedOrderList` | "Saved Orders" header + SortableList with SavedOrderCard rendering. Shows empty state message. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
+| `BottomAppBar` | Fixed bottom bar (`position: fixed`, `z-index: 10`) rendered at App level as a sibling to the layout component. Accepts `left` and `right` ReactNode slots. `sidebarOffset` prop shifts the bar's left edge to `var(--sidebar-width)` on desktop so it spans only the main panel. Also exports `Fab` — a styled FAB button with `aria-label` support. |
 
 ### Templates
 Layout containers.
@@ -283,9 +284,9 @@ Screen-level components. Compose organisms and pass through callbacks from App.t
 
 | Component | Description |
 |-----------|-------------|
-| `RunView` | Full Run view: mascot, Order list, bottom bar with End Run + FAB, confirmation dialogs. Handles Run start/end and Order CRUD delegation. |
-| `AddOrder` | New Order button + SavedOrderList. Optional back button (mobile). |
-| `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). |
+| `RunView` | Run view: mascot, Order list, Order delete confirmation dialog, Run start button. No longer contains navigation buttons or End Run dialog — those moved to App.tsx. |
+| `AddOrder` | New Order button + SavedOrderList. Delete Saved Order confirmation dialog. Navigation (Back) is provided by App.tsx via BottomAppBar. |
+| `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). Passes through `showActions` and `onValidityChange` to OrderForm. |
 
 ---
 

@@ -55,7 +55,7 @@ The primary screen showing the current active Run.
 
 ### 2. Add Order Screen
 
-Reached by tapping the FAB on the Run view. On mobile, this is a full-page transition with a "Back" button. On desktop, it appears in the right panel.
+Reached by tapping the FAB on the Run view. On mobile, this is a full-page transition; the bottom bar shows a "Back" button. On desktop, it appears in the right panel.
 
 **Layout:**
 - A "New Order" button at the top to open a blank Order form.
@@ -88,7 +88,9 @@ Used for creating new Orders, editing existing Orders in the Run, and customisin
 
 **Bottom of form:**
 - A "Remember this one for next time?" checkbox — saves the Order for future recall.
-- "Add Order" / "Update Order" submit button (label varies by context).
+
+**Bottom bar:**
+- "Add Order" / "Update Order" submit button (label varies by context, disabled until a drink type is selected).
 - "Cancel" button returns to the add screen.
 
 **Behaviour by context:**
@@ -104,13 +106,16 @@ Used for creating new Orders, editing existing Orders in the Run, and customisin
 - Single-column, full-width layout.
 - Full-page transitions between screens (slide-in animation).
 - Touch-friendly: swipe-to-delete, large tap targets.
-- Bottom bar with FAB and End Run button on the Run view.
+- Bottom bar contents vary by screen:
+  - **Run view** (active run): End Run (text button, left) + FAB (right).
+  - **Add Order**: Back (ghost button, left).
+  - **Order form**: Cancel (ghost button, left) + Add/Update Order (primary button, right).
 - Order card action buttons always visible.
 
 ### Desktop (≥ 768px)
 - Two-panel layout:
-  - **Left sidebar** (360px fixed width): Run header, Order list, bottom bar with End Run + FAB.
-  - **Right main panel**: Add Order screen or Order Form. When no Run is active, the right panel is empty.
+  - **Left sidebar** (360px fixed width): Run header, Order list.
+  - **Right main panel**: Add Order screen or Order Form. A fixed bottom bar (spanning only the main panel) shows context-aware buttons: End Run (Add Order screen) or Cancel + Add/Update Order (form screen). When no Run is active, the right panel is empty.
 - Only the right panel changes on navigation — the sidebar persists.
 - Order card action buttons revealed on hover.
 - The Add Order screen is the default right panel content when a Run is active.
