@@ -27,7 +27,7 @@ export function DrinkPills({ order }: DrinkPillsProps) {
 
   return (
     <>
-      <Pill label={drinkType} color={drinkColor} />
+      <Pill label={t(`drinks.${drinkType}`, drinkType)} color={drinkColor} />
       {iced && (
         <Pill color={ASPECT_COLORS.iced} label={t('orderCard.drinkSummary.iced')} />
       )}

@@ -1,4 +1,3 @@
-export { APP_NAME } from './app'
 export { DRINKS, DRINK_TYPES } from './drinks'
 export type { DrinkConfig } from './drinks'
 export { ASPECT_COLORS } from './aspectColors'

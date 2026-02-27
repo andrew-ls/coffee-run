@@ -43,8 +43,8 @@ export function OrderForm({
   const [saveForLater, setSaveForLater] = useState(false)
 
   useEffect(() => {
-    onValidityChange?.(!!form.drinkType)
-  }, [form.drinkType, onValidityChange])
+    onValidityChange?.(!!form.drinkType && !!form.personName.trim())
+  }, [form.drinkType, form.personName, onValidityChange])
 
   const drinkConfig: DrinkConfig | undefined = useMemo(
     () => DRINKS.find((d) => d.type === form.drinkType),
@@ -226,7 +226,7 @@ export function OrderForm({
           <Button variant="ghost" type="button" onClick={onCancel}>
             {t('orderForm.cancel')}
           </Button>
-          <Button type="submit" fullWidth disabled={!form.drinkType}>
+          <Button type="submit" fullWidth disabled={!form.drinkType || !form.personName.trim()}>
             {submitLabel ?? t('orderForm.addOrder')}
           </Button>
         </div>

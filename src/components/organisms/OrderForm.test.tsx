@@ -29,11 +29,19 @@ describe('OrderForm', () => {
     expect(screen.getByRole('button', { name: /add order/i })).toBeDisabled()
   })
 
-  it('submit button is enabled once a drink type is selected', async () => {
+  it('submit button is enabled once drink type and name are provided', async () => {
+    const user = userEvent.setup()
+    render(<OrderForm {...defaultProps} />)
+    await user.type(screen.getByPlaceholderText('Name'), 'Alice')
+    await user.selectOptions(getDrinkSelect(), 'Coffee')
+    expect(screen.getByRole('button', { name: /add order/i })).not.toBeDisabled()
+  })
+
+  it('submit button is disabled when drink type is selected but name is empty', async () => {
     const user = userEvent.setup()
     render(<OrderForm {...defaultProps} />)
     await user.selectOptions(getDrinkSelect(), 'Coffee')
-    expect(screen.getByRole('button', { name: /add order/i })).not.toBeDisabled()
+    expect(screen.getByRole('button', { name: /add order/i })).toBeDisabled()
   })
 
   it('does not call onSubmit when personName is empty', async () => {
@@ -215,6 +223,48 @@ describe('OrderForm', () => {
       expect(onSubmit).toHaveBeenCalledOnce()
       const [, save] = onSubmit.mock.calls[0] as [unknown, boolean]
       expect(save).toBe(true)
+    })
+  })
+
+  describe('onValidityChange', () => {
+    it('reports false when form is initially empty', () => {
+      const onValidityChange = vi.fn()
+      render(<OrderForm {...defaultProps} onValidityChange={onValidityChange} />)
+      expect(onValidityChange).toHaveBeenLastCalledWith(false)
+    })
+
+    it('reports true when both drink type and name are provided', async () => {
+      const onValidityChange = vi.fn()
+      const user = userEvent.setup()
+      render(<OrderForm {...defaultProps} onValidityChange={onValidityChange} />)
+
+      await user.type(screen.getByPlaceholderText('Name'), 'Alice')
+      await user.selectOptions(getDrinkSelect(), 'Coffee')
+
+      expect(onValidityChange).toHaveBeenLastCalledWith(true)
+    })
+
+    it('reports false when drink type is selected but name is empty', async () => {
+      const onValidityChange = vi.fn()
+      const user = userEvent.setup()
+      render(<OrderForm {...defaultProps} onValidityChange={onValidityChange} />)
+
+      await user.selectOptions(getDrinkSelect(), 'Coffee')
+
+      expect(onValidityChange).toHaveBeenLastCalledWith(false)
+    })
+
+    it('reports false when name is cleared after being valid', async () => {
+      const onValidityChange = vi.fn()
+      const user = userEvent.setup()
+      render(<OrderForm {...defaultProps} onValidityChange={onValidityChange} />)
+
+      await user.type(screen.getByPlaceholderText('Name'), 'Alice')
+      await user.selectOptions(getDrinkSelect(), 'Coffee')
+      expect(onValidityChange).toHaveBeenLastCalledWith(true)
+
+      await user.clear(screen.getByPlaceholderText('Name'))
+      expect(onValidityChange).toHaveBeenLastCalledWith(false)
     })
   })
 
