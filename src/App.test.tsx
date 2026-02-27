@@ -61,20 +61,20 @@ describe('App — mobile layout', () => {
 
   it('shows start Run screen with no active Run', () => {
     render(<App />)
-    expect(screen.getByText('Start a new Run')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Start a new Run' })).toBeInTheDocument()
   })
 
   it('starts a Run and shows the active Run view', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
-    expect(screen.getByText('End Run')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
+    expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
   })
 
   it('navigates to AddOrder when FAB is clicked', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getByText('Add Order')).toBeInTheDocument()
     expect(screen.getByText('New Order')).toBeInTheDocument()
@@ -83,16 +83,16 @@ describe('App — mobile layout', () => {
   it('goes back from AddOrder to RunView', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('Back'))
-    expect(screen.getByText('End Run')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
   })
 
   it('navigates to New Order form from AddOrder', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     expect(screen.getByText('New Order')).toBeInTheDocument()
@@ -105,7 +105,7 @@ describe('App — mobile layout', () => {
     render(<App />)
 
     // Start Run
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     // Navigate to form
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
@@ -124,7 +124,7 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.click(screen.getByRole('button', { name: /cancel/i }))
@@ -136,7 +136,7 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
 
@@ -157,7 +157,7 @@ describe('App — mobile layout', () => {
     render(<App />)
 
     // Save an Order
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Eve')
@@ -170,7 +170,7 @@ describe('App — mobile layout', () => {
     await user.click(screen.getByRole('button', { name: 'Usual' }))
 
     // Should be back at Run view with Eve's Order added again
-    expect(screen.getByText('End Run')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
   })
 
   it('clicking Custom opens the form pre-filled from Saved Order', async () => {
@@ -178,7 +178,7 @@ describe('App — mobile layout', () => {
     render(<App />)
 
     // Save an Order
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Frank')
@@ -198,23 +198,23 @@ describe('App — mobile layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
-    await user.click(screen.getByText('End Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
+    await user.click(screen.getByRole('button', { name: 'End Run' }))
     await user.click(screen.getByText('End round'))
 
-    expect(screen.getByText('Start a new Run')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Start a new Run' })).toBeInTheDocument()
   })
 
   it('cancelling End Run dialog does not end the run', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
-    await user.click(screen.getByText('End Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
+    await user.click(screen.getByRole('button', { name: 'End Run' }))
     await user.click(screen.getByText('Never mind'))
 
-    expect(screen.getByText('End Run')).toBeInTheDocument()
-    expect(screen.queryByText('Start a new Run')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Start a new Run' })).not.toBeInTheDocument()
   })
 
   it('edit Order navigates to form pre-filled', async () => {
@@ -222,7 +222,7 @@ describe('App — mobile layout', () => {
     render(<App />)
 
     // Add an Order first
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Carol')
@@ -242,7 +242,7 @@ describe('App — mobile layout', () => {
     render(<App />)
 
     // Add an Order
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Dave')
@@ -264,7 +264,7 @@ describe('App — mobile layout', () => {
     // Persist an active run to localStorage via a desktop render
     mockUseBreakpoint.mockReturnValue('desktop')
     const { unmount } = render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     unmount()
 
     // Fresh render on mobile — run restored from localStorage, screen defaults to 'landing'
@@ -279,14 +279,28 @@ describe('App — mobile layout', () => {
 
     mockUseBreakpoint.mockReturnValue('desktop')
     const { unmount } = render(<App />)
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     unmount()
 
     mockUseBreakpoint.mockReturnValue('mobile')
     render(<App />)
 
     await user.click(screen.getByText('Back'))
-    expect(screen.getByText('End Run')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
+  })
+
+  it('clicking "How to use" navigates to landing', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    // Navigate away from landing first
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
+    await user.click(screen.getByRole('button', { name: 'Add Order' }))
+    expect(screen.getByText('New Order')).toBeInTheDocument()
+
+    // Click the help button — should navigate to landing screen
+    await user.click(screen.getByRole('button', { name: 'How to use' }))
+    expect(screen.queryByText('New Order')).not.toBeInTheDocument()
   })
 })
 
@@ -306,7 +320,7 @@ describe('App — desktop layout', () => {
     render(<App />)
 
     // On desktop, the RunView is in the sidebar — start run button should be there
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
 
     // Right panel shows AddOrder with a Back button
     expect(screen.getByText('Add Order')).toBeInTheDocument()
@@ -323,7 +337,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByText('New Order'))
 
     expect(screen.getByText('Pick a drink...')).toBeInTheDocument()
@@ -333,7 +347,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByText('New Order'))
     expect(screen.getByText('Pick a drink...')).toBeInTheDocument()
 
@@ -347,7 +361,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByText('New Order'))
     await user.type(screen.getByPlaceholderText('Name'), 'Carol')
     await user.selectOptions(screen.getAllByRole('combobox')[0], 'Coffee')
@@ -367,7 +381,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     expect(screen.getByText('New Order')).toBeInTheDocument()
     await user.click(screen.getByText('Back'))
     expect(screen.queryByText('New Order')).not.toBeInTheDocument()
@@ -377,7 +391,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByText('Back'))
     expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
   })
@@ -386,7 +400,7 @@ describe('App — desktop layout', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByText('Start a new Run'))
+    await user.click(screen.getByRole('button', { name: 'Start a new Run' }))
     await user.click(screen.getByText('Back'))
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getByText('New Order')).toBeInTheDocument()

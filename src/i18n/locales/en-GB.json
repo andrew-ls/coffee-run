@@ -31,7 +31,31 @@
     "orderCount_one": "\u00b7 {{count}} Order",
     "orderCount_other": "\u00b7 {{count}} Orders",
     "noRun": "No Run on \u2014 fancy starting one?",
-    "endRun": "End Run"
+    "endRun": "End Run",
+    "helpAriaLabel": "How to use"
+  },
+  "landingPage": {
+    "title": "How it works",
+    "steps": {
+      "startRun": {
+        "title": "Start a Run",
+        "description": "Tap \"Start a new Run\" to get going."
+      },
+      "addOrders": {
+        "title": "Add Orders",
+        "description": "Use the + button to pop in each person\u2019s drink order."
+      },
+      "endRun": {
+        "title": "Finish up",
+        "description": "Once everyone\u2019s sorted, tap \"End Run\" to wrap up the round."
+      }
+    },
+    "features": {
+      "title": "Good to know",
+      "savedOrders": "Tick \"Remember this one\" on the order form to save someone\u2019s usual.",
+      "swipeToDelete": "Swipe an order card left to bin it.",
+      "dragToReorder": "Hold and drag to rearrange the order queue."
+    }
   },
   "addOrder": {
     "title": "Add Order",

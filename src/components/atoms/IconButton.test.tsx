@@ -61,6 +61,15 @@ describe('IconButton', () => {
     expect(screen.getByRole('button').className).toContain('custom')
   })
 
+  it('applies primary class when variant is primary', () => {
+    render(
+      <IconButton label="Help" variant="primary">
+        ?
+      </IconButton>,
+    )
+    expect(screen.getByRole('button').className).toContain('primary')
+  })
+
   it('does not apply danger class for default variant', () => {
     render(<IconButton label="Default">x</IconButton>)
     expect(screen.getByRole('button').className).not.toContain('danger')

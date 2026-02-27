@@ -106,6 +106,12 @@ export default function App() {
     }
   }, [breakpoint])
 
+  const handleHelpClick = useCallback(() => {
+    setDirection('back')
+    setScreen({ name: 'landing' })
+    setSidebarActive(false)
+  }, [])
+
   const submitLabel =
     screen.name === 'form' && screen.orderId
       ? t('orderFormPage.updateSubmit')
@@ -202,7 +208,13 @@ export default function App() {
   return (
     <SidebarContext.Provider value={{ sidebarActive, setSidebarActive }}>
       <DualPanelLayout
-        header={<RunHeader orderCount={orders.length} hasActiveRun={!!activeRun} />}
+        header={
+          <RunHeader
+            orderCount={orders.length}
+            hasActiveRun={!!activeRun}
+            onHelpClick={handleHelpClick}
+          />
+        }
         sidebar={
           <RunView
             hasActiveRun={!!activeRun}

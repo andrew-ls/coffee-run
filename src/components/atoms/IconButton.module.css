@@ -35,3 +35,13 @@
   background-color: var(--color-accent-peach);
   color: var(--color-text);
 }
+
+.primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.primary:hover {
+  background-color: var(--color-primary-hover);
+  color: #fff;
+}

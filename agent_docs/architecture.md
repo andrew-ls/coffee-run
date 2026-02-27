@@ -43,3 +43,13 @@ Navigation actions live in `BottomAppBar` organisms rendered via `DualPanelLayou
 
 - **Sidebar bar**: "End Run" button (left), FAB (right, shown on mobile or when on landing screen).
 - **Main bar** (contextual): Cancel + Submit on the form screen; Back button on add/landing (mobile only).
+
+## Landing screen — onboarding tips
+
+`LandingPage` (`src/pages/LandingPage.tsx`) shows a three-step walkthrough and feature tips explaining how to use the app. Content is driven entirely by `landingPage.*` keys in `src/i18n/locales/en-GB.json`.
+
+**Desktop**: The tips render in the main panel alongside the visible sidebar. Step 1 includes a dashed SVG arrow pointing left toward the "Start a new Run" button in the sidebar. Steps 2–3 show inline SVG illustrations of the FAB and End Run button, since those elements are not present on the landing screen.
+
+**Mobile**: On the landing screen the sidebar is shown by default (`sidebarActive: true`), so `LandingPage` is off-screen. A "?" icon button in `RunHeader` (hidden on desktop via `@media (min-width: 768px) { display: none }`) is always wired to `handleHelpClick`, which sets `screen` to `'landing'`, sets `sidebarActive` to `false`, and sets the transition direction to `'back'`. This navigates to the tips from any screen on mobile. The existing Back button in the main bar returns to the previous view (`handleBack` → `setSidebarActive(true)` on mobile).
+
+**Keeping tips current**: If a workflow step is added, removed, or renamed, update the step content in `LandingPage.tsx` and the corresponding `landingPage.steps.*` / `landingPage.features.*` keys. See the Workflow section in `AGENTS.md` for the full rule.

@@ -71,6 +71,7 @@ Strict mode is on with `noUnusedLocals` and `noUnusedParameters`. Target ES2022.
 - Prefer extending existing patterns over introducing new abstractions.
 - Do not mark work complete if tests or lint fail.
 - When a change affects product behaviour, screens, drink config, visual design, or copy, update `SPEC.product.md` to match.
+- When a change adds, removes, or significantly alters a user-facing feature or workflow (e.g. new screens, new gestures, changes to the run/order lifecycle), review and update the help tips in `src/pages/LandingPage.tsx` and their translation keys in `src/i18n/locales/en-GB.json` (`landingPage.*`) to keep the onboarding guidance accurate.
 - When a change affects project structure, data model, types, hooks, components, config, styling tokens, i18n setup, testing, or build config, update `SPEC.technical.md` to match.
 - When a change affects the app's features, tech stack, prerequisites, npm scripts, or top-level project structure, update `README.md` to match.
 

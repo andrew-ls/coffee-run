@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { RunHeader } from './RunHeader'
 
 describe('RunHeader', () => {
@@ -31,5 +32,23 @@ describe('RunHeader', () => {
   it('shows zero Order count', () => {
     render(<RunHeader orderCount={0} hasActiveRun={true} />)
     expect(screen.getByText(/0 Orders/)).toBeInTheDocument()
+  })
+
+  it('renders help button when onHelpClick is provided', () => {
+    render(<RunHeader orderCount={0} hasActiveRun={false} onHelpClick={() => {}} />)
+    expect(screen.getByRole('button', { name: /how to use/i })).toBeInTheDocument()
+  })
+
+  it('does not render help button when onHelpClick is not provided', () => {
+    render(<RunHeader orderCount={0} hasActiveRun={false} />)
+    expect(screen.queryByRole('button', { name: /how to use/i })).not.toBeInTheDocument()
+  })
+
+  it('calls onHelpClick when help button is clicked', async () => {
+    const user = userEvent.setup()
+    const onHelpClick = vi.fn()
+    render(<RunHeader orderCount={0} hasActiveRun={false} onHelpClick={onHelpClick} />)
+    await user.click(screen.getByRole('button', { name: /how to use/i }))
+    expect(onHelpClick).toHaveBeenCalledOnce()
   })
 })

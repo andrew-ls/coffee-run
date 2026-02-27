@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@/components/atoms'
 import styles from './RunHeader.module.css'
 
 interface RunHeaderProps {
   orderCount: number
   hasActiveRun: boolean
+  onHelpClick?: () => void
 }
 
-export function RunHeader({ orderCount, hasActiveRun }: RunHeaderProps) {
+export function RunHeader({ orderCount, hasActiveRun, onHelpClick }: RunHeaderProps) {
   const { t } = useTranslation()
 
   return (
@@ -26,6 +28,16 @@ export function RunHeader({ orderCount, hasActiveRun }: RunHeaderProps) {
           )}
         </div>
       </div>
+      {onHelpClick && (
+        <IconButton
+          variant="primary"
+          className={styles.helpButton}
+          onClick={onHelpClick}
+          label={t('runHeader.helpAriaLabel')}
+        >
+          ?
+        </IconButton>
+      )}
     </header>
   )
 }

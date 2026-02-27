@@ -28,3 +28,17 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-secondary);
 }
+
+.helpButton:hover {
+  background-color: var(--color-primary-light);
+}
+
+.helpButton:active {
+  transform: scale(0.93);
+}
+
+@media (min-width: 768px) {
+  .helpButton {
+    display: none;
+  }
+}
