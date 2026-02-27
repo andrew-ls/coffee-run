@@ -3,10 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { OrderCard } from './OrderCard'
 import { createOrder } from '@/test/fixtures'
 
-vi.mock('@/hooks/useBreakpoint', () => ({
-  useBreakpoint: vi.fn().mockReturnValue('desktop'),
-}))
-
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
   DragOverlay: () => null,
@@ -36,7 +32,6 @@ vi.mock('@dnd-kit/utilities', () => ({
 }))
 
 import React from 'react'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 describe('OrderCard', () => {
   it('renders person name', () => {
@@ -142,7 +137,14 @@ describe('OrderCard', () => {
 
   describe('mobile layout', () => {
     beforeEach(() => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
+      window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+        matches: query === '(pointer: coarse)',
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }))
     })
 
     it('applies swipe transform on mobile', () => {

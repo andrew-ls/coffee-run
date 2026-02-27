@@ -1,11 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SavedOrderCard } from './SavedOrderCard'
 import { createSavedOrder, createOrderFormData } from '@/test/fixtures'
-
-vi.mock('@/hooks/useBreakpoint', () => ({
-  useBreakpoint: vi.fn().mockReturnValue('desktop'),
-}))
 
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
@@ -36,7 +32,6 @@ vi.mock('@dnd-kit/utilities', () => ({
 }))
 
 import React from 'react'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 describe('SavedOrderCard', () => {
   const savedOrder = createSavedOrder({
@@ -213,8 +208,18 @@ describe('SavedOrderCard', () => {
   })
 
   describe('mobile touch handling', () => {
+    beforeEach(() => {
+      window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+        matches: query === '(pointer: coarse)',
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }))
+    })
+
     it('handles touch start, move, and end events', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
@@ -227,7 +232,6 @@ describe('SavedOrderCard', () => {
     })
 
     it('snaps card when swipe exceeds threshold', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
@@ -239,7 +243,6 @@ describe('SavedOrderCard', () => {
     })
 
     it('updates offset when touch moves in positive direction (right swipe enabled)', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const { container } = render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
@@ -251,7 +254,6 @@ describe('SavedOrderCard', () => {
     })
 
     it('calls onUsual when the Usual swipe zone is clicked (mobile)', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const onUsual = vi.fn()
       render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={onUsual} onCustom={vi.fn()} onDelete={vi.fn()} />,
@@ -261,7 +263,6 @@ describe('SavedOrderCard', () => {
     })
 
     it('calls onCustom when the Custom swipe zone is clicked (mobile)', () => {
-      vi.mocked(useBreakpoint).mockReturnValue('mobile')
       const onCustom = vi.fn()
       render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={onCustom} onDelete={vi.fn()} />,

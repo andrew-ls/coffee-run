@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import { useBreakpoint } from './useBreakpoint'
 
 const SWIPE_THRESHOLD = 80
 const SNAP_FALLBACK = SWIPE_THRESHOLD + 20
@@ -13,7 +12,7 @@ export function useSwipeToDelete({
   snapLeftRef?: { readonly current: HTMLElement | null }
   snapRightRef?: { readonly current: HTMLElement | null }
 } = {}) {
-  const breakpoint = useBreakpoint()
+  const isTouch = window.matchMedia('(pointer: coarse)').matches
   const startX = useRef(0)
   const startOffsetX = useRef(0)
   const [offsetX, setOffsetX] = useState(0)
@@ -56,12 +55,10 @@ export function useSwipeToDelete({
     }
   }
 
-  const isMobile = breakpoint === 'mobile'
-
   return {
     swipeDirection,
-    swipeStyle: isMobile ? { transform: `translateX(${offsetX}px)` } : undefined,
-    touchHandlers: isMobile
+    swipeStyle: isTouch ? { transform: `translateX(${offsetX}px)` } : undefined,
+    touchHandlers: isTouch
       ? {
           onTouchStart: handleTouchStart,
           onTouchMove: handleTouchMove,
