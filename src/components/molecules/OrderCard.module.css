@@ -98,6 +98,7 @@
   padding-right: var(--space-lg);
   padding-left: var(--space-2xl);
   opacity: 0;
+  pointer-events: none;
   transition: opacity var(--duration-fast);
   background: linear-gradient(to right, transparent, var(--color-bg-card) var(--space-2xl));
 }
@@ -105,5 +106,6 @@
 @media (hover: hover) {
   .card:hover .actions {
     opacity: 1;
+    pointer-events: auto;
   }
 }
