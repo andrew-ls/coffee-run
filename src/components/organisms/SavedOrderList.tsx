@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
 import { SortableList } from '@/components/atoms'
-import { SavedOrderCard } from '@/components/molecules'
+import { OrderCard } from '@/components/molecules'
 import styles from './SavedOrderList.module.css'
 
 interface SavedOrderListProps {
@@ -34,7 +34,8 @@ export function SavedOrderList({
             items={savedOrders}
             onReorder={onReorder}
             renderItem={(saved, { dragHandleProps, isDragging }) => (
-              <SavedOrderCard
+              <OrderCard
+                mode="saved"
                 savedOrder={saved}
                 onUsual={onUsual}
                 onCustom={onCustom}
@@ -44,7 +45,8 @@ export function SavedOrderList({
               />
             )}
             renderOverlay={(saved) => (
-              <SavedOrderCard
+              <OrderCard
+                mode="saved"
                 savedOrder={saved}
                 onUsual={() => {}}
                 onCustom={() => {}}

@@ -38,7 +38,7 @@ Tests are co-located with their source files. Current coverage:
 | Layer | Files |
 |-------|-------|
 | **Atoms** (8) | Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList |
-| **Molecules** (5) | ConfirmDialog, FormField, OrderCard, PageTransition, SavedOrderCard |
+| **Molecules** (4) | ConfirmDialog, FormField, OrderCard, PageTransition |
 | **Organisms** (6) | BottomAppBar, Mascot, OrderForm, OrderList, RunHeader, SavedOrderList |
 | **Templates** (1) | DualPanelLayout |
 | **Contexts** (1) | SidebarContext |

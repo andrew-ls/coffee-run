@@ -159,6 +159,6 @@ All user-facing strings are externalised via i18n with a single `en-GB` locale. 
 
 ## Known Issues
 
-1. **Swipe-to-delete reset** — On `SavedOrderCard`, swiping partially and not completing the swipe does not always reset the card position cleanly. The `offsetX` state persists until the next touch interaction.
+1. **Swipe-to-delete reset** — On `OrderCard` (`mode="saved"`), swiping partially and not completing the swipe does not always reset the card position cleanly. The `offsetX` state persists until the next touch interaction.
 2. **Order form validation** — The submit button is disabled only when no drink type is selected. The name field is required in logic but there is no visible validation error shown to the user.
 3. **Saved Order duplication** — The "Save for later" checkbox always creates a new Saved Order. There is no deduplication by person name or matching against existing Saved Orders.

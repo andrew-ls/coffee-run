@@ -56,8 +56,9 @@ interface DrinkConfig {
 - **Collision detection:** `closestCenter`.
 - **Strategy:** `verticalListSortingStrategy`.
 
-**Swipe-to-delete** is implemented natively via `useSwipeToDelete` (touch events on `OrderCard` and `SavedOrderCard`). Swipe threshold: 80px. Only active on mobile breakpoint.
+**Swipe-to-delete** is implemented natively via `useSwipeToDelete` (touch events on `OrderCard`). Swipe threshold: 80px. Only active on mobile breakpoint.
 
-- **Left swipe** on `OrderCard`: reveals a red delete zone.
-- **Left swipe** on `SavedOrderCard`: reveals a red delete zone.
-- **Right swipe** on `SavedOrderCard` (`enableRightSwipe: true`): reveals a split zone with "Usual" (mint, left) and "Custom" (peach, right) actions.
+- **Left swipe** on `OrderCard` (either mode): reveals a red delete zone.
+- **Right swipe** on `OrderCard` (`enableRightSwipe: true` in both modes):
+  - `mode="active"`: reveals a mint "Edit" zone.
+  - `mode="saved"`: reveals a mint zone with "Use" (left) and "Customised" (right) actions.

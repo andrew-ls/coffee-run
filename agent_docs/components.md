@@ -7,7 +7,7 @@ Components live under `src/components/` and follow Atomic Design:
 | Level | Directory | Current components |
 |-------|-----------|-------------------|
 | Atoms | `atoms/` | Button, Input, Select, Checkbox, Pill, IconButton, DragHandle, SortableList |
-| Molecules | `molecules/` | FormField, DrinkPills, OrderCard, SavedOrderCard, ConfirmDialog, PageTransition |
+| Molecules | `molecules/` | FormField, DrinkPills, OrderCard, ConfirmDialog, PageTransition |
 | Organisms | `organisms/` | BottomAppBar, OrderForm, OrderList, RunHeader, SavedOrderList, Mascot |
 | Templates | `templates/` | DualPanelLayout |
 
@@ -38,9 +38,8 @@ Composite components combining atoms.
 |-----------|-------------|
 | `FormField` | Label + children wrapper for form inputs. |
 | `ConfirmDialog` | Modal overlay with title, message, cancel/confirm actions. |
-| `OrderCard` | Order display card with drag handle, name, drink pills, edit/delete actions, swipe-to-delete. |
-| `SavedOrderCard` | Saved Order card with drag handle, name, drink pills, Usual/Custom/Delete buttons, swipe-to-delete. |
-| `DrinkPills` | Renders a row of Pill components summarising a drink Order. Shared by OrderCard and SavedOrderCard. |
+| `OrderCard` | Unified card with drag handle, name, drink pills, and swipe-to-delete. `mode="active"`: edit/delete actions, enter animation (`isNew`). `mode="saved"`: Use/Customised/Delete actions, no enter animation. Both modes support `dragHandleProps` and `isDragging`. |
+| `DrinkPills` | Renders a row of Pill components summarising a drink Order. Used by OrderCard in both modes. |
 | `PageTransition` | Wraps the main content area in `App.tsx`. Renders outgoing and incoming pages simultaneously during a 250ms navigation transition. Accepts `contentKey` (current screen name), `direction` (forward slides in from below; back slides in from above), and `children`. |
 
 ### Organisms
@@ -52,7 +51,7 @@ Complex UI blocks with internal state or business logic.
 | `RunHeader` | App title, Run status subtitle with Order count. |
 | `OrderForm` | Multi-field form driven by drink config. Manages own form state; resets dependent fields on drink type change. Submit disabled when no drink type or person name. Accepts `showActions` and `onValidityChange`. |
 | `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
-| `SavedOrderList` | "Saved Orders" header + SortableList with SavedOrderCard rendering. Shows empty state message. |
+| `SavedOrderList` | "Saved Orders" header + SortableList with `OrderCard` (`mode="saved"`) rendering. Shows empty state message. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
 | `BottomAppBar` | `flex-shrink: 0` bar rendered at the bottom of each DualPanelLayout panel via `sidebarBottom`/`mainBottom` props. Accepts `left` and `right` ReactNode slots. Also exports `Fab` — a styled FAB button. |
 

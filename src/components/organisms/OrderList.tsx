@@ -26,6 +26,7 @@ export function OrderList({ orders, onEdit, onDelete, onReorder }: OrderListProp
         onReorder={onReorder}
         renderItem={(order, { dragHandleProps, isDragging }) => (
           <OrderCard
+            mode="active"
             order={order}
             onEdit={onEdit}
             onDelete={onDelete}
@@ -35,7 +36,7 @@ export function OrderList({ orders, onEdit, onDelete, onReorder }: OrderListProp
           />
         )}
         renderOverlay={(order) => (
-          <OrderCard order={order} onEdit={() => {}} onDelete={() => {}} />
+          <OrderCard mode="active" order={order} onEdit={() => {}} onDelete={() => {}} />
         )}
       />
     </div>

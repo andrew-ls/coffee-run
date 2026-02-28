@@ -32,6 +32,25 @@
   font-size: var(--font-size-sm);
 }
 
+.usualCustomZone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-accent-mint);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+}
+
+.usualCustomContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: 0 var(--space-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
 .card {
   position: relative;
   display: flex;
