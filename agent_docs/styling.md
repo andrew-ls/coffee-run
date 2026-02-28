@@ -62,6 +62,7 @@ All tokens are CSS custom properties defined in `src/styles/tokens.css`.
 | `--color-secondary` | `#D4A574` | Caramel accent |
 | `--color-accent-pink` | `#E8A0BF` | — |
 | `--color-accent-mint` | `#A8D8B9` | — |
+| `--color-accent-amber` | `#F59E0B` | Edit/Customised button hover |
 | `--color-accent-peach` | `#FBBF77` | — |
 | `--color-accent-lavender` | `#C3AED6` | — |
 | `--color-danger` | `#D9534F` | — |

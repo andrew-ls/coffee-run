@@ -149,7 +149,7 @@ describe('App — mobile layout', () => {
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
     expect(screen.getAllByText('Bob').length).toBeGreaterThan(0)
     // The Usual button should be there
-    expect(screen.getByRole('button', { name: 'Usual' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Use' })).toBeInTheDocument()
   })
 
   it('clicking Usual adds the Saved Order and returns to Run view', async () => {
@@ -167,7 +167,7 @@ describe('App — mobile layout', () => {
 
     // Go to AddOrder to see the Saved Order
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
-    await user.click(screen.getByRole('button', { name: 'Usual' }))
+    await user.click(screen.getByRole('button', { name: 'Use' }))
 
     // Should be back at Run view with Eve's Order added again
     expect(screen.getByRole('button', { name: 'End Run' })).toBeInTheDocument()
@@ -188,7 +188,7 @@ describe('App — mobile layout', () => {
 
     // Go to AddOrder and click Custom
     await user.click(screen.getByRole('button', { name: 'Add Order' }))
-    await user.click(screen.getByRole('button', { name: 'Custom' }))
+    await user.click(screen.getByRole('button', { name: 'Customised' }))
 
     // Should show form pre-filled with Frank's data
     expect(screen.getByPlaceholderText('Name')).toHaveValue('Frank')
@@ -252,8 +252,8 @@ describe('App — mobile layout', () => {
     expect(screen.getByText('Dave')).toBeInTheDocument()
 
     // Delete it
-    await user.click(screen.getByRole('button', { name: 'Delete Order' }))
-    await user.click(screen.getByText('Remove'))
+    await user.click(screen.getByRole('button', { name: 'Remove Order' }))
+    await user.click(screen.getByRole('button', { name: 'Remove' }))
 
     expect(screen.queryByText('Dave')).not.toBeInTheDocument()
   })

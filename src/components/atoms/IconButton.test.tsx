@@ -43,22 +43,22 @@ describe('IconButton', () => {
     expect(screen.getByRole('button').className).toContain('danger')
   })
 
-  it('applies usual class when variant is usual', () => {
+  it('applies mint class when variant is mint', () => {
     render(
-      <IconButton label="Usual" variant="usual">
+      <IconButton label="Use" variant="mint">
         x
       </IconButton>,
     )
-    expect(screen.getByRole('button').className).toContain('usual')
+    expect(screen.getByRole('button').className).toContain('mint')
   })
 
-  it('applies custom class when variant is custom', () => {
+  it('applies amber class when variant is amber', () => {
     render(
-      <IconButton label="Custom" variant="custom">
+      <IconButton label="Customised" variant="amber">
         x
       </IconButton>,
     )
-    expect(screen.getByRole('button').className).toContain('custom')
+    expect(screen.getByRole('button').className).toContain('amber')
   })
 
   it('applies primary class when variant is primary', () => {

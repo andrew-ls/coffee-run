@@ -101,8 +101,8 @@
   },
   "orderCard": {
     "editLabel": "Edit Order",
-    "deleteLabel": "Delete Order",
-    "delete": "Delete",
+    "deleteLabel": "Remove Order",
+    "delete": "Remove",
     "edit": "Edit",
     "drinkSummary": {
       "iced": "Iced",
@@ -112,8 +112,8 @@
   },
   "savedOrderCard": {
     "delete": "Delete",
-    "usual": "Usual",
-    "custom": "Custom"
+    "usual": "Use",
+    "custom": "Customised"
   },
   "confirmDialog": {
     "cancel": "Never mind",

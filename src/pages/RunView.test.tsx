@@ -79,7 +79,7 @@ describe('RunView', () => {
 
     it('opens delete confirm dialog when delete is triggered', () => {
       render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
-      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
       expect(screen.getByText('Remove this Order?')).toBeInTheDocument()
     })
 
@@ -88,8 +88,8 @@ describe('RunView', () => {
       render(
         <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
       )
-      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
-      fireEvent.click(screen.getByText('Remove'))
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Remove' }))
       expect(onDeleteOrder).toHaveBeenCalledWith('o1')
     })
 
@@ -98,7 +98,7 @@ describe('RunView', () => {
       render(
         <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
       )
-      fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
       fireEvent.click(screen.getByText('Never mind'))
       expect(screen.queryByText('Remove this Order?')).not.toBeInTheDocument()
       expect(onDeleteOrder).not.toHaveBeenCalled()

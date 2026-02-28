@@ -113,7 +113,7 @@ describe('SavedOrderList', () => {
         onReorder={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByRole('button', { name: 'Usual' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Use' }))
     expect(onUsual).toHaveBeenCalledWith(saved[0])
   })
 
@@ -129,7 +129,7 @@ describe('SavedOrderList', () => {
         onReorder={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByRole('button', { name: 'Custom' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Customised' }))
     expect(onCustom).toHaveBeenCalledWith(saved[0])
   })
 
@@ -156,8 +156,8 @@ describe('SavedOrderList', () => {
     expect(aliceElements.length).toBeGreaterThan(1)
 
     // Invoke the no-op callbacks on the overlay card to achieve function coverage
-    const usualButtons = screen.getAllByRole('button', { name: 'Usual' })
-    const customButtons = screen.getAllByRole('button', { name: 'Custom' })
+    const usualButtons = screen.getAllByRole('button', { name: 'Use' })
+    const customButtons = screen.getAllByRole('button', { name: 'Customised' })
     const deleteZones = screen.getAllByText('Delete')
     fireEvent.click(usualButtons[usualButtons.length - 1])
     fireEvent.click(customButtons[customButtons.length - 1])

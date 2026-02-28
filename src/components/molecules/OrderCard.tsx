@@ -55,7 +55,7 @@ export function OrderCard({ order, onEdit, onDelete, isNew, dragHandleProps, isD
           </div>
         </div>
         <div className={styles.actions}>
-          <IconButton label={t('orderCard.editLabel')} onClick={() => onEdit(order.id)}>
+          <IconButton label={t('orderCard.editLabel')} variant="amber" onClick={() => onEdit(order.id)}>
             <EditIcon />
           </IconButton>
           <IconButton

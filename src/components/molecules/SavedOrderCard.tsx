@@ -70,10 +70,10 @@ export function SavedOrderCard({
           </div>
         </div>
         <div className={styles.actions}>
-          <IconButton variant="usual" label={t('savedOrderCard.usual')} onClick={() => onUsual(savedOrder)}>
+          <IconButton variant="mint" label={t('savedOrderCard.usual')} onClick={() => onUsual(savedOrder)}>
             <CheckIcon />
           </IconButton>
-          <IconButton variant="custom" label={t('savedOrderCard.custom')} onClick={() => onCustom(savedOrder)}>
+          <IconButton variant="amber" label={t('savedOrderCard.custom')} onClick={() => onCustom(savedOrder)}>
             <SlidersIcon />
           </IconButton>
           <IconButton variant="danger" label={t('savedOrderCard.delete')} onClick={() => onDelete(savedOrder.id)}>

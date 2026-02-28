@@ -56,7 +56,7 @@ describe('OrderCard', () => {
     const onDelete = vi.fn()
     const order = createOrder({ id: 'del-id' })
     render(<OrderCard order={order} onEdit={vi.fn()} onDelete={onDelete} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Delete Order' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
     expect(onDelete).toHaveBeenCalledWith('del-id')
   })
 
@@ -182,7 +182,7 @@ describe('OrderCard', () => {
       const onDelete = vi.fn()
       const order = createOrder({ id: 'swipe-id' })
       const { getByText } = render(<OrderCard order={order} onEdit={vi.fn()} onDelete={onDelete} />)
-      fireEvent.click(getByText('Delete'))
+      fireEvent.click(getByText('Remove'))
       expect(onDelete).toHaveBeenCalledWith('swipe-id')
     })
 

@@ -25,7 +25,7 @@ Foundational UI primitives with no business logic.
 | `Input` | Styled text input wrapping `<input>`. |
 | `Select` | Styled `<select>` with custom chevron. Accepts `string` or `{value, label}` options. |
 | `Checkbox` | Styled checkbox with label. |
-| `IconButton` | Circular icon button. Variants: default, danger. Requires `label` for a11y. |
+| `IconButton` | Circular icon button. Variants: `default`, `primary`, `danger`, `mint` (mint hover, for Use/Done actions), `amber` (amber hover, for Edit/Customised actions). Requires `label` for a11y. |
 | `Pill` | Generic coloured pill. Accepts `label` and `color: PillColor`. Used for drink type badges and aspect pills. |
 | `DragHandle` | Six-dot grip icon for drag-and-drop. |
 | `SortableList` | Generic drag-and-drop list using @dnd-kit. Accepts render props for items and overlay. Vertical-axis-only with pointer (8px distance) and touch (250ms delay) sensors. |

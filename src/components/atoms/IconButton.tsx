@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from 'react'
 import styles from './IconButton.module.css'
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'primary' | 'danger' | 'usual' | 'custom'
+  variant?: 'default' | 'primary' | 'danger' | 'mint' | 'amber'
   label: string
 }
 
@@ -17,8 +17,8 @@ export function IconButton({
     styles.iconButton,
     variant === 'primary' && styles.primary,
     variant === 'danger' && styles.danger,
-    variant === 'usual' && styles.usual,
-    variant === 'custom' && styles.custom,
+    variant === 'mint' && styles.mint,
+    variant === 'amber' && styles.amber,
     className,
   ]
     .filter(Boolean)

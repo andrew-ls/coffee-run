@@ -95,7 +95,7 @@ describe('SavedOrderCard', () => {
         onDelete={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByRole('button', { name: 'Usual' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Use' }))
     expect(onUsual).toHaveBeenCalledWith(savedOrder)
   })
 
@@ -109,7 +109,7 @@ describe('SavedOrderCard', () => {
         onDelete={vi.fn()}
       />,
     )
-    fireEvent.click(screen.getByRole('button', { name: 'Custom' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Customised' }))
     expect(onCustom).toHaveBeenCalledWith(savedOrder)
   })
 
@@ -258,7 +258,7 @@ describe('SavedOrderCard', () => {
       render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={onUsual} onCustom={vi.fn()} onDelete={vi.fn()} />,
       )
-      fireEvent.click(screen.getByText('Usual'))
+      fireEvent.click(screen.getByText('Use'))
       expect(onUsual).toHaveBeenCalledWith(savedOrder)
     })
 
@@ -267,7 +267,7 @@ describe('SavedOrderCard', () => {
       render(
         <SavedOrderCard savedOrder={savedOrder} onUsual={vi.fn()} onCustom={onCustom} onDelete={vi.fn()} />,
       )
-      fireEvent.click(screen.getByText('Custom'))
+      fireEvent.click(screen.getByText('Customised'))
       expect(onCustom).toHaveBeenCalledWith(savedOrder)
     })
   })

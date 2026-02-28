@@ -82,7 +82,7 @@ describe('AddOrder', () => {
     const onUsual = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onUsual={onUsual} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Usual' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Use' }))
     expect(onUsual).toHaveBeenCalledWith(saved[0])
   })
 
@@ -90,7 +90,7 @@ describe('AddOrder', () => {
     const onCustom = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
     render(<AddOrder {...defaultProps} savedOrders={saved} onCustom={onCustom} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Custom' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Customised' }))
     expect(onCustom).toHaveBeenCalledWith(saved[0])
   })
 
