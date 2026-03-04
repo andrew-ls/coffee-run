@@ -59,20 +59,20 @@ describe('SavedOrderList', () => {
     expect(screen.getByText('No Saved Orders yet. Save one from the Order form!')).toBeInTheDocument()
   })
 
-  it('calls onAdd with the correct id', () => {
+  it('calls onAdd with the correct saved order', () => {
     const onAdd = vi.fn()
     render(<SavedOrderList {...defaultProps} onAdd={onAdd} />)
     const useButtons = screen.getAllByRole('button', { name: 'Use' })
     fireEvent.click(useButtons[0])
-    expect(onAdd).toHaveBeenCalledWith('s1')
+    expect(onAdd).toHaveBeenCalledWith(defaultProps.savedOrders[0])
   })
 
-  it('calls onCustomise with the correct id', () => {
+  it('calls onCustomise with the correct saved order', () => {
     const onCustomise = vi.fn()
     render(<SavedOrderList {...defaultProps} onCustomise={onCustomise} />)
     const customButtons = screen.getAllByRole('button', { name: 'Customised' })
     fireEvent.click(customButtons[1])
-    expect(onCustomise).toHaveBeenCalledWith('s2')
+    expect(onCustomise).toHaveBeenCalledWith(defaultProps.savedOrders[1])
   })
 
   it('calls onDelete with the correct id', () => {

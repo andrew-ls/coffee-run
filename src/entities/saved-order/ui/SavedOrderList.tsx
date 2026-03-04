@@ -6,8 +6,8 @@ import styles from './SavedOrderList.module.css'
 
 interface SavedOrderListProps {
   savedOrders: SavedOrder[]
-  onAdd: (id: string) => void
-  onCustomise: (id: string) => void
+  onAdd: (saved: SavedOrder) => void
+  onCustomise: (saved: SavedOrder) => void
   onDelete: (id: string) => void
   onReorder: (savedOrders: SavedOrder[]) => void
 }
@@ -34,8 +34,8 @@ export function SavedOrderList({
             renderItem={(saved, drag) => (
               <SavedOrderCard
                 savedOrder={saved}
-                onAdd={() => onAdd(saved.id)}
-                onCustomise={() => onCustomise(saved.id)}
+                onAdd={() => onAdd(saved)}
+                onCustomise={() => onCustomise(saved)}
                 onDelete={() => onDelete(saved.id)}
                 drag={drag}
               />

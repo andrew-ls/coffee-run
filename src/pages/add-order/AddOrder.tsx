@@ -35,14 +35,8 @@ export function AddOrder({ onNewOrder, onUsual, onCustom }: AddOrderProps) {
       </div>
       <SavedOrderList
         savedOrders={savedOrders}
-        onAdd={(id) => {
-          const saved = savedOrders.find((s) => s.id === id)
-          if (saved) onUsual(saved)
-        }}
-        onCustomise={(id) => {
-          const saved = savedOrders.find((s) => s.id === id)
-          if (saved) onCustom(saved)
-        }}
+        onAdd={onUsual}
+        onCustomise={onCustom}
         onDelete={setDeleteConfirmId}
         onReorder={reorderSavedOrders}
       />
