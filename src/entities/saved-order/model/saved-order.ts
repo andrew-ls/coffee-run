@@ -1,4 +1,4 @@
-import type { OrderFormData } from './order'
+import type { OrderFormData } from '@/shared/types'
 
 export interface SavedOrder {
   id: string

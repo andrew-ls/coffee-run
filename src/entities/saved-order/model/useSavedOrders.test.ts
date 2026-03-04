@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useSavedOrders } from './useSavedOrders'
 import { createSavedOrder, createOrderFormData } from '@/test/fixtures'
-import type { SavedOrder } from '@/types'
+import type { SavedOrder } from './saved-order'
 
 describe('useSavedOrders', () => {
   it('returns empty array when storage is empty', () => {
@@ -53,7 +53,7 @@ describe('useSavedOrders', () => {
   })
 
   describe('reorderSavedOrders', () => {
-    it('moves first item to last: [A,B,C] from=0 to=2 → [B,C,A]', () => {
+    it('replaces user orders with the provided reordered array', () => {
       const saved = ['A', 'B', 'C'].map((id) =>
         createSavedOrder({ id, userId: 'default-user' }),
       )
@@ -61,8 +61,9 @@ describe('useSavedOrders', () => {
 
       const { result } = renderHook(() => useSavedOrders())
 
+      const reordered = [saved[1], saved[2], saved[0]]
       act(() => {
-        result.current.reorderSavedOrders(0, 2)
+        result.current.reorderSavedOrders(reordered)
       })
 
       expect(result.current.savedOrders.map((s) => s.id)).toEqual(['B', 'C', 'A'])
@@ -76,8 +77,9 @@ describe('useSavedOrders', () => {
 
       const { result } = renderHook(() => useSavedOrders())
 
+      const reordered = [result.current.savedOrders[1], result.current.savedOrders[0]]
       act(() => {
-        result.current.reorderSavedOrders(0, 1)
+        result.current.reorderSavedOrders(reordered)
       })
 
       expect(result.current.savedOrders.map((s) => s.id)).toEqual(['M2', 'M1'])

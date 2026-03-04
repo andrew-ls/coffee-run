@@ -1,0 +1,11 @@
+.personName {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-xs);
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}

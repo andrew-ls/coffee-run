@@ -99,6 +99,16 @@
     "title": "Saved Orders",
     "empty": "No Saved Orders yet. Save one from the Order form!"
   },
+  "activeOrderCard": {
+    "doneLabel": "Mark as done",
+    "done": "Done",
+    "editLabel": "Edit Order",
+    "edit": "Edit",
+    "removeLabel": "Remove Order",
+    "remove": "Delete",
+    "undoLabel": "Undo",
+    "undo": "Mark not done"
+  },
   "orderCard": {
     "editLabel": "Edit Order",
     "deleteLabel": "Remove Order",
@@ -112,8 +122,11 @@
   },
   "savedOrderCard": {
     "delete": "Delete",
+    "deleteSwipe": "Remove saved",
     "usual": "Use",
-    "custom": "Customised"
+    "usualSwipe": "Add as usual",
+    "custom": "Customised",
+    "customSwipe": "Customise"
   },
   "confirmDialog": {
     "cancel": "Never mind",

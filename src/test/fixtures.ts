@@ -1,4 +1,7 @@
-import type { Run, Order, SavedOrder, OrderFormData } from '@/types'
+import type { Run } from '@/entities/run'
+import type { ActiveOrder } from '@/entities/active-order'
+import type { SavedOrder } from '@/entities/saved-order'
+import type { OrderFormData } from '@/shared/types'
 
 export function createRun(overrides: Partial<Run> = {}): Run {
   return {
@@ -27,7 +30,7 @@ export function createOrderFormData(overrides: Partial<OrderFormData> = {}): Ord
   }
 }
 
-export function createOrder(overrides: Partial<Order> = {}): Order {
+export function createActiveOrder(overrides: Partial<ActiveOrder> = {}): ActiveOrder {
   return {
     id: 'order-1',
     runId: 'run-1',
@@ -42,11 +45,14 @@ export function createOrder(overrides: Partial<Order> = {}): Order {
     sweetenerAmount: 0,
     customDrinkName: '',
     notes: '',
+    done: false,
     createdAt: '2024-01-15T12:00:00.000Z',
     updatedAt: '2024-01-15T12:00:00.000Z',
     ...overrides,
   }
 }
+
+export const createOrder = createActiveOrder
 
 export function createSavedOrder(overrides: Partial<SavedOrder> = {}): SavedOrder {
   return {

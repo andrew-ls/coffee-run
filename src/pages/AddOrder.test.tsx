@@ -2,11 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AddOrder } from './AddOrder'
 import { createSavedOrder, createOrderFormData } from '@/test/fixtures'
-import type { SavedOrder } from '@/types'
-
-vi.mock('@/hooks/useBreakpoint', () => ({
-  useBreakpoint: vi.fn().mockReturnValue('desktop'),
-}))
+import type { SavedOrder } from '@/entities/saved-order'
 
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
@@ -35,8 +31,6 @@ vi.mock('@dnd-kit/modifiers', () => ({ restrictToVerticalAxis: vi.fn() }))
 vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
-
-import React from 'react'
 
 const defaultProps = {
   savedOrders: [] as SavedOrder[],

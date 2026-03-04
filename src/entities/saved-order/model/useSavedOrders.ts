@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { arrayMove } from '@dnd-kit/sortable'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { useUserId } from '@/shared/hooks/useUserId'
 import { generateId, now } from '@/shared/utils'
-import type { SavedOrder, OrderFormData } from '@/types'
+import type { OrderFormData } from '@/shared/types'
+import type { SavedOrder } from './saved-order'
 
 const STORAGE_KEY = 'CoffeeRun:savedOrders'
 
@@ -39,18 +39,10 @@ export function useSavedOrders() {
   )
 
   const reorderSavedOrders = useCallback(
-    (fromIndex: number, toIndex: number) => {
+    (reordered: SavedOrder[]) => {
       setAllSaved((prev) => {
-        const userIndices = prev.reduce<number[]>((acc, s, i) => {
-          if (s.userId === userId) acc.push(i)
-          return acc
-        }, [])
-        const reorderedIndices = arrayMove(userIndices, fromIndex, toIndex)
-        const next = [...prev]
-        reorderedIndices.forEach((globalIdx, slot) => {
-          next[userIndices[slot]] = prev[globalIdx]
-        })
-        return next
+        const others = prev.filter((s) => s.userId !== userId)
+        return [...others, ...reordered]
       })
     },
     [userId, setAllSaved],

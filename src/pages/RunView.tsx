@@ -1,24 +1,27 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Order } from '@/types'
+import type { ActiveOrder } from '@/entities/active-order'
+import { ActiveOrderList } from '@/entities/active-order'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
-import { OrderList, Mascot } from '@/components/organisms'
+import { Mascot } from '@/components/organisms'
 import styles from './RunView.module.css'
 
 interface RunViewProps {
   hasActiveRun: boolean
-  orders: Order[]
+  orders: ActiveOrder[]
   onStartRun: () => void
+  onToggleDone: (orderId: string) => void
   onEditOrder: (orderId: string) => void
   onDeleteOrder: (orderId: string) => void
-  onReorderOrder: (fromIndex: number, toIndex: number) => void
+  onReorderOrder: (orders: ActiveOrder[]) => void
 }
 
 export function RunView({
   hasActiveRun,
   orders,
   onStartRun,
+  onToggleDone,
   onEditOrder,
   onDeleteOrder,
   onReorderOrder,
@@ -52,10 +55,11 @@ export function RunView({
         ) : (
           <>
             <Mascot orderCount={orders.length} />
-            <OrderList
+            <ActiveOrderList
               orders={orders}
+              onToggleDone={onToggleDone}
               onEdit={onEditOrder}
-              onDelete={(id) => setDeleteConfirm(id)}
+              onRemove={(id) => setDeleteConfirm(id)}
               onReorder={onReorderOrder}
             />
           </>

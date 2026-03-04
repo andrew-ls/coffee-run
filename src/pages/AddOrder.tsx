@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { SavedOrder } from '@/types'
+import type { SavedOrder } from '@/entities/saved-order'
+import { SavedOrderList } from '@/entities/saved-order'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
-import { SavedOrderList } from '@/components/organisms'
 import styles from './AddOrder.module.css'
 
 interface AddOrderProps {
@@ -12,7 +12,7 @@ interface AddOrderProps {
   onUsual: (saved: SavedOrder) => void
   onCustom: (saved: SavedOrder) => void
   onDeleteSaved: (savedId: string) => void
-  onReorderSaved: (fromIndex: number, toIndex: number) => void
+  onReorderSaved: (reordered: SavedOrder[]) => void
 }
 
 export function AddOrder({
@@ -43,8 +43,14 @@ export function AddOrder({
       </div>
       <SavedOrderList
         savedOrders={savedOrders}
-        onUsual={onUsual}
-        onCustom={onCustom}
+        onAdd={(id) => {
+          const saved = savedOrders.find((s) => s.id === id)
+          if (saved) onUsual(saved)
+        }}
+        onCustomise={(id) => {
+          const saved = savedOrders.find((s) => s.id === id)
+          if (saved) onCustom(saved)
+        }}
         onDelete={setDeleteConfirmId}
         onReorder={onReorderSaved}
       />

@@ -1,26 +1,32 @@
 import { useCallback, useMemo } from 'react'
-import { arrayMove } from '@dnd-kit/sortable'
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
 import { generateId, now } from '@/shared/utils'
-import type { Order, OrderFormData } from '@/types'
+import type { OrderFormData } from '@/shared/types'
+import type { ActiveOrder } from './active-order'
 
 const STORAGE_KEY = 'CoffeeRun:orders'
 
-export function useOrders(runId: string | null) {
-  const [allOrders, setAllOrders] = useLocalStorage<Order[]>(STORAGE_KEY, [])
+export function useActiveOrders(runId: string | null) {
+  const [allOrders, setAllOrders] = useLocalStorage<ActiveOrder[]>(STORAGE_KEY, [])
 
   const orders = useMemo(
-    () => (runId ? allOrders.filter((o) => o.runId === runId) : []),
+    () =>
+      runId
+        ? allOrders
+            .filter((o) => o.runId === runId)
+            .map((o) => ({ ...o, done: o.done ?? false }))
+        : [],
     [allOrders, runId],
   )
 
   const addOrder = useCallback(
     (data: OrderFormData) => {
       if (!runId) return
-      const order: Order = {
+      const order: ActiveOrder = {
         ...data,
         id: generateId(),
         runId,
+        done: false,
         createdAt: now(),
         updatedAt: now(),
       }
@@ -48,24 +54,27 @@ export function useOrders(runId: string | null) {
     [setAllOrders],
   )
 
+  const toggleDone = useCallback(
+    (orderId: string) => {
+      setAllOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, done: !o.done, updatedAt: now() } : o,
+        ),
+      )
+    },
+    [setAllOrders],
+  )
+
   const reorderOrders = useCallback(
-    (fromIndex: number, toIndex: number) => {
+    (reordered: ActiveOrder[]) => {
       if (!runId) return
       setAllOrders((prev) => {
-        const runIndices = prev.reduce<number[]>((acc, o, i) => {
-          if (o.runId === runId) acc.push(i)
-          return acc
-        }, [])
-        const reorderedIndices = arrayMove(runIndices, fromIndex, toIndex)
-        const next = [...prev]
-        reorderedIndices.forEach((globalIdx, slot) => {
-          next[runIndices[slot]] = prev[globalIdx]
-        })
-        return next
+        const others = prev.filter((o) => o.runId !== runId)
+        return [...others, ...reordered]
       })
     },
     [runId, setAllOrders],
   )
 
-  return { orders, addOrder, updateOrder, removeOrder, reorderOrders }
+  return { orders, addOrder, updateOrder, removeOrder, toggleDone, reorderOrders }
 }

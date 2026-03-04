@@ -1,6 +1,4 @@
 export { BottomAppBar, Fab } from './BottomAppBar'
 export { OrderForm } from './OrderForm'
-export { OrderList } from './OrderList'
-export { SavedOrderList } from './SavedOrderList'
 export { RunHeader } from './RunHeader'
 export { Mascot } from './Mascot'

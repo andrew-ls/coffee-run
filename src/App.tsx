@@ -1,7 +1,10 @@
 import { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { OrderFormData, SavedOrder } from '@/types'
-import { useRun, useOrders, useSavedOrders } from '@/hooks'
+import type { OrderFormData } from '@/shared/types'
+import type { SavedOrder } from '@/entities/saved-order'
+import { useRun } from '@/entities/run'
+import { useActiveOrders } from '@/entities/active-order'
+import { useSavedOrders } from '@/entities/saved-order'
 import { useBreakpoint } from '@/shared/hooks'
 import { DualPanelLayout } from '@/components/templates'
 import { Button } from '@/shared/ui/Button'
@@ -20,7 +23,7 @@ export default function App() {
   const { t } = useTranslation()
   const breakpoint = useBreakpoint()
   const { activeRun, startRun, archiveRun } = useRun()
-  const { orders, addOrder, updateOrder, removeOrder, reorderOrders } = useOrders(activeRun?.id ?? null)
+  const { orders, addOrder, updateOrder, removeOrder, toggleDone, reorderOrders } = useActiveOrders(activeRun?.id ?? null)
   const { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders } = useSavedOrders()
   const [screen, setScreen] = useState<Screen>({ name: 'landing' })
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
@@ -222,6 +225,7 @@ export default function App() {
             hasActiveRun={!!activeRun}
             orders={orders}
             onStartRun={handleStartRun}
+            onToggleDone={toggleDone}
             onEditOrder={handleEditOrder}
             onDeleteOrder={removeOrder}
             onReorderOrder={reorderOrders}

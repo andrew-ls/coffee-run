@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { OrderFormData } from '@/types'
+import type { OrderFormData } from '@/shared/types'
 import { DRINKS, MILK_TYPES, MILK_AMOUNTS, SWEETENER_TYPES, SWEETENER_MIN, SWEETENER_MAX, SWEETENER_STEP } from '@/shared/config'
 import type { DrinkConfig } from '@/shared/config'
 import { Button } from '@/shared/ui/Button'

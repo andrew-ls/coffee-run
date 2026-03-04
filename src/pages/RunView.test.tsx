@@ -3,10 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { RunView } from './RunView'
 import { createOrder } from '@/test/fixtures'
 
-vi.mock('@/hooks/useBreakpoint', () => ({
-  useBreakpoint: vi.fn().mockReturnValue('desktop'),
-}))
-
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
   DragOverlay: () => null,
@@ -35,12 +31,11 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
-import React from 'react'
-
 const defaultProps = {
   hasActiveRun: false,
   orders: [],
   onStartRun: vi.fn(),
+  onToggleDone: vi.fn(),
   onEditOrder: vi.fn(),
   onDeleteOrder: vi.fn(),
   onReorderOrder: vi.fn(),
