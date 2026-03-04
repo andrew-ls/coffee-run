@@ -1,4 +1,4 @@
-import type { PillColor } from '@/config'
+import type { PillColor } from '@/shared/config'
 import styles from './Pill.module.css'
 
 interface PillProps {

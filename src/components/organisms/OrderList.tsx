@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Order } from '@/types'
-import { SortableList } from '@/components/atoms'
+import { SortableList } from '@/shared/ui/SortableList'
 import { OrderCard } from '@/components/molecules'
 import styles from './OrderList.module.css'
 

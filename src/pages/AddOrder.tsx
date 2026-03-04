@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
-import { Button } from '@/components/atoms'
-import { ConfirmDialog } from '@/components/molecules'
+import { Button } from '@/shared/ui/Button'
+import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { SavedOrderList } from '@/components/organisms'
 import styles from './AddOrder.module.css'
 

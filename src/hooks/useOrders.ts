@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
-import { useLocalStorage } from './useLocalStorage'
-import { generateId, now } from '@/utils'
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
+import { generateId, now } from '@/shared/utils'
 import type { Order, OrderFormData } from '@/types'
 
 const STORAGE_KEY = 'CoffeeRun:orders'

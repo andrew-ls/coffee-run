@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { SavedOrder } from '@/types'
-import { SortableList } from '@/components/atoms'
+import { SortableList } from '@/shared/ui/SortableList'
 import { OrderCard } from '@/components/molecules'
 import styles from './SavedOrderList.module.css'
 

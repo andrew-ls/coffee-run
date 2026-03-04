@@ -14,6 +14,14 @@ vi.mock('@/hooks', async (importOriginal) => {
   }
 })
 
+vi.mock('@/shared/hooks', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/shared/hooks')>()
+  return {
+    ...actual,
+    useBreakpoint: () => mockUseBreakpoint(),
+  }
+})
+
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
   DragOverlay: () => null,

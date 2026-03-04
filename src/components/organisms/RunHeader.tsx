@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { IconButton } from '@/components/atoms'
+import { IconButton } from '@/shared/ui/IconButton'
 import styles from './RunHeader.module.css'
 
 interface RunHeaderProps {

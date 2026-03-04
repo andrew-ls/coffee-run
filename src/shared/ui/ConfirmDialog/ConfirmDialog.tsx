@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/atoms'
+import { Button } from '@/shared/ui/Button'
 import styles from './ConfirmDialog.module.css'
 
 interface ConfirmDialogProps {

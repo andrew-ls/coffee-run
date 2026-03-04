@@ -1,7 +1,7 @@
 import { vi, beforeEach, afterEach } from 'vitest'
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import '@/i18n'
+import '@/shared/i18n'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

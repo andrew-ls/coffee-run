@@ -1,9 +1,10 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Order, SavedOrder } from '@/types'
-import { CheckIcon, DeleteIcon, EditIcon, SlidersIcon } from '@/assets/icons'
-import { DragHandle, IconButton } from '@/components/atoms'
-import { useSwipeToDelete } from '@/hooks'
+import { CheckIcon, DeleteIcon, EditIcon, SlidersIcon } from '@/shared/assets/icons'
+import { DragHandle } from '@/shared/ui/DragHandle'
+import { IconButton } from '@/shared/ui/IconButton'
+import { useSwipe } from '@/shared/ui/ActionCard'
 import { DrinkPills } from './DrinkPills'
 import styles from './OrderCard.module.css'
 
@@ -33,7 +34,7 @@ export function OrderCard(props: OrderCardProps) {
   const { t } = useTranslation()
   const rightZoneRef = useRef<HTMLElement>(null)
   const deleteZoneRef = useRef<HTMLSpanElement>(null)
-  const { swipeStyle, touchHandlers, swipeDirection } = useSwipeToDelete({
+  const { swipeStyle, touchHandlers, swipeDirection } = useSwipe({
     enableRightSwipe: true,
     snapRightRef: rightZoneRef,
     snapLeftRef: deleteZoneRef,

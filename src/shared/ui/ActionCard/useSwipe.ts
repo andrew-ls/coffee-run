@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 const SWIPE_THRESHOLD = 80
 const SNAP_FALLBACK = SWIPE_THRESHOLD + 20
 
-export function useSwipeToDelete({
+export function useSwipe({
   enableRightSwipe = false,
   snapLeftRef,
   snapRightRef,

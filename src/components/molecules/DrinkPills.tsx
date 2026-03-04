@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
-import { ASPECT_COLORS, DRINKS } from '@/config'
-import { Pill } from '@/components/atoms'
+import { ASPECT_COLORS, DRINKS } from '@/shared/config'
+import { Pill } from '@/shared/ui/Pill'
 
 const FALLBACK_PILL_COLOR = DRINKS.find((d) => d.type === 'Other')!.pillColor
 

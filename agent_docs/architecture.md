@@ -35,7 +35,7 @@ type Direction = 'forward' | 'back'
 
 ## State & persistence
 
-All state lives in `localStorage`. The `useLocalStorage<T>` hook (`src/hooks/useLocalStorage.ts`) handles serialisation and listens to the `storage` event to sync state across browser tabs.
+All state lives in `localStorage`. The `useLocalStorage<T>` hook (`src/shared/hooks/useLocalStorage.ts`) handles serialisation and listens to the `storage` event to sync state across browser tabs.
 
 Three storage keys, each owned exclusively by one domain hook:
 

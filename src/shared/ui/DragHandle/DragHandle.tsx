@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { DragHandleIcon } from '@/assets/icons'
+import { DragHandleIcon } from '@/shared/assets/icons'
 import styles from './DragHandle.module.css'
 
 export function DragHandle(props: React.HTMLAttributes<HTMLSpanElement>) {

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
-import { useLocalStorage } from './useLocalStorage'
-import { useUserId } from './useUserId'
-import { generateId, now } from '@/utils'
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage'
+import { useUserId } from '@/shared/hooks/useUserId'
+import { generateId, now } from '@/shared/utils'
 import type { Run } from '@/types'
 
 const STORAGE_KEY = 'CoffeeRun:runs'

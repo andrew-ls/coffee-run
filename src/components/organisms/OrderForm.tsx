@@ -1,10 +1,13 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/types'
-import { DRINKS, MILK_TYPES, MILK_AMOUNTS, SWEETENER_TYPES, SWEETENER_MIN, SWEETENER_MAX, SWEETENER_STEP } from '@/config'
-import type { DrinkConfig } from '@/config'
-import { Button, Input, Select, Checkbox } from '@/components/atoms'
-import { FormField } from '@/components/molecules'
+import { DRINKS, MILK_TYPES, MILK_AMOUNTS, SWEETENER_TYPES, SWEETENER_MIN, SWEETENER_MAX, SWEETENER_STEP } from '@/shared/config'
+import type { DrinkConfig } from '@/shared/config'
+import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
+import { Select } from '@/shared/ui/Select'
+import { Checkbox } from '@/shared/ui/Checkbox'
+import { FormField } from '@/shared/ui/FormField'
 import styles from './OrderForm.module.css'
 
 const EMPTY_FORM: OrderFormData = {

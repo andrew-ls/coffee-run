@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
-import { useSwipeToDelete } from './useSwipeToDelete'
+import { useSwipe } from './useSwipe'
 
 function createTouchEvent(clientX: number) {
   return { touches: [{ clientX }] } as unknown as React.TouchEvent
@@ -10,10 +10,10 @@ function createTransitionEvent(propertyName: string) {
   return { propertyName } as unknown as React.TransitionEvent
 }
 
-describe('useSwipeToDelete', () => {
+describe('useSwipe', () => {
   describe('non-touch device', () => {
     it('returns undefined swipeStyle and empty touchHandlers', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       expect(result.current.swipeStyle).toBeUndefined()
       expect(result.current.touchHandlers).toEqual({})
       expect(result.current.swipeDirection).toBeNull()
@@ -33,7 +33,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('returns swipeStyle with transform and touch handlers', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       expect(result.current.swipeStyle).toEqual({ transform: 'translateX(0px)' })
       expect(result.current.touchHandlers).toHaveProperty('onTouchStart')
       expect(result.current.touchHandlers).toHaveProperty('onTouchMove')
@@ -42,7 +42,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('sets negative offset and left direction on left swipe', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
       })
@@ -54,7 +54,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('sets positive offset and right direction when enableRightSwipe is true', () => {
-      const { result } = renderHook(() => useSwipeToDelete({ enableRightSwipe: true }))
+      const { result } = renderHook(() => useSwipe({ enableRightSwipe: true }))
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
       })
@@ -66,7 +66,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('resets offset to 0 when swiping right with enableRightSwipe false', () => {
-      const { result } = renderHook(() => useSwipeToDelete({ enableRightSwipe: false }))
+      const { result } = renderHook(() => useSwipe({ enableRightSwipe: false }))
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
       })
@@ -78,7 +78,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('snaps to negative snap width past left threshold', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(200))
       })
@@ -93,7 +93,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('snaps to positive snap width past right threshold', () => {
-      const { result } = renderHook(() => useSwipeToDelete({ enableRightSwipe: true }))
+      const { result } = renderHook(() => useSwipe({ enableRightSwipe: true }))
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(0))
       })
@@ -108,7 +108,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('snaps back to 0 when below threshold', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
       })
@@ -123,7 +123,7 @@ describe('useSwipeToDelete', () => {
 
     it('uses snapLeftRef offsetWidth when provided', () => {
       const snapLeftRef = { current: { offsetWidth: 120 } as HTMLElement }
-      const { result } = renderHook(() => useSwipeToDelete({ snapLeftRef }))
+      const { result } = renderHook(() => useSwipe({ snapLeftRef }))
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(200))
       })
@@ -139,7 +139,7 @@ describe('useSwipeToDelete', () => {
     it('uses snapRightRef offsetWidth when provided', () => {
       const snapRightRef = { current: { offsetWidth: 90 } as HTMLElement }
       const { result } = renderHook(() =>
-        useSwipeToDelete({ enableRightSwipe: true, snapRightRef }),
+        useSwipe({ enableRightSwipe: true, snapRightRef }),
       )
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(0))
@@ -154,7 +154,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('clears swipeDirection on transitionEnd with transform when offset is 0', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       // Swipe left below threshold, then touch end to snap back to 0
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
@@ -173,7 +173,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('does not clear swipeDirection for non-transform transitionEnd', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(100))
       })
@@ -190,7 +190,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('does not clear swipeDirection on transitionEnd when offset is not 0', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       // Swipe left past threshold so card snaps to -100
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(200))
@@ -209,7 +209,7 @@ describe('useSwipeToDelete', () => {
     })
 
     it('continues swipe relative to locked position', () => {
-      const { result } = renderHook(() => useSwipeToDelete())
+      const { result } = renderHook(() => useSwipe())
       // Lock card at -100 (left swipe past threshold)
       act(() => {
         result.current.touchHandlers.onTouchStart!(createTouchEvent(200))
