@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import { useSidebarContext } from '@/contexts/SidebarContext'
 import styles from './DualPanelLayout.module.css'
 
 interface DualPanelLayoutProps {
+  sidebarActive: boolean
   header: ReactNode
   sidebar: ReactNode
   sidebarBottom?: ReactNode
@@ -10,8 +10,7 @@ interface DualPanelLayoutProps {
   mainBottom?: ReactNode
 }
 
-export function DualPanelLayout({ header, sidebar, sidebarBottom, children, mainBottom }: DualPanelLayoutProps) {
-  const { sidebarActive } = useSidebarContext()
+export function DualPanelLayout({ sidebarActive, header, sidebar, sidebarBottom, children, mainBottom }: DualPanelLayoutProps) {
   return (
     <div className={styles.layout}>
       <div className={`${styles.sidebar} ${!sidebarActive ? styles.sidebarHidden : ''}`}>

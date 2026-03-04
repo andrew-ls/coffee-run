@@ -4,7 +4,7 @@ import type { ActiveOrder } from '@/entities/active-order'
 import { ActiveOrderList } from '@/entities/active-order'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
-import { Mascot } from '@/components/organisms'
+import { Mascot } from '@/widgets/mascot'
 import styles from './RunView.module.css'
 
 interface RunViewProps {

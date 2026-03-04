@@ -6,13 +6,11 @@ import { useRun } from '@/entities/run'
 import { useActiveOrders } from '@/entities/active-order'
 import { useSavedOrders } from '@/entities/saved-order'
 import { useBreakpoint } from '@/shared/hooks'
-import { DualPanelLayout } from '@/components/templates'
+import { DualPanelLayout, BottomAppBar, Fab, PageTransition } from '@/widgets/layout'
+import { RunHeader } from '@/widgets/run-header'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
-import { PageTransition } from '@/components/molecules'
-import { RunHeader, BottomAppBar, Fab } from '@/components/organisms'
 import { RunView, AddOrder, OrderFormPage, LandingPage } from '@/pages'
-import { SidebarContext } from '@/contexts/SidebarContext'
 
 type Screen =
   | { name: 'landing' }
@@ -211,8 +209,9 @@ export default function App() {
   ) : null
 
   return (
-    <SidebarContext.Provider value={{ sidebarActive, setSidebarActive }}>
+    <>
       <DualPanelLayout
+        sidebarActive={sidebarActive}
         header={
           <RunHeader
             orderCount={orders.length}
@@ -239,6 +238,6 @@ export default function App() {
         </PageTransition>
       </DualPanelLayout>
       {endRunConfirmDialog}
-    </SidebarContext.Provider>
+    </>
   )
 }

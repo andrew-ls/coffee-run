@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/shared/types'
-import { OrderForm } from '@/components/organisms'
+import { OrderForm } from '@/widgets/order-form'
 import styles from './OrderFormPage.module.css'
 
 interface OrderFormPageProps {

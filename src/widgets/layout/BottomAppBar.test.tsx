@@ -12,7 +12,6 @@ describe('BottomAppBar', () => {
     render(<BottomAppBar right={<button>Add Order</button>} />)
     expect(screen.getByText('Add Order')).toBeInTheDocument()
   })
-
 })
 
 describe('Fab', () => {

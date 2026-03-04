@@ -6,14 +6,6 @@ import App from './App'
 // Control breakpoint in each test
 const mockUseBreakpoint = vi.fn().mockReturnValue('mobile')
 
-vi.mock('@/hooks', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/hooks')>()
-  return {
-    ...actual,
-    useBreakpoint: () => mockUseBreakpoint(),
-  }
-})
-
 vi.mock('@/shared/hooks', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/shared/hooks')>()
   return {
@@ -56,7 +48,7 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
-vi.mock('@/components/molecules/PageTransition', () => ({
+vi.mock('@/widgets/layout/PageTransition', () => ({
   PageTransition: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
