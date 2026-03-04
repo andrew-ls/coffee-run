@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AddOrder } from './AddOrder'
 import { createSavedOrder, createOrderFormData } from '@/test/fixtures'
@@ -32,16 +32,30 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
+const mockRemoveSavedOrder = vi.fn()
+const mockReorderSavedOrders = vi.fn()
+const mockUseSavedOrderContext = vi.fn()
+
+vi.mock('@/app/contexts/SavedOrderContext', () => ({
+  useSavedOrderContext: () => mockUseSavedOrderContext(),
+}))
+
 const defaultProps = {
-  savedOrders: [] as SavedOrder[],
   onNewOrder: vi.fn(),
   onUsual: vi.fn(),
   onCustom: vi.fn(),
-  onDeleteSaved: vi.fn(),
-  onReorderSaved: vi.fn(),
 }
 
 describe('AddOrder', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockUseSavedOrderContext.mockReturnValue({
+      savedOrders: [] as SavedOrder[],
+      removeSavedOrder: mockRemoveSavedOrder,
+      reorderSavedOrders: mockReorderSavedOrders,
+    })
+  })
+
   it('renders the title', () => {
     render(<AddOrder {...defaultProps} />)
     expect(screen.getByText('Add Order')).toBeInTheDocument()
@@ -63,7 +77,12 @@ describe('AddOrder', () => {
     const saved = [
       createSavedOrder({ id: 's1', orderData: createOrderFormData({ personName: 'Eve' }) }),
     ]
-    render(<AddOrder {...defaultProps} savedOrders={saved} />)
+    mockUseSavedOrderContext.mockReturnValue({
+      savedOrders: saved,
+      removeSavedOrder: mockRemoveSavedOrder,
+      reorderSavedOrders: mockReorderSavedOrders,
+    })
+    render(<AddOrder {...defaultProps} />)
     expect(screen.getByText('Eve')).toBeInTheDocument()
   })
 
@@ -75,7 +94,12 @@ describe('AddOrder', () => {
   it('wires onUsual to Saved Order cards', () => {
     const onUsual = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
-    render(<AddOrder {...defaultProps} savedOrders={saved} onUsual={onUsual} />)
+    mockUseSavedOrderContext.mockReturnValue({
+      savedOrders: saved,
+      removeSavedOrder: mockRemoveSavedOrder,
+      reorderSavedOrders: mockReorderSavedOrders,
+    })
+    render(<AddOrder {...defaultProps} onUsual={onUsual} />)
     fireEvent.click(screen.getByRole('button', { name: 'Use' }))
     expect(onUsual).toHaveBeenCalledWith(saved[0])
   })
@@ -83,36 +107,46 @@ describe('AddOrder', () => {
   it('wires onCustom to Saved Order cards', () => {
     const onCustom = vi.fn()
     const saved = [createSavedOrder({ id: 's1' })]
-    render(<AddOrder {...defaultProps} savedOrders={saved} onCustom={onCustom} />)
+    mockUseSavedOrderContext.mockReturnValue({
+      savedOrders: saved,
+      removeSavedOrder: mockRemoveSavedOrder,
+      reorderSavedOrders: mockReorderSavedOrders,
+    })
+    render(<AddOrder {...defaultProps} onCustom={onCustom} />)
     fireEvent.click(screen.getByRole('button', { name: 'Customised' }))
     expect(onCustom).toHaveBeenCalledWith(saved[0])
   })
 
   describe('delete saved order', () => {
+    const saved = [createSavedOrder({ id: 's1' })]
+
+    beforeEach(() => {
+      mockUseSavedOrderContext.mockReturnValue({
+        savedOrders: saved,
+        removeSavedOrder: mockRemoveSavedOrder,
+        reorderSavedOrders: mockReorderSavedOrders,
+      })
+    })
+
     it('shows confirm dialog when delete button is clicked', () => {
-      const saved = [createSavedOrder({ id: 's1' })]
-      render(<AddOrder {...defaultProps} savedOrders={saved} />)
+      render(<AddOrder {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
       expect(screen.getByText('Delete Saved Order?')).toBeInTheDocument()
     })
 
-    it('calls onDeleteSaved and closes dialog when Remove is confirmed', () => {
-      const onDeleteSaved = vi.fn()
-      const saved = [createSavedOrder({ id: 's1' })]
-      render(<AddOrder {...defaultProps} savedOrders={saved} onDeleteSaved={onDeleteSaved} />)
+    it('calls removeSavedOrder and closes dialog when Remove is confirmed', () => {
+      render(<AddOrder {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
       fireEvent.click(screen.getByText('Remove'))
-      expect(onDeleteSaved).toHaveBeenCalledWith('s1')
+      expect(mockRemoveSavedOrder).toHaveBeenCalledWith('s1')
       expect(screen.queryByText('Delete Saved Order?')).not.toBeInTheDocument()
     })
 
-    it('does not call onDeleteSaved and closes dialog when cancelled', () => {
-      const onDeleteSaved = vi.fn()
-      const saved = [createSavedOrder({ id: 's1' })]
-      render(<AddOrder {...defaultProps} savedOrders={saved} onDeleteSaved={onDeleteSaved} />)
+    it('does not call removeSavedOrder and closes dialog when cancelled', () => {
+      render(<AddOrder {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
       fireEvent.click(screen.getByText('Never mind'))
-      expect(onDeleteSaved).not.toHaveBeenCalled()
+      expect(mockRemoveSavedOrder).not.toHaveBeenCalled()
       expect(screen.queryByText('Delete Saved Order?')).not.toBeInTheDocument()
     })
   })

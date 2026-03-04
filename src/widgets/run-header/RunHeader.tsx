@@ -1,15 +1,19 @@
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@/shared/ui/IconButton'
+import { useRunContext } from '@/app/contexts/RunContext'
+import { useActiveOrderContext } from '@/app/contexts/ActiveOrderContext'
 import styles from './RunHeader.module.css'
 
 interface RunHeaderProps {
-  orderCount: number
-  hasActiveRun: boolean
   onHelpClick?: () => void
 }
 
-export function RunHeader({ orderCount, hasActiveRun, onHelpClick }: RunHeaderProps) {
+export function RunHeader({ onHelpClick }: RunHeaderProps) {
   const { t } = useTranslation()
+  const { activeRun } = useRunContext()
+  const { orders } = useActiveOrderContext()
+  const hasActiveRun = !!activeRun
+  const orderCount = orders.length
 
   return (
     <header className={styles.header}>

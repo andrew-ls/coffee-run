@@ -15,6 +15,8 @@ type Direction = 'forward' | 'back'
 
 `App.tsx` passes handler callbacks (e.g. `handleAddOrder`, `handleEditOrder`) down to pages as props. Pages never set screen state directly — they call the handler they were given. There is no global state manager.
 
+`App` (the default export) renders the three context providers. `AppContent` (internal component within the same file) holds the `Screen` state machine, `sidebarActive`, and all navigation handlers.
+
 `direction` drives the `PageTransition` widget, which wraps the main content area. Forward navigations (landing→add, add→form) slide the incoming screen in from below; back navigations slide in from above. Both the outgoing and incoming pages are simultaneously in the DOM for the 250ms transition.
 
 **Screen transitions:**
@@ -41,11 +43,19 @@ Three storage keys, each owned exclusively by one domain hook:
 
 | Key | Hook | Contents |
 |-----|------|----------|
-| `CoffeeRun:runs` | `useRun` | Active and archived runs |
-| `CoffeeRun:orders` | `useOrders` | All orders across all runs |
-| `CoffeeRun:savedOrders` | `useSavedOrders` | User's saved "usual" orders |
+| `CoffeeRun:runs` | `useRun` (`src/entities/run`) | Active and archived runs |
+| `CoffeeRun:orders` | `useActiveOrders` (`src/entities/active-order`) | All orders across all runs |
+| `CoffeeRun:savedOrders` | `useSavedOrders` (`src/entities/saved-order`) | User's saved "usual" orders |
 
 Each domain hook exposes CRUD operations. Nothing else reads or writes these keys directly.
+
+Three app-level contexts (`src/app/contexts/`) wrap these hooks and make the values available to any descendant without prop drilling:
+
+- **`RunContext`** (`RunProvider`, `useRunContext`) — wraps `useRun()`
+- **`ActiveOrderContext`** (`ActiveOrderProvider`, `useActiveOrderContext`) — wraps `useActiveOrders(activeRun?.id ?? null)`; must be nested inside `RunProvider`
+- **`SavedOrderContext`** (`SavedOrderProvider`, `useSavedOrderContext`) — wraps `useSavedOrders()`
+
+All three providers are composed in the root `App` component (`src/app/App.tsx`). `RunView`, `AddOrder`, and `RunHeader` consume these contexts directly. `AppContent` (internal to `App.tsx`) reads only the operations it needs for navigation-mixed handlers.
 
 `useUserId` returns the hardcoded string `'default-user'`. It is a placeholder — the hook exists so a future multi-user implementation has a clear seam to change.
 

@@ -1,32 +1,22 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ActiveOrder } from '@/entities/active-order'
 import { ActiveOrderList } from '@/entities/active-order'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { Mascot } from '@/widgets/mascot'
+import { useRunContext } from '@/app/contexts/RunContext'
+import { useActiveOrderContext } from '@/app/contexts/ActiveOrderContext'
 import styles from './RunView.module.css'
 
 interface RunViewProps {
-  hasActiveRun: boolean
-  orders: ActiveOrder[]
   onStartRun: () => void
-  onToggleDone: (orderId: string) => void
   onEditOrder: (orderId: string) => void
-  onDeleteOrder: (orderId: string) => void
-  onReorderOrder: (orders: ActiveOrder[]) => void
 }
 
-export function RunView({
-  hasActiveRun,
-  orders,
-  onStartRun,
-  onToggleDone,
-  onEditOrder,
-  onDeleteOrder,
-  onReorderOrder,
-}: RunViewProps) {
+export function RunView({ onStartRun, onEditOrder }: RunViewProps) {
   const { t } = useTranslation()
+  const { activeRun } = useRunContext()
+  const { orders, toggleDone, removeOrder, reorderOrders } = useActiveOrderContext()
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
   const [emptyMessage] = useState(() => {
@@ -34,7 +24,7 @@ export function RunView({
     return messages[Math.floor(Math.random() * messages.length)]
   })
 
-  if (!hasActiveRun) {
+  if (!activeRun) {
     return (
       <div className={styles.emptyState}>
         <Mascot orderCount={0} message={emptyMessage} />
@@ -57,10 +47,10 @@ export function RunView({
             <Mascot orderCount={orders.length} />
             <ActiveOrderList
               orders={orders}
-              onToggleDone={onToggleDone}
+              onToggleDone={toggleDone}
               onEdit={onEditOrder}
               onRemove={(id) => setDeleteConfirm(id)}
-              onReorder={onReorderOrder}
+              onReorder={reorderOrders}
             />
           </>
         )}
@@ -71,7 +61,7 @@ export function RunView({
           message={t('runView.deleteOrderDialog.message')}
           confirmLabel={t('runView.deleteOrderDialog.confirm')}
           onConfirm={() => {
-            onDeleteOrder(deleteConfirm)
+            removeOrder(deleteConfirm)
             setDeleteConfirm(null)
           }}
           onCancel={() => setDeleteConfirm(null)}

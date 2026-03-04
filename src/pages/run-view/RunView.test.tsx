@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { RunView } from './RunView'
 import { createOrder } from '@/test/fixtures'
@@ -31,26 +31,46 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
+const mockRemoveOrder = vi.fn()
+const mockToggleDone = vi.fn()
+const mockReorderOrders = vi.fn()
+const mockUseRunContext = vi.fn()
+const mockUseActiveOrderContext = vi.fn()
+
+vi.mock('@/app/contexts/RunContext', () => ({
+  useRunContext: () => mockUseRunContext(),
+}))
+
+vi.mock('@/app/contexts/ActiveOrderContext', () => ({
+  useActiveOrderContext: () => mockUseActiveOrderContext(),
+}))
+
 const defaultProps = {
-  hasActiveRun: false,
-  orders: [],
   onStartRun: vi.fn(),
-  onToggleDone: vi.fn(),
   onEditOrder: vi.fn(),
-  onDeleteOrder: vi.fn(),
-  onReorderOrder: vi.fn(),
 }
 
 describe('RunView', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockUseRunContext.mockReturnValue({ activeRun: null })
+    mockUseActiveOrderContext.mockReturnValue({
+      orders: [],
+      toggleDone: mockToggleDone,
+      removeOrder: mockRemoveOrder,
+      reorderOrders: mockReorderOrders,
+    })
+  })
+
   describe('no active run', () => {
     it('shows the start run button', () => {
-      render(<RunView {...defaultProps} hasActiveRun={false} />)
+      render(<RunView {...defaultProps} />)
       expect(screen.getByText('Start a new Run')).toBeInTheDocument()
     })
 
     it('calls onStartRun when start button is clicked', () => {
       const onStartRun = vi.fn()
-      render(<RunView {...defaultProps} hasActiveRun={false} onStartRun={onStartRun} />)
+      render(<RunView onStartRun={onStartRun} onEditOrder={vi.fn()} />)
       fireEvent.click(screen.getByText('Start a new Run'))
       expect(onStartRun).toHaveBeenCalledOnce()
     })
@@ -63,7 +83,14 @@ describe('RunView', () => {
     ]
 
     it('renders Order cards', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
+      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', startedAt: 0 } })
+      mockUseActiveOrderContext.mockReturnValue({
+        orders,
+        toggleDone: mockToggleDone,
+        removeOrder: mockRemoveOrder,
+        reorderOrders: mockReorderOrders,
+      })
+      render(<RunView {...defaultProps} />)
       expect(screen.getByText('Alice')).toBeInTheDocument()
       expect(screen.getByText('Bob')).toBeInTheDocument()
     })
@@ -72,31 +99,35 @@ describe('RunView', () => {
   describe('delete Order dialog', () => {
     const orders = [createOrder({ id: 'o1', personName: 'Alice' })]
 
+    beforeEach(() => {
+      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', startedAt: 0 } })
+      mockUseActiveOrderContext.mockReturnValue({
+        orders,
+        toggleDone: mockToggleDone,
+        removeOrder: mockRemoveOrder,
+        reorderOrders: mockReorderOrders,
+      })
+    })
+
     it('opens delete confirm dialog when delete is triggered', () => {
-      render(<RunView {...defaultProps} hasActiveRun={true} orders={orders} />)
+      render(<RunView {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
       expect(screen.getByText('Remove this Order?')).toBeInTheDocument()
     })
 
-    it('calls onDeleteOrder with the correct id when confirmed', () => {
-      const onDeleteOrder = vi.fn()
-      render(
-        <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
-      )
+    it('calls removeOrder with the correct id when confirmed', () => {
+      render(<RunView {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
       fireEvent.click(screen.getByRole('button', { name: 'Remove' }))
-      expect(onDeleteOrder).toHaveBeenCalledWith('o1')
+      expect(mockRemoveOrder).toHaveBeenCalledWith('o1')
     })
 
     it('closes dialog without deleting when cancelled', () => {
-      const onDeleteOrder = vi.fn()
-      render(
-        <RunView {...defaultProps} hasActiveRun={true} orders={orders} onDeleteOrder={onDeleteOrder} />,
-      )
+      render(<RunView {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: 'Remove Order' }))
       fireEvent.click(screen.getByText('Never mind'))
       expect(screen.queryByText('Remove this Order?')).not.toBeInTheDocument()
-      expect(onDeleteOrder).not.toHaveBeenCalled()
+      expect(mockRemoveOrder).not.toHaveBeenCalled()
     })
   })
 })

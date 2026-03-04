@@ -2,27 +2,27 @@ import { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { OrderFormData } from '@/shared/types'
 import type { SavedOrder } from '@/entities/saved-order'
-import { useRun } from '@/entities/run'
-import { useActiveOrders } from '@/entities/active-order'
-import { useSavedOrders } from '@/entities/saved-order'
 import { useBreakpoint } from '@/shared/hooks'
 import { DualPanelLayout, BottomAppBar, Fab, PageTransition } from '@/widgets/layout'
 import { RunHeader } from '@/widgets/run-header'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { RunView, AddOrder, OrderFormPage, LandingPage } from '@/pages'
+import { RunProvider, useRunContext } from './contexts/RunContext'
+import { ActiveOrderProvider, useActiveOrderContext } from './contexts/ActiveOrderContext'
+import { SavedOrderProvider, useSavedOrderContext } from './contexts/SavedOrderContext'
 
 type Screen =
   | { name: 'landing' }
   | { name: 'add' }
   | { name: 'form'; orderId?: string; prefill?: Partial<OrderFormData> }
 
-export default function App() {
+function AppContent() {
   const { t } = useTranslation()
   const breakpoint = useBreakpoint()
-  const { activeRun, startRun, archiveRun } = useRun()
-  const { orders, addOrder, updateOrder, removeOrder, toggleDone, reorderOrders } = useActiveOrders(activeRun?.id ?? null)
-  const { savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders } = useSavedOrders()
+  const { activeRun, startRun, archiveRun } = useRunContext()
+  const { orders, addOrder, updateOrder } = useActiveOrderContext()
+  const { saveOrder } = useSavedOrderContext()
   const [screen, setScreen] = useState<Screen>({ name: 'landing' })
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
   const [showEndConfirm, setShowEndConfirm] = useState(false)
@@ -182,12 +182,9 @@ export default function App() {
       case 'add':
         return (
           <AddOrder
-            savedOrders={savedOrders}
             onNewOrder={handleNewOrder}
             onUsual={handleUsual}
             onCustom={handleCustom}
-            onDeleteSaved={removeSavedOrder}
-            onReorderSaved={reorderSavedOrders}
           />
         )
       default:
@@ -212,23 +209,9 @@ export default function App() {
     <>
       <DualPanelLayout
         sidebarActive={sidebarActive}
-        header={
-          <RunHeader
-            orderCount={orders.length}
-            hasActiveRun={!!activeRun}
-            onHelpClick={handleHelpClick}
-          />
-        }
+        header={<RunHeader onHelpClick={handleHelpClick} />}
         sidebar={
-          <RunView
-            hasActiveRun={!!activeRun}
-            orders={orders}
-            onStartRun={handleStartRun}
-            onToggleDone={toggleDone}
-            onEditOrder={handleEditOrder}
-            onDeleteOrder={removeOrder}
-            onReorderOrder={reorderOrders}
-          />
+          <RunView onStartRun={handleStartRun} onEditOrder={handleEditOrder} />
         }
         sidebarBottom={sidebarBar}
         mainBottom={mainBar}
@@ -239,5 +222,17 @@ export default function App() {
       </DualPanelLayout>
       {endRunConfirmDialog}
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <RunProvider>
+      <ActiveOrderProvider>
+        <SavedOrderProvider>
+          <AppContent />
+        </SavedOrderProvider>
+      </ActiveOrderProvider>
+    </RunProvider>
   )
 }

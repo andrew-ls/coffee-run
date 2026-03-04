@@ -4,30 +4,22 @@ import type { SavedOrder } from '@/entities/saved-order'
 import { SavedOrderList } from '@/entities/saved-order'
 import { Button } from '@/shared/ui/Button'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
+import { useSavedOrderContext } from '@/app/contexts/SavedOrderContext'
 import styles from './AddOrder.module.css'
 
 interface AddOrderProps {
-  savedOrders: SavedOrder[]
   onNewOrder: () => void
   onUsual: (saved: SavedOrder) => void
   onCustom: (saved: SavedOrder) => void
-  onDeleteSaved: (savedId: string) => void
-  onReorderSaved: (reordered: SavedOrder[]) => void
 }
 
-export function AddOrder({
-  savedOrders,
-  onNewOrder,
-  onUsual,
-  onCustom,
-  onDeleteSaved,
-  onReorderSaved,
-}: AddOrderProps) {
+export function AddOrder({ onNewOrder, onUsual, onCustom }: AddOrderProps) {
   const { t } = useTranslation()
+  const { savedOrders, removeSavedOrder, reorderSavedOrders } = useSavedOrderContext()
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
 
   const handleConfirmDelete = () => {
-    onDeleteSaved(deleteConfirmId!)
+    removeSavedOrder(deleteConfirmId!)
     setDeleteConfirmId(null)
   }
 
@@ -52,7 +44,7 @@ export function AddOrder({
           if (saved) onCustom(saved)
         }}
         onDelete={setDeleteConfirmId}
-        onReorder={onReorderSaved}
+        onReorder={reorderSavedOrders}
       />
       {deleteConfirmId && (
         <ConfirmDialog
