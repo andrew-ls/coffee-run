@@ -15,7 +15,7 @@ type Direction = 'forward' | 'back'
 
 `App.tsx` passes handler callbacks (e.g. `handleAddOrder`, `handleEditOrder`) down to pages as props. Pages never set screen state directly — they call the handler they were given. There is no global state manager.
 
-`direction` drives the `PageTransition` molecule, which wraps the main content area. Forward navigations (landing→add, add→form) slide the incoming screen in from below; back navigations slide in from above. Both the outgoing and incoming pages are simultaneously in the DOM for the 250ms transition.
+`direction` drives the `PageTransition` widget, which wraps the main content area. Forward navigations (landing→add, add→form) slide the incoming screen in from below; back navigations slide in from above. Both the outgoing and incoming pages are simultaneously in the DOM for the 250ms transition.
 
 **Screen transitions:**
 
@@ -53,20 +53,19 @@ Each domain hook exposes CRUD operations. Nothing else reads or writes these key
 
 `useBreakpoint` watches `(min-width: 768px)` and returns `'mobile'` or `'desktop'`.
 
-`App.tsx` uses a single `DualPanelLayout` template on all form factors. Both panels (sidebar and main) are always in the DOM. Panel visibility on mobile is controlled by `SidebarContext`:
+`App.tsx` uses a single `DualPanelLayout` widget on all form factors. Both panels (sidebar and main) are always in the DOM. Panel visibility on mobile is controlled by the `sidebarActive` boolean held in `useState` in `App.tsx` and passed as a prop to `DualPanelLayout`:
 
-- **`SidebarContext`** (`src/contexts/SidebarContext.tsx`) provides `sidebarActive` (boolean) and `setSidebarActive`. Created in `App.tsx` and consumed by `DualPanelLayout`.
 - **Mobile**: `DualPanelLayout` applies CSS transform classes (`sidebarHidden` / `mainHidden`) to show one panel at a time based on `sidebarActive`.
 - **Desktop**: Both panels are always fully visible; `sidebarActive` has no visual effect.
 
-Navigation actions live in `BottomAppBar` organisms rendered via `DualPanelLayout`'s `sidebarBottom` and `mainBottom` slots. `App.tsx` assembles the bar content — pages do not contain their own navigation controls.
+Navigation actions live in `BottomAppBar` widgets rendered via `DualPanelLayout`'s `sidebarBottom` and `mainBottom` slots. `App.tsx` assembles the bar content — pages do not contain their own navigation controls.
 
 - **Sidebar bar**: "End Run" button (left), FAB (right, shown on mobile or when on landing screen).
 - **Main bar** (contextual): Cancel + Submit on the form screen; Back button on add/landing (mobile only).
 
 ## Landing screen — onboarding tips
 
-`LandingPage` (`src/pages/LandingPage.tsx`) shows a three-step walkthrough and feature tips explaining how to use the app. Content is driven entirely by `landingPage.*` keys in `src/i18n/locales/en-GB.json`.
+`LandingPage` (`src/pages/landing-page/LandingPage.tsx`) shows a three-step walkthrough and feature tips explaining how to use the app. Content is driven entirely by `landingPage.*` keys in `src/shared/i18n/locales/en-GB.json`.
 
 **Desktop**: The tips render in the main panel alongside the visible sidebar. Step 1 includes a dashed SVG arrow pointing left toward the "Start a new Run" button in the sidebar. Steps 2–3 show inline SVG illustrations of the FAB and End Run button, since those elements are not present on the landing screen.
 

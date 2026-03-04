@@ -18,12 +18,11 @@ export default mergeConfig(
         reporter: ['text', 'html'],
         include: ['src/**/*.{ts,tsx}'],
         exclude: [
-          'src/main.tsx',
-          'src/i18n/index.ts',
-          'src/styles/**',
+          'src/app/main.tsx',
+          'src/shared/i18n/index.ts',
+          'src/app/styles/**',
           'src/test/**',
           'src/**/index.ts',
-          'src/types/**',
         ],
         thresholds: {
           statements: 80,
