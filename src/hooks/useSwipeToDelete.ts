@@ -37,7 +37,7 @@ export function useSwipeToDelete({
     }
   }
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (_e: React.TouchEvent) => {
     const snapLeft = snapLeftRef?.current?.offsetWidth || SNAP_FALLBACK
     const snapRight = snapRightRef?.current?.offsetWidth || SNAP_FALLBACK
     if (offsetX < -SWIPE_THRESHOLD) {
