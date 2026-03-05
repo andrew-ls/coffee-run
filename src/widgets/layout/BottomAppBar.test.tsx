@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { BottomAppBar, Fab } from './BottomAppBar'
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { BottomAppBar } from './BottomAppBar'
 
 describe('BottomAppBar', () => {
   it('renders left slot content', () => {
@@ -14,16 +14,3 @@ describe('BottomAppBar', () => {
   })
 })
 
-describe('Fab', () => {
-  it('renders with correct aria-label', () => {
-    render(<Fab onClick={vi.fn()} label="Add Order" />)
-    expect(screen.getByRole('button', { name: 'Add Order' })).toBeInTheDocument()
-  })
-
-  it('calls onClick when clicked', () => {
-    const onClick = vi.fn()
-    render(<Fab onClick={onClick} label="Add Order" />)
-    fireEvent.click(screen.getByRole('button', { name: 'Add Order' }))
-    expect(onClick).toHaveBeenCalledOnce()
-  })
-})

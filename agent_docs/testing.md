@@ -38,7 +38,7 @@ Tests are co-located with their source files. Current coverage:
 
 | Layer | Files |
 |-------|-------|
-| **shared/ui** | ActionCard, ActionCardList, Button, Card, Checkbox, ConfirmDialog, DragHandle, DrinkPills, FormField, IconButton, Input, Pill, Select, SortableList |
+| **shared/ui** | ActionCard, ActionCardList, Button, Card, Checkbox, ConfirmDialog, DragHandle, DrinkPills, Fab, FormField, IconButton, Input, Pill, Select, SortableList |
 | **shared/hooks** | useBreakpoint, useConfirmation, useLocalStorage, useUserId |
 | **shared/config** | aspectColors, drinks, milk, sweetener |
 | **shared/assets/icons** | CheckIcon, DeleteIcon, DragHandleIcon, EditIcon, SlidersIcon |

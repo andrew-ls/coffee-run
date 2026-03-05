@@ -33,6 +33,7 @@ The codebase follows Feature-Sliced Design (FSD). Layers from lowest to highest:
 | `DrinkPills` | Renders a row of Pill components summarising a drink order. Used by entity card components. |
 | `ActionCard` | Generic swipeable card with configurable action zones. Left zone: destructive actions; right zone: non-destructive actions. Accepts `drag?: DragBindings` for use with `ActionCardList`. |
 | `ActionCardList` | DnD list that passes `DragBindings` to `renderItem`, eliminating the extra wrapper div. `onReorder` receives the full reordered array. |
+| `Fab` | Floating Action Button. Rounded square, primary colour, renders `+`. Accepts `onClick` and `label` (aria-label). |
 
 #### `ActionCard` details
 
@@ -73,7 +74,7 @@ Each entity slice has a `model/` directory (types + hook) and a `ui/` directory 
 | `OrderForm` | Multi-field form driven by drink config. Manages own form state via `useOrderForm`. Submit disabled when no drink type or person name. Accepts `showActions` and `onValidityChange`. |
 | `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
 | `DualPanelLayout` | Universal layout for all form factors. Fixed-width sidebar + flexible main panel. `sidebarActive` prop controls mobile panel switching via CSS classes. On desktop both panels are always visible. |
-| `BottomAppBar` | `flex-shrink: 0` bar rendered at the bottom of each `DualPanelLayout` panel via `sidebarBottom`/`mainBottom` props. Accepts `left` and `right` ReactNode slots. Also exports `Fab` — a styled FAB button. |
+| `BottomAppBar` | `flex-shrink: 0` bar rendered at the bottom of each `DualPanelLayout` panel via `sidebarBottom`/`mainBottom` props. Accepts `left` and `right` ReactNode slots. |
 | `PageTransition` | Wraps the main content area in `App.tsx`. Renders outgoing and incoming pages simultaneously during a 250ms navigation transition. Accepts `contentKey` (current screen name), `direction` (forward slides in from below; back slides in from above), and `children`. |
 
 ### `src/pages/` — full-screen page components
