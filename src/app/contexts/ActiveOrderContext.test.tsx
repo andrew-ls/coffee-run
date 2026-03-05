@@ -5,6 +5,10 @@ import { ActiveOrderProvider, useActiveOrderContext } from './ActiveOrderContext
 
 const mockOrders = [{ id: 'o1', personName: 'Alice' }]
 const mockAddOrder = vi.fn()
+const mockUpdateOrder = vi.fn()
+const mockRemoveOrder = vi.fn()
+const mockToggleDone = vi.fn()
+const mockReorderOrders = vi.fn()
 
 vi.mock('./RunContext', () => ({
   useRunContext: vi.fn(() => ({ activeRun: { id: 'run-1' } })),
@@ -17,10 +21,10 @@ vi.mock('@/entities/active-order', async (importOriginal) => {
     useActiveOrders: vi.fn(() => ({
       orders: mockOrders,
       addOrder: mockAddOrder,
-      updateOrder: vi.fn(),
-      removeOrder: vi.fn(),
-      toggleDone: vi.fn(),
-      reorderOrders: vi.fn(),
+      updateOrder: mockUpdateOrder,
+      removeOrder: mockRemoveOrder,
+      toggleDone: mockToggleDone,
+      reorderOrders: mockReorderOrders,
     })),
   }
 })
@@ -42,6 +46,26 @@ describe('ActiveOrderContext', () => {
   it('provides addOrder from useActiveOrders', () => {
     const { result } = renderHook(() => useActiveOrderContext(), { wrapper })
     expect(result.current.addOrder).toBe(mockAddOrder)
+  })
+
+  it('provides updateOrder from useActiveOrders', () => {
+    const { result } = renderHook(() => useActiveOrderContext(), { wrapper })
+    expect(result.current.updateOrder).toBe(mockUpdateOrder)
+  })
+
+  it('provides removeOrder from useActiveOrders', () => {
+    const { result } = renderHook(() => useActiveOrderContext(), { wrapper })
+    expect(result.current.removeOrder).toBe(mockRemoveOrder)
+  })
+
+  it('provides toggleDone from useActiveOrders', () => {
+    const { result } = renderHook(() => useActiveOrderContext(), { wrapper })
+    expect(result.current.toggleDone).toBe(mockToggleDone)
+  })
+
+  it('provides reorderOrders from useActiveOrders', () => {
+    const { result } = renderHook(() => useActiveOrderContext(), { wrapper })
+    expect(result.current.reorderOrders).toBe(mockReorderOrders)
   })
 
   it('throws when used outside ActiveOrderProvider', () => {

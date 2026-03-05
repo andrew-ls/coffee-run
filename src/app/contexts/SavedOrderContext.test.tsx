@@ -5,6 +5,8 @@ import { SavedOrderProvider, useSavedOrderContext } from './SavedOrderContext'
 
 const mockSavedOrders = [{ id: 's1', orderData: { personName: 'Bob' } }]
 const mockSaveOrder = vi.fn()
+const mockRemoveSavedOrder = vi.fn()
+const mockReorderSavedOrders = vi.fn()
 
 vi.mock('@/entities/saved-order', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/entities/saved-order')>()
@@ -13,8 +15,8 @@ vi.mock('@/entities/saved-order', async (importOriginal) => {
     useSavedOrders: vi.fn(() => ({
       savedOrders: mockSavedOrders,
       saveOrder: mockSaveOrder,
-      removeSavedOrder: vi.fn(),
-      reorderSavedOrders: vi.fn(),
+      removeSavedOrder: mockRemoveSavedOrder,
+      reorderSavedOrders: mockReorderSavedOrders,
     })),
   }
 })
@@ -36,6 +38,16 @@ describe('SavedOrderContext', () => {
   it('provides saveOrder from useSavedOrders', () => {
     const { result } = renderHook(() => useSavedOrderContext(), { wrapper })
     expect(result.current.saveOrder).toBe(mockSaveOrder)
+  })
+
+  it('provides removeSavedOrder from useSavedOrders', () => {
+    const { result } = renderHook(() => useSavedOrderContext(), { wrapper })
+    expect(result.current.removeSavedOrder).toBe(mockRemoveSavedOrder)
+  })
+
+  it('provides reorderSavedOrders from useSavedOrders', () => {
+    const { result } = renderHook(() => useSavedOrderContext(), { wrapper })
+    expect(result.current.reorderSavedOrders).toBe(mockReorderSavedOrders)
   })
 
   it('throws when used outside SavedOrderProvider', () => {
