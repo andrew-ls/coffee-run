@@ -23,8 +23,9 @@ Factory functions for domain types; all accept `Partial<T>` overrides:
 | Factory | Default values |
 |---------|---------------|
 | `createRun(overrides?)` | `id: 'run-1'`, `userId: 'default-user'`, `archivedAt: null` |
-| `createOrder(overrides?)` | `id: 'order-1'`, `runId: 'run-1'`, Coffee Latte with Oat milk |
-| `createOrderFormData(overrides?)` | Same drink defaults as `createOrder` without id/runId/timestamps |
+| `createActiveOrder(overrides?)` | `id: 'order-1'`, `runId: 'run-1'`, Coffee Latte with Oat milk, `done: false` |
+| `createOrder` | Alias for `createActiveOrder` |
+| `createOrderFormData(overrides?)` | Same drink defaults as `createActiveOrder` without id/runId/timestamps/done |
 | `createSavedOrder(overrides?)` | `id: 'saved-1'`, wraps `createOrderFormData()` |
 
 ## CSS Modules in tests
@@ -37,16 +38,17 @@ Tests are co-located with their source files. Current coverage:
 
 | Layer | Files |
 |-------|-------|
-| **Atoms** (8) | Button, Checkbox, DragHandle, IconButton, Input, Pill, Select, SortableList |
-| **Molecules** (4) | ConfirmDialog, FormField, OrderCard, PageTransition |
-| **Organisms** (6) | BottomAppBar, Mascot, OrderForm, OrderList, RunHeader, SavedOrderList |
-| **Templates** (1) | DualPanelLayout |
-| **Contexts** (1) | SidebarContext |
-| **Hooks** (6) | useBreakpoint, useLocalStorage, useOrders, useRun, useSavedOrders, useUserId |
-| **Utils** (2) | id, time |
-| **Config** (1) | drinks |
-| **Pages** (4) | RunView, AddOrder, OrderFormPage, LandingPage |
-| **Integration** (1) | App |
+| **shared/ui** | ActionCard, ActionCardList, Button, Card, Checkbox, ConfirmDialog, DragHandle, DrinkPills, FormField, IconButton, Input, Pill, Select, SortableList |
+| **shared/hooks** | useBreakpoint, useConfirmation, useLocalStorage, useUserId |
+| **shared/config** | aspectColors, drinks, milk, sweetener |
+| **shared/assets/icons** | CheckIcon, DeleteIcon, DragHandleIcon, EditIcon, SlidersIcon |
+| **shared/ui/ActionCard** | useSwipe |
+| **entities** | ActiveOrderCard, ActiveOrderList, SavedOrderCard, SavedOrderList, useActiveOrders, useRun, useSavedOrders |
+| **widgets** | BottomAppBar, DualPanelLayout, Mascot, OrderForm, PageTransition, RunHeader |
+| **pages** | AddOrder, LandingPage, OrderFormPage, RunView |
+| **app/contexts** | ActiveOrderContext, RunContext, SavedOrderContext |
+| **app** | App (integration) |
+| **shared/utils** | id, time |
 
 ## Coverage configuration
 
@@ -56,11 +58,11 @@ Provider: v8. Reporters: `text` (console), `html` (coverage/).
 
 **Excluded from coverage**:
 - `src/main.tsx`
-- `src/i18n/index.ts`
-- `src/styles/**`
+- `src/i18n/index.ts` (now `src/shared/i18n/index.ts`)
+- `src/styles/**` (now `src/app/styles/**`)
 - `src/test/**`
 - `src/**/index.ts` (barrel files)
-- `src/types/**`
+- `src/types/**` (now `src/shared/types/**`)
 
 **Thresholds** (from `vitest.config.ts`):
 - Statements: 80%

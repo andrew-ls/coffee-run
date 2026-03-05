@@ -2,7 +2,7 @@
 
 ## Directory structure
 
-The codebase is migrating from Atomic Design to Feature Sliced Design (FSD). Phase 1 has established a `src/shared/` layer containing primitives shared across the whole app.
+The codebase follows Feature-Sliced Design (FSD). Layers from lowest to highest:
 
 ### `src/shared/` — shared primitives
 
@@ -30,7 +30,7 @@ The codebase is migrating from Atomic Design to Feature Sliced Design (FSD). Pha
 | `FormField` | Label + children wrapper for form inputs. |
 | `ConfirmDialog` | Modal overlay with title, message, cancel/confirm actions. |
 | `Card` | Visual container with border, shadow, and border-radius. Accepts optional `className`. |
-| `SortableList` | Generic drag-and-drop list (existing pattern). Accepts render props for items and overlay. |
+| `DrinkPills` | Renders a row of Pill components summarising a drink order. Used by entity card components. |
 | `ActionCard` | Generic swipeable card with configurable action zones. Left zone: destructive actions; right zone: non-destructive actions. Accepts `drag?: DragBindings` for use with `ActionCardList`. |
 | `ActionCardList` | DnD list that passes `DragBindings` to `renderItem`, eliminating the extra wrapper div. `onReorder` receives the full reordered array. |
 
@@ -38,8 +38,8 @@ The codebase is migrating from Atomic Design to Feature Sliced Design (FSD). Pha
 
 ```typescript
 interface Action {
-  name: string
-  label: string
+  ariaLabel: string  // accessible label for the icon button
+  label: string      // text shown in the swipe zone button
   icon: React.FC<React.SVGProps<SVGSVGElement>>
   color: 'default' | 'primary' | 'danger' | 'mint' | 'amber'
   destructive: boolean  // true → left zone, false → right zone
@@ -55,55 +55,46 @@ interface DragBindings {
 
 `ActionCardList.renderItem: (item: T, drag: DragBindings) => ReactNode` — the render callback receives bindings and the item itself IS the sortable DOM element.
 
-## Atomic Design hierarchy (existing feature code)
+### `src/entities/` — domain entities
 
-Feature code still follows Atomic Design under `src/components/` while the migration to FSD is in progress:
+Each entity slice has a `model/` directory (types + hook) and a `ui/` directory (entity-specific components).
 
-| Level | Directory | Current components |
-|-------|-----------|-------------------|
-| Molecules | `molecules/` | DrinkPills, OrderCard, PageTransition |
-| Organisms | `organisms/` | BottomAppBar, OrderForm, OrderList, RunHeader, SavedOrderList, Mascot |
-| Templates | `templates/` | DualPanelLayout |
+| Entity | Model | UI Components |
+|--------|-------|---------------|
+| `run` | `Run` type, `useRun` hook | — |
+| `active-order` | `ActiveOrder` type, `useActiveOrders` hook | `ActiveOrderCard`, `ActiveOrderList` |
+| `saved-order` | `SavedOrder` type, `useSavedOrders` hook | `SavedOrderCard`, `SavedOrderList` |
 
-Pages (`src/pages/`) compose organisms: `RunView`, `AddOrder`, `OrderFormPage`, `LandingPage`.
+### `src/widgets/` — composed UI blocks
 
-Domain hooks (`src/hooks/`): `useRun`, `useOrders`, `useSavedOrders`.
-
-Domain types (`src/types/`): `Order`, `SavedOrder`, `Run`, `OrderFormData`.
-
-### Molecules
-
-| Component | Description |
-|-----------|-------------|
-| `OrderCard` | Unified card with drag handle, name, drink pills, and swipe-to-delete. `mode="active"`: edit/delete actions, enter animation (`isNew`). `mode="saved"`: Use/Customised/Delete actions, no enter animation. Both modes support `dragHandleProps` and `isDragging`. |
-| `DrinkPills` | Renders a row of Pill components summarising a drink Order. Used by OrderCard in both modes. |
+| Widget | Description |
+|--------|-------------|
+| `RunHeader` | App title, Run status subtitle with order count, mobile help button. |
+| `OrderForm` | Multi-field form driven by drink config. Manages own form state via `useOrderForm`. Submit disabled when no drink type or person name. Accepts `showActions` and `onValidityChange`. |
+| `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
+| `DualPanelLayout` | Universal layout for all form factors. Fixed-width sidebar + flexible main panel. `sidebarActive` prop controls mobile panel switching via CSS classes. On desktop both panels are always visible. |
+| `BottomAppBar` | `flex-shrink: 0` bar rendered at the bottom of each `DualPanelLayout` panel via `sidebarBottom`/`mainBottom` props. Accepts `left` and `right` ReactNode slots. Also exports `Fab` — a styled FAB button. |
 | `PageTransition` | Wraps the main content area in `App.tsx`. Renders outgoing and incoming pages simultaneously during a 250ms navigation transition. Accepts `contentKey` (current screen name), `direction` (forward slides in from below; back slides in from above), and `children`. |
 
-### Organisms
+### `src/pages/` — full-screen page components
 
-| Component | Description |
-|-----------|-------------|
-| `RunHeader` | App title, Run status subtitle with Order count. |
-| `OrderForm` | Multi-field form driven by drink config. Manages own form state; resets dependent fields on drink type change. Submit disabled when no drink type or person name. Accepts `showActions` and `onValidityChange`. |
-| `OrderList` | Wraps SortableList with OrderCard rendering. Detects newly added Orders for entry animation. |
-| `SavedOrderList` | "Saved Orders" header + SortableList with `OrderCard` (`mode="saved"`) rendering. Shows empty state message. |
-| `Mascot` | SVG coffee cup with 3 mood states (neutral/happy/overwhelmed). Wobble animation on mood change. |
-| `BottomAppBar` | `flex-shrink: 0` bar rendered at the bottom of each DualPanelLayout panel via `sidebarBottom`/`mainBottom` props. Accepts `left` and `right` ReactNode slots. Also exports `Fab` — a styled FAB button. |
-
-### Templates
-
-| Component | Description |
-|-----------|-------------|
-| `DualPanelLayout` | Universal layout for all form factors. Fixed-width sidebar + flexible main panel. Consumes `SidebarContext` to apply `sidebarHidden`/`mainHidden` CSS classes for mobile panel switching. On desktop both panels are always visible. |
-
-### Pages
-
-| Component | Description |
-|-----------|-------------|
-| `RunView` | Run view: mascot, Order list, Order delete confirmation dialog, Run start button. |
+| Page | Description |
+|------|-------------|
+| `RunView` | Run view: mascot, order list, order delete confirmation dialog, Run start button. |
 | `AddOrder` | New Order button + SavedOrderList. Delete Saved Order confirmation dialog. |
 | `OrderFormPage` | Wrapper around OrderForm with title (New Order / Edit Order). |
 | `LandingPage` | Onboarding tips panel: shown in the main panel when no Run is active. |
+
+### `src/app/` — application root
+
+| File | Description |
+|------|-------------|
+| `App.tsx` | Screen state machine, navigation handlers, layout assembly, context providers. |
+| `contexts/RunContext.tsx` | Wraps `useRun()` — exposes `activeRun`, `startRun`, `archiveRun`. |
+| `contexts/ActiveOrderContext.tsx` | Wraps `useActiveOrders()` — must nest inside `RunProvider`. |
+| `contexts/SavedOrderContext.tsx` | Wraps `useSavedOrders()`. |
+| `main.tsx` | React root, i18n init. |
+| `styles/` | `tokens.css`, `global.css`, `textures.css`. |
 
 ## Assets
 
@@ -139,4 +130,3 @@ import { Button } from '@/shared/ui/Button/Button'
 ## Path alias
 
 `@` resolves to `src/`. Use it for all non-relative imports.
-

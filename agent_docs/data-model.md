@@ -16,12 +16,10 @@ interface Run {
 **Storage key:** `CoffeeRun:runs`
 **Lifecycle:** Created by `startRun()`. Archived (not deleted) by `archiveRun(runId)` which sets `archivedAt`. Only one Run per user can have `archivedAt === null` at a time.
 
-### Order
+### ActiveOrder
 
 ```typescript
-interface Order {
-  id: string
-  runId: string           // Foreign key to Run.id
+interface OrderFormData {
   personName: string
   drinkType: string       // Key into DRINKS config
   variant: string         // Selected variant or 'Other'
@@ -33,15 +31,19 @@ interface Order {
   sweetenerAmount: number // 0–5, step 0.5
   customDrinkName: string // Freetext when drinkType === 'Other'
   notes: string
+}
+
+interface ActiveOrder extends OrderFormData {
+  id: string
+  runId: string           // Foreign key to Run.id
+  done: boolean           // Whether the order has been fulfilled
   createdAt: string       // ISO 8601
   updatedAt: string       // ISO 8601
 }
-
-type OrderFormData = Omit<Order, 'id' | 'runId' | 'createdAt' | 'updatedAt'>
 ```
 
 **Storage key:** `CoffeeRun:orders`
-All Orders across all Runs are stored in a single flat array. Filtering by `runId` happens in `useOrders`.
+All ActiveOrders across all Runs are stored in a single flat array. Filtering by `runId` happens in `useActiveOrders`.
 
 ### SavedOrder
 
@@ -67,7 +69,7 @@ type SweetenerType = (typeof SWEETENER_TYPES)[number]
 
 ## Drink Configuration Type
 
-Defined in `src/config/drinks.ts` as a `readonly DrinkConfig[]`. See `agent_docs/patterns.md` for the full `DrinkConfig` interface and the feature matrix.
+Defined in `src/shared/config/drinks.ts` as a `readonly DrinkConfig[]`. See `agent_docs/patterns.md` for the full `DrinkConfig` interface and the feature matrix.
 
 ## Hooks (Data Layer)
 
@@ -75,7 +77,7 @@ All persistence is abstracted through custom hooks. Components never call localS
 
 ### `useLocalStorage<T>(key, initialValue)`
 
-Generic hook wrapping localStorage.
+Generic hook wrapping localStorage (`src/shared/hooks/useLocalStorage.ts`).
 
 - Lazy initialisation from stored JSON.
 - Functional updates (`setValue(prev => ...)`).
@@ -87,48 +89,53 @@ Returns `'default-user'`. Placeholder for future auth — when auth is added, on
 
 ### `useRun()`
 
-Returns `{ activeRun, startRun, archiveRun }`.
+In `src/entities/run`. Returns `{ activeRun, startRun, archiveRun }`.
 
 - `activeRun`: The current user's non-archived Run, or `null`.
 - `startRun()`: Creates and persists a new Run.
 - `archiveRun(runId)`: Sets `archivedAt` on the Run.
 
-### `useOrders(runId: string | null)`
+### `useActiveOrders(runId: string | null)`
 
-Returns `{ orders, addOrder, updateOrder, removeOrder, reorderOrders }`.
+In `src/entities/active-order`. Returns `{ orders, addOrder, updateOrder, removeOrder, toggleDone, reorderOrders }`.
 
-- Filters the global Order array by `runId`.
-- `addOrder(data: OrderFormData)`: Creates an Order with generated ID and timestamps.
+- Filters the global ActiveOrder array by `runId`.
+- `addOrder(data: OrderFormData)`: Creates an ActiveOrder with `done: false`, generated ID, and timestamps.
 - `updateOrder(orderId, data)`: Partial update with new `updatedAt`.
 - `removeOrder(orderId)`: Hard deletes from the array.
-- `reorderOrders(fromIndex, toIndex)`: Reorders within the Run's subset while preserving global array positions (uses `arrayMove` from @dnd-kit).
+- `toggleDone(orderId)`: Flips the `done` boolean and updates `updatedAt`.
+- `reorderOrders(reordered: ActiveOrder[])`: Replaces this run's orders with the provided reordered array, preserving other runs' orders.
 
 ### `useSavedOrders()`
 
-Returns `{ savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders }`.
+In `src/entities/saved-order`. Returns `{ savedOrders, saveOrder, removeSavedOrder, reorderSavedOrders }`.
 
 - Filters by current `userId`.
 - `saveOrder(data)`: Always creates a new SavedOrder (no update/overwrite — see Known Issues in `agent_docs/product.md`).
 - `removeSavedOrder(savedId)`: Hard deletes.
-- `reorderSavedOrders(fromIndex, toIndex)`: Same array-reorder pattern as Orders.
+- `reorderSavedOrders(reordered: SavedOrder[])`: Replaces this user's saved orders with the provided reordered array.
 
 ### `useBreakpoint(): 'mobile' | 'desktop'`
 
 Uses `window.matchMedia('(min-width: 768px)')` with a change listener. Returns the current breakpoint.
 
-### `useSwipeToDelete(options?)`
+### `useSwipe(options?)`
 
-Touch gesture handler for swipe-to-delete. Options: `enableRightSwipe` (boolean), `snapLeftRef` and `snapRightRef` (element refs for snap width measurement). Returns touch event handlers and swipe state. Only active on mobile. Swipe threshold: 80px.
+In `src/shared/ui/ActionCard/useSwipe.ts`. Handles touch swipe gestures for `ActionCard`. Options: `enableRightSwipe` (boolean), `snapLeftRef` and `snapRightRef` (element refs for snap width measurement). Returns `{ swipeStyle, swipeDirection, touchHandlers }`. Only active on touch devices (pointer: coarse). Swipe threshold: 80px.
+
+### `useConfirmation(onConfirm)`
+
+In `src/shared/hooks/useConfirmation.ts`. Manages the state for a confirmation dialog. Returns `{ pendingId, request, confirm, cancel }`. Call `request(id)` to open the dialog; `confirm()` calls `onConfirm(id)` and clears state; `cancel()` clears state without calling.
 
 ## Key Implementation Details
 
 ### ID Generation
 
-`crypto.randomUUID()` via `src/utils/id.ts`. Mocked in tests to return `'test-uuid-' + random`.
+`crypto.randomUUID()` via `src/shared/utils/id.ts`. Mocked in tests to return `'test-uuid-' + random`.
 
 ### Timestamp Generation
 
-`new Date().toISOString()` via `src/utils/time.ts`.
+`new Date().toISOString()` via `src/shared/utils/time.ts`.
 
 ### localStorage Key Namespace
 
@@ -140,4 +147,4 @@ Single source of truth: the `app.name` key in the i18n locale (`'Coffee Run'`). 
 
 ### Order Reordering
 
-`arrayMove` from `@dnd-kit/sortable`. The reorder functions in `useOrders` and `useSavedOrders` operate on a filtered subset (by `runId` or `userId`) while preserving all other entries' positions in the flat array.
+`arrayMove` from `@dnd-kit/sortable`. The reorder functions in `useActiveOrders` and `useSavedOrders` take the complete reordered subset and splice it back into the flat global array, preserving positions of other runs'/users' records.
