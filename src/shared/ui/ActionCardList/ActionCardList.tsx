@@ -13,6 +13,7 @@ import {
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
   SortableContext,
+  arrayMove,
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
@@ -74,10 +75,7 @@ export function ActionCardList<T extends { id: string }>({
     const fromIndex = items.findIndex((item) => item.id === active.id)
     const toIndex = items.findIndex((item) => item.id === over.id)
     if (fromIndex !== -1 && toIndex !== -1) {
-      const reordered = [...items]
-      const [removed] = reordered.splice(fromIndex, 1)
-      reordered.splice(toIndex, 0, removed)
-      onReorder(reordered)
+      onReorder(arrayMove(items, fromIndex, toIndex))
     }
   }
 
