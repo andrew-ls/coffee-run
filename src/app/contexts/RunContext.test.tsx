@@ -5,7 +5,7 @@ import { RunProvider, useRunContext } from './RunContext'
 
 const mockStartRun = vi.fn()
 const mockArchiveRun = vi.fn()
-const mockActiveRun = { id: 'run-1', startedAt: 0 }
+const mockActiveRun = { id: 'run-1', userId: 'default-user', createdAt: '2024-01-15T12:00:00.000Z', archivedAt: null }
 
 vi.mock('@/entities/run', () => ({
   useRun: vi.fn(() => ({

@@ -83,7 +83,7 @@ describe('RunView', () => {
     ]
 
     it('renders Order cards', () => {
-      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', startedAt: 0 } })
+      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', userId: 'default-user', createdAt: '2024-01-15T12:00:00.000Z', archivedAt: null } })
       mockUseActiveOrderContext.mockReturnValue({
         orders,
         toggleDone: mockToggleDone,
@@ -100,7 +100,7 @@ describe('RunView', () => {
     const orders = [createOrder({ id: 'o1', personName: 'Alice' })]
 
     beforeEach(() => {
-      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', startedAt: 0 } })
+      mockUseRunContext.mockReturnValue({ activeRun: { id: 'run-1', userId: 'default-user', createdAt: '2024-01-15T12:00:00.000Z', archivedAt: null } })
       mockUseActiveOrderContext.mockReturnValue({
         orders,
         toggleDone: mockToggleDone,
