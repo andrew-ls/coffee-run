@@ -67,39 +67,39 @@ describe('DualPanelLayout', () => {
     expect(screen.getByText('Main Bar')).toBeInTheDocument()
   })
 
-  it('applies sidebarHidden class when sidebarActive is false', () => {
-    const { container } = render(
+  it('hides the sidebar when sidebarActive is false', () => {
+    const { getByText } = render(
       <DualPanelLayout sidebarActive={false} header={<div>Header</div>} sidebar={<div>Sidebar</div>}>
         <div>Main</div>
       </DualPanelLayout>,
     )
-    expect(container.querySelector('.sidebar')).toHaveClass('sidebarHidden')
+    expect(getByText('Sidebar').closest('[data-hidden]')).toHaveAttribute('data-hidden', 'true')
   })
 
-  it('does not apply sidebarHidden class when sidebarActive is true', () => {
-    const { container } = render(
+  it('does not hide the sidebar when sidebarActive is true', () => {
+    const { getByText } = render(
       <DualPanelLayout sidebarActive={true} header={<div>Header</div>} sidebar={<div>Sidebar</div>}>
         <div>Main</div>
       </DualPanelLayout>,
     )
-    expect(container.querySelector('.sidebar')).not.toHaveClass('sidebarHidden')
+    expect(getByText('Sidebar').closest('[data-hidden]')).toBeNull()
   })
 
-  it('applies mainHidden class when sidebarActive is true', () => {
-    const { container } = render(
+  it('hides the main panel when sidebarActive is true', () => {
+    const { getByText } = render(
       <DualPanelLayout sidebarActive={true} header={<div>Header</div>} sidebar={<div>Sidebar</div>}>
         <div>Main</div>
       </DualPanelLayout>,
     )
-    expect(container.querySelector('.main')).toHaveClass('mainHidden')
+    expect(getByText('Main').closest('[data-hidden]')).toHaveAttribute('data-hidden', 'true')
   })
 
-  it('does not apply mainHidden class when sidebarActive is false', () => {
-    const { container } = render(
+  it('does not hide the main panel when sidebarActive is false', () => {
+    const { getByText } = render(
       <DualPanelLayout sidebarActive={false} header={<div>Header</div>} sidebar={<div>Sidebar</div>}>
         <div>Main</div>
       </DualPanelLayout>,
     )
-    expect(container.querySelector('.main')).not.toHaveClass('mainHidden')
+    expect(getByText('Main').closest('[data-hidden]')).toBeNull()
   })
 })

@@ -13,12 +13,18 @@ interface DualPanelLayoutProps {
 export function DualPanelLayout({ sidebarActive, header, sidebar, sidebarBottom, children, mainBottom }: DualPanelLayoutProps) {
   return (
     <div className={styles.layout}>
-      <div className={`${styles.sidebar} ${!sidebarActive ? styles.sidebarHidden : ''}`}>
+      <div
+        className={`${styles.sidebar} ${!sidebarActive ? styles.sidebarHidden : ''}`}
+        data-hidden={!sidebarActive || undefined}
+      >
         {header}
         <div className={styles.sidebarContent}>{sidebar}</div>
         {sidebarBottom}
       </div>
-      <div className={`${styles.main} ${sidebarActive ? styles.mainHidden : ''}`}>
+      <div
+        className={`${styles.main} ${sidebarActive ? styles.mainHidden : ''}`}
+        data-hidden={sidebarActive || undefined}
+      >
         <div className={styles.mainContent}>{children}</div>
         {mainBottom}
       </div>
