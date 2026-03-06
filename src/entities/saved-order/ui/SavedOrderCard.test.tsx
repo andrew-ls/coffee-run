@@ -8,7 +8,7 @@ const defaultProps = {
     orderData: createOrderFormData({ personName: 'Alice', drinkType: 'Coffee', variant: 'Latte' }),
   }),
   onAdd: vi.fn(),
-  onCustomise: vi.fn(),
+  onCustomised: vi.fn(),
   onDelete: vi.fn(),
 }
 
@@ -38,11 +38,11 @@ describe('SavedOrderCard', () => {
     expect(onAdd).toHaveBeenCalledOnce()
   })
 
-  it('calls onCustomise when Customised is clicked', () => {
-    const onCustomise = vi.fn()
-    render(<SavedOrderCard {...defaultProps} onCustomise={onCustomise} />)
+  it('calls onCustomised when Customised is clicked', () => {
+    const onCustomised = vi.fn()
+    render(<SavedOrderCard {...defaultProps} onCustomised={onCustomised} />)
     fireEvent.click(screen.getByRole('button', { name: 'Customised' }))
-    expect(onCustomise).toHaveBeenCalledOnce()
+    expect(onCustomised).toHaveBeenCalledOnce()
   })
 
   it('calls onDelete when Delete is clicked', () => {

@@ -9,7 +9,7 @@ import styles from './SavedOrderCard.module.css'
 interface SavedOrderCardProps {
   savedOrder: SavedOrder
   onAdd: () => void
-  onCustomise: () => void
+  onCustomised: () => void
   onDelete: () => void
   drag?: DragBindings
 }
@@ -17,7 +17,7 @@ interface SavedOrderCardProps {
 export function SavedOrderCard({
   savedOrder,
   onAdd,
-  onCustomise,
+  onCustomised,
   onDelete,
   drag,
 }: SavedOrderCardProps) {
@@ -39,7 +39,7 @@ export function SavedOrderCard({
       icon: SlidersIcon,
       color: 'amber',
       destructive: false,
-      callback: onCustomise,
+      callback: onCustomised,
     },
     {
       name: t('savedOrderCard.delete'),

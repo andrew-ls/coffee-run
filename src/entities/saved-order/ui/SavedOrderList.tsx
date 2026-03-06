@@ -7,7 +7,7 @@ import styles from './SavedOrderList.module.css'
 interface SavedOrderListProps {
   savedOrders: SavedOrder[]
   onAdd: (saved: SavedOrder) => void
-  onCustomise: (saved: SavedOrder) => void
+  onCustomised: (saved: SavedOrder) => void
   onDelete: (id: string) => void
   onReorder: (savedOrders: SavedOrder[]) => void
 }
@@ -15,7 +15,7 @@ interface SavedOrderListProps {
 export function SavedOrderList({
   savedOrders,
   onAdd,
-  onCustomise,
+  onCustomised,
   onDelete,
   onReorder,
 }: SavedOrderListProps) {
@@ -35,7 +35,7 @@ export function SavedOrderList({
               <SavedOrderCard
                 savedOrder={saved}
                 onAdd={() => onAdd(saved)}
-                onCustomise={() => onCustomise(saved)}
+                onCustomised={() => onCustomised(saved)}
                 onDelete={() => onDelete(saved.id)}
                 drag={drag}
               />
@@ -44,7 +44,7 @@ export function SavedOrderList({
               <SavedOrderCard
                 savedOrder={saved}
                 onAdd={() => {}}
-                onCustomise={() => {}}
+                onCustomised={() => {}}
                 onDelete={() => {}}
               />
             )}

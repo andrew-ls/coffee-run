@@ -37,7 +37,7 @@ const defaultProps = {
     createSavedOrder({ id: 's2', orderData: createOrderFormData({ personName: 'Bob' }) }),
   ],
   onAdd: vi.fn(),
-  onCustomise: vi.fn(),
+  onCustomised: vi.fn(),
   onDelete: vi.fn(),
   onReorder: vi.fn(),
 }
@@ -67,12 +67,12 @@ describe('SavedOrderList', () => {
     expect(onAdd).toHaveBeenCalledWith(defaultProps.savedOrders[0])
   })
 
-  it('calls onCustomise with the correct saved order', () => {
-    const onCustomise = vi.fn()
-    render(<SavedOrderList {...defaultProps} onCustomise={onCustomise} />)
+  it('calls onCustomised with the correct saved order', () => {
+    const onCustomised = vi.fn()
+    render(<SavedOrderList {...defaultProps} onCustomised={onCustomised} />)
     const customButtons = screen.getAllByRole('button', { name: 'Customised' })
     fireEvent.click(customButtons[1])
-    expect(onCustomise).toHaveBeenCalledWith(defaultProps.savedOrders[1])
+    expect(onCustomised).toHaveBeenCalledWith(defaultProps.savedOrders[1])
   })
 
   it('calls onDelete with the correct id', () => {

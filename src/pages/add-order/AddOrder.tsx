@@ -36,7 +36,7 @@ export function AddOrder({ onNewOrder, onUsual, onCustom }: AddOrderProps) {
       <SavedOrderList
         savedOrders={savedOrders}
         onAdd={onUsual}
-        onCustomise={onCustom}
+        onCustomised={onCustom}
         onDelete={setDeleteConfirmId}
         onReorder={reorderSavedOrders}
       />
