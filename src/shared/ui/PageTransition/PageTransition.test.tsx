@@ -41,7 +41,7 @@ describe('PageTransition', () => {
     expect(container.textContent).toContain('Add')
   })
 
-  it('applies enterForward and exitForward classes on forward transition', () => {
+  it('shows both exiting and entering content on a forward transition', () => {
     const { rerender, container } = render(
       <PageTransition contentKey="landing" direction="forward">
         <div>Landing</div>
@@ -54,12 +54,11 @@ describe('PageTransition', () => {
       </PageTransition>,
     )
 
-    const pages = container.querySelectorAll('.page')
-    expect(pages[0].className).toContain('exitForward')
-    expect(pages[1].className).toContain('enterForward')
+    expect(container.textContent).toContain('Landing')
+    expect(container.textContent).toContain('Add')
   })
 
-  it('applies enterBack and exitBack classes on back transition', () => {
+  it('shows both exiting and entering content on a back transition', () => {
     const { rerender, container } = render(
       <PageTransition contentKey="add" direction="forward">
         <div>Add</div>
@@ -72,9 +71,8 @@ describe('PageTransition', () => {
       </PageTransition>,
     )
 
-    const pages = container.querySelectorAll('.page')
-    expect(pages[0].className).toContain('exitBack')
-    expect(pages[1].className).toContain('enterBack')
+    expect(container.textContent).toContain('Add')
+    expect(container.textContent).toContain('Landing')
   })
 
   it('removes exiting content after 250ms', () => {

@@ -48,7 +48,7 @@ vi.mock('@dnd-kit/utilities', () => ({
   CSS: { Transform: { toString: vi.fn(() => undefined) } },
 }))
 
-vi.mock('@/widgets/layout/PageTransition', () => ({
+vi.mock('@/shared/ui/PageTransition', () => ({
   PageTransition: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
