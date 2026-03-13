@@ -3,10 +3,10 @@
 ## Approach
 
 - **CSS Modules** with `camelCaseOnly` convention (configured in Vite).
-- **Design tokens** in `src/styles/tokens.css` as CSS custom properties on `:root`. No magic values in component CSS — always reference a token.
+- **Design tokens** in `src/app/styles/tokens.css` as CSS custom properties on `:root`. No magic values in component CSS — always reference a token.
 - **Co-located styles:** Each component has a `.module.css` alongside it.
-- **Global reset** in `src/styles/global.css`: box-sizing, margin/padding reset, font inheritance, button reset.
-- **Texture overlay** in `src/styles/textures.css`: SVG fractal noise `::before` pseudo-element on `#root` at `opacity: 0.035`, giving a crayon/paper feel.
+- **Global reset** in `src/app/styles/global.css`: box-sizing, margin/padding reset, font inheritance, button reset.
+- **Texture overlay** in `src/app/styles/textures.css`: SVG fractal noise `::before` pseudo-element on `#root` at `opacity: 0.035`, giving a crayon/paper feel.
 
 ## Visual Design
 
@@ -47,7 +47,7 @@ The mascot wobbles (600ms animation) when its mood changes.
 
 ## Design Tokens
 
-All tokens are CSS custom properties defined in `src/styles/tokens.css`.
+All tokens are CSS custom properties defined in `src/app/styles/tokens.css`.
 
 ### Colour Palette
 
@@ -77,7 +77,7 @@ All tokens are CSS custom properties defined in `src/styles/tokens.css`.
 
 ### Drink Pill Colours
 
-Each drink type has a distinct pill colour for visual scanning (defined in `src/config/aspectColors.ts`):
+Each drink type has a distinct pill colour for visual scanning (defined in `src/shared/config/aspectColors.ts`):
 
 | Drink | Background |
 |-------|-----------|
@@ -107,7 +107,7 @@ Aspect pills by category:
 | `--font-size-sm` | 0.875rem |
 | `--font-size-md` | 1rem |
 | `--font-size-lg` | 1.125rem |
-| `--font-size-xl` | 1.25rem |
+| `--font-size-xl` | 1.5rem |
 | `--font-size-2xl` | 2rem |
 
 Weights: regular (400), semibold (600), bold (700), extrabold (800).

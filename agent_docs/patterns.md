@@ -3,9 +3,9 @@
 ## Internationalisation (i18n)
 
 - All UI text must use `useTranslation()` → `t('key')`. No hardcoded English strings in JSX.
-- Translation keys live in `src/i18n/locales/en-GB.json`. Add new keys there when adding UI text.
+- Translation keys live in `src/shared/i18n/locales/en-GB.json`. Add new keys there when adding UI text.
 - **Config enum values** (drink types, milk types, sweetener types) are stored raw in English in `localStorage` and in component state. They are translated only at the point of display using a translation key derived from the value. Never translate before storing.
-- i18next is initialised in `src/i18n/index.ts`, which is imported in `src/main.tsx` before `<App />` renders.
+- i18next is initialised in `src/shared/i18n/index.ts`, which is imported in `src/app/main.tsx` before `<App />` renders.
 
 **Library details:**
 
@@ -18,7 +18,7 @@
 
 ## Drink configuration
 
-`src/config/drinks.ts` is the single source of truth for what drinks exist and which form fields each drink shows.
+`src/shared/config/drinks.ts` is the single source of truth for what drinks exist and which form fields each drink shows.
 
 ```typescript
 interface DrinkConfig {
@@ -56,7 +56,7 @@ interface DrinkConfig {
 - **Collision detection:** `closestCenter`.
 - **Strategy:** `verticalListSortingStrategy`.
 
-**Swipe-to-delete** is implemented natively via `useSwipeToDelete` (touch events on `OrderCard`). Swipe threshold: 80px. Only active on mobile breakpoint.
+**Swipe-to-delete** is implemented natively via `useSwipe` (`src/shared/ui/ActionCard/useSwipe.ts`, touch events on `OrderCard`). Swipe threshold: 80px. Only active on mobile breakpoint.
 
 - **Left swipe** on `OrderCard` (either mode): reveals a red delete zone.
 - **Right swipe** on `OrderCard` (`enableRightSwipe: true` in both modes):
